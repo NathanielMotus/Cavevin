@@ -1,0 +1,44 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.nathaniel.motus.cavevin.controller.MainActivity">
+
+
+   <item
+       android:id="@+id/menu_activity_main_add_entry"
+       app:showAsAction="ifRoom"
+       android:icon="@drawable/baseline_add_circle_outline_black_18dp"
+       android:title="Add entry"/>
+
+    <item
+        android:id="@+id/menu_activity_main_cellar"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_more_vert_black_18dp"
+        android:title="Params">
+
+        <menu>
+            <item
+                android:id="@+id/menu_activity_main_export"
+                android:title="Exporter les données"
+                app:showAsAction="ifRoom"/>
+
+            <item
+                android:id="@+id/menu_activity_main_import"
+                android:title="Importer les données"
+                app:showAsAction="ifRoom"/>
+
+            <item
+                android:id="@+id/menu_activity_main_delete_cellar"
+                android:title="Supprimer une cave"
+                app:showAsAction="ifRoom"/>
+
+            <item
+                android:id="@+id/menu_activity_main_stats"
+                android:title="Stats"
+                app:showAsAction="ifRoom"/>
+
+        </menu>
+
+    </item>
+
+</menu>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/activity_main_drawer_choose_cellar"
+                    android:title="Choisir une cave"/>
+                <item
+                    android:id="@+id/activity_main_drawer_create_cellar"
+                    android:title="Nouvelle cave"/>
+                <item
+                    android:id="@+id/activity_main_drawer_rename_cellar"
+                    android:title="Renommer la cave"/>
+            </group>
+
+</menu>

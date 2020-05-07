@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:animateLayoutChanges="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_type_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_normal"
+        android:gravity="center"
+        android:padding="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignTop="@id/recycler_cellar_row_appellation_text"
+        android:layout_alignBottom="@id/recycler_cellar_row_bottle_name_text"
+        android:singleLine="false"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_appellation_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_big"
+        android:textStyle="normal"
+        android:padding="5dp"
+        android:gravity="left"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@id/recycler_cellar_row_type_text"
+        android:text="Côtes du Rhône"/>
+
+    <Button
+        android:id="@+id/recycler_cellar_row_plus_button"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_huge"
+        android:gravity="center"
+        android:padding="5dp"
+        android:layout_alignTop="@id/recycler_cellar_row_appellation_text"
+        android:layout_marginEnd="5dp"
+        android:layout_alignParentEnd="true"
+        android:text="+"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_vintage_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_big"
+        android:gravity="end"
+        android:padding="5dp"
+        android:layout_alignTop="@id/recycler_cellar_row_appellation_text"
+        android:layout_marginEnd="5dp"
+        android:layout_toLeftOf="@id/recycler_cellar_row_quantity_text"
+        android:text="2010"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_domain_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_normal"
+        android:gravity="end"
+        android:padding="5dp"
+        android:layout_alignEnd="@id/recycler_cellar_row_vintage_text"
+        android:layout_below="@id/recycler_cellar_row_appellation_text"
+        android:text="Château Comme C'est Bon"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_cuvee_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_normal"
+        android:textStyle="italic"
+        android:gravity="end"
+        android:padding="5dp"
+        android:layout_alignEnd="@id/recycler_cellar_row_vintage_text"
+        android:layout_below="@id/recycler_cellar_row_domain_text"
+        android:text="Cuvée la Meilleure"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_bottle_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_small"
+        android:gravity="left"
+        android:padding="5dp"
+        android:layout_alignStart="@id/recycler_cellar_row_appellation_text"
+        android:layout_alignBottom="@id/recycler_cellar_row_cuvee_text"
+        android:text="Nabuchodonosor"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_capacity_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_small"
+        android:gravity="left"
+        android:padding="5dp"
+        android:layout_toEndOf="@id/recycler_cellar_row_bottle_name_text"
+        android:layout_alignBottom="@id/recycler_cellar_row_bottle_name_text"
+        android:text="0.75 L"/>
+
+    <Button
+        android:id="@+id/recycler_cellar_row_minus_button"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_huge"
+        android:gravity="center"
+        android:padding="5dp"
+        android:layout_alignBottom="@id/recycler_cellar_row_bottle_name_text"
+        android:layout_marginEnd="5dp"
+        android:layout_alignParentEnd="true"
+        android:text="-"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_quantity_text"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/recycler_cellar_row_plus_button"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="12"
+        android:textSize="14sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_origin_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recycler_cellar_row_bottle_name_text"
+        android:textSize="@dimen/text_normal"
+        android:text="Origine :"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_origin_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recycler_cellar_row_origin_title_text"
+        android:textSize="@dimen/text_normal"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_bottle_comment_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recycler_cellar_row_origin_text"
+        android:textSize="@dimen/text_normal"
+        android:layout_marginTop="@dimen/padding_normal"
+        android:text="Commentaires sur le vin :"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_bottle_comment_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recycler_cellar_row_bottle_comment_title_text"
+        android:textSize="@dimen/text_normal"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_cellar_comment_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recycler_cellar_row_bottle_comment_text"
+        android:textSize="@dimen/text_normal"
+        android:layout_marginTop="@dimen/padding_normal"
+        android:text="Commentaires sur la mise en cave :"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/recycler_cellar_row_cellar_comment_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recycler_cellar_row_cellar_comment_title_text"
+        android:textSize="@dimen/text_normal"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/recycler_cellar_row_collapse_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recycler_cellar_row_cellar_comment_text"
+        android:src="@drawable/baseline_keyboard_arrow_down_white_18dp"
+        android:gravity="center"/>
+
+    <ImageView
+        android:id="@+id/recycler_cellar_row_edit_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/recycler_cellar_row_collapse_image"
+        android:layout_alignEnd="@id/recycler_cellar_row_collapse_image"
+        android:src="@drawable/baseline_edit_white_18dp"
+        android:visibility="gone"/>
+
+</RelativeLayout>
+
+</androidx.cardview.widget.CardView>

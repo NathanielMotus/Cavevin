@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="CapacityValues">
+        <item>Bouteille (0.75 L)</item>
+        <item>Piccolo (0.2 L)</item>
+        <item>Quart (0.25 L)</item>
+        <item>Demi (0.375 L)</item>
+        <item>Pot (0.46 L)</item>
+        <item>Magnum (1.5 L)</item>
+        <item>Marie-Jeanne (3 L)</item>
+        <item>Réhoboam (4.5 L)</item>
+        <item>Jéroboam (5 L)</item>
+        <item>Mathusalem (6 L)</item>
+        <item>Salmanazar (9 L)</item>
+        <item>Balthazar (12 L)</item>
+        <item>Nabuchodonosor (15 L)</item>
+        <item>Melchior (18 L)</item>
+    </string-array>
+</resources>

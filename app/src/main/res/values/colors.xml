@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#607d8b</color>
+    <color name="colorPrimaryVariant">#455a64</color>
+    <color name="colorPrimaryDark">#263238</color>
+    <color name="colorAccent">#3f51b5</color>
+    <color name="colorBackground">#121212</color>
+    <color name="colorSurface">#121212</color>
+    <color name="colorOnPrimary">#000000</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorOnBackground">#ffffff</color>
+    <color name="redWine">#770909</color>
+    <color name="whiteWine">#F2FF73</color>
+    <color name="pinkWine">#FFC4FF</color>
+</resources>
