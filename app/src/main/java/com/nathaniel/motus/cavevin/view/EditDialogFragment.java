@@ -15,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.nathaniel.motus.cavevin.R;
+import com.nathaniel.motus.cavevin.controller.CellarInputUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,7 +71,7 @@ public class EditDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 createCallBackToParentActivity();
-                String inputText=mInputTextEdit.getText().toString();
+                String inputText= CellarInputUtils.replaceForbiddenCharacters(view.getContext(),mInputTextEdit.getText().toString());
                 mCallBack.onEditDialogClick(view,inputText);
             }
         });

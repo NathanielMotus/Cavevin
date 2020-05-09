@@ -126,14 +126,14 @@ public class EditCellarActivity extends AppCompatActivity {
         //collect all the datas submitted and create a new bottle in the current cellar
 
         //Collect the datas
-        String appellation=mAppellationACTV.getText().toString();
-        String domain=mDomainACTV.getText().toString();
-        String cuvee=mCuveeACTV.getText().toString();
+        String appellation=CellarInputUtils.replaceForbiddenCharacters(this,mAppellationACTV.getText().toString());
+        String domain=CellarInputUtils.replaceForbiddenCharacters(this,mDomainACTV.getText().toString());
+        String cuvee=CellarInputUtils.replaceForbiddenCharacters(this,mCuveeACTV.getText().toString());
         String type="";
         if (mRedWineRadio.isChecked()) type="0";
         if (mWhiteWineRadio.isChecked()) type="1";
         if (mPinkWineRadio.isChecked()) type="2";
-        String vintage=mVintageEdit.getText().toString();
+        String vintage=CellarInputUtils.replaceForbiddenCharacters(this,mVintageEdit.getText().toString());
         int capacityIndex=mCapacitySpinner.getSelectedItemPosition();
         String bottleName="Bouteille";
         Float capacity=0.75f;
@@ -208,10 +208,10 @@ public class EditCellarActivity extends AppCompatActivity {
                 capacity = 18f;
             }
         }
-        String bottleComment=mBottleCommentEdit.getText().toString();
-        String origin=mOriginEdit.getText().toString();
+        String bottleComment=CellarInputUtils.replaceForbiddenCharacters(this,mBottleCommentEdit.getText().toString());
+        String origin=CellarInputUtils.replaceForbiddenCharacters(this,mOriginEdit.getText().toString());
         int stock=Integer.parseInt(mStockEdit.getText().toString());
-        String cellarComment=mCellarCommentEdit.getText().toString();
+        String cellarComment=CellarInputUtils.replaceForbiddenCharacters(this,mCellarCommentEdit.getText().toString());
 
         //Create new objects if it is a creation
         if (sCellPosition==-1) {

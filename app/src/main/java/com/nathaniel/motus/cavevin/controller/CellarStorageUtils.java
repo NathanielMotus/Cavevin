@@ -1,9 +1,14 @@
-package com.nathaniel.motus.cavevin.model;
+package com.nathaniel.motus.cavevin.controller;
 
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.nathaniel.motus.cavevin.model.Bottle;
+import com.nathaniel.motus.cavevin.model.Cell;
+import com.nathaniel.motus.cavevin.model.Cellar;
+import com.nathaniel.motus.cavevin.model.JsonObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

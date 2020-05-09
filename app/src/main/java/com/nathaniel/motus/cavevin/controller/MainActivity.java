@@ -29,7 +29,6 @@ import com.nathaniel.motus.cavevin.model.Bottle;
 import com.nathaniel.motus.cavevin.model.Cell;
 import com.nathaniel.motus.cavevin.model.CellComparator;
 import com.nathaniel.motus.cavevin.model.Cellar;
-import com.nathaniel.motus.cavevin.model.CellarStorageUtils;
 import com.nathaniel.motus.cavevin.view.BottomBarFragment;
 import com.nathaniel.motus.cavevin.view.CellarChoiceDialogFragment;
 import com.nathaniel.motus.cavevin.view.CellarFragment;
