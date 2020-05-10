@@ -13,7 +13,7 @@ public class CellarInputUtils {
 //    Static declaration
 //    **********************************************************************************************
 
-    private static final ArrayList<String> forbiddenCharacters= new ArrayList<>(Arrays.asList("\"", "\\"));
+    private static final ArrayList<String> forbiddenCharacters= new ArrayList<>(Arrays.asList("\"", "\\","{","}","[","]"));
     private static final String replacementCharacter="*";
 
 
