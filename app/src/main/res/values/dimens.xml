@@ -7,4 +7,13 @@
     <dimen name="text_big">16sp</dimen>
     <dimen name="margin_big">30dp</dimen>
     <dimen name="text_huge">25sp</dimen>
+
+<!--    Recyclerview cellar row dimensions-->
+    <dimen name="recyclerview_cellar_row_photo_width">72dp</dimen>
+    <dimen name="recyclerview_cellar_row_photo_height">120dp</dimen>
+    <dimen name="recyclerview_cellar_row_type_width">5dp</dimen>
+    <dimen name="recyclerview_cellar_row_stock_width">40dp</dimen>
+    <dimen name="recyclerview_cellar_row_buttons_width">40dp</dimen>
+    <dimen name="recyclerview_cellar_row_vintage_width">60dp</dimen>
+
 </resources>
