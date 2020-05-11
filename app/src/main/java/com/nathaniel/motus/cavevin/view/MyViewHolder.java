@@ -13,7 +13,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     public TextView appellation,domain,cuvee,type,vintage,bottleName,capacity,quantity;
     public TextView originTitle,origin,bottleCommentTitle,bottleComment,cellarCommentTitle,cellarComment;
     public Button buttonPlus,buttonMinus;
-    public ImageView buttonCollapse,buttonEdit;
+    public ImageView buttonCollapse,buttonEdit,photoImage;
 
     public MyViewHolder(View view) {
         super(view);
@@ -35,5 +35,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         cellarComment=view.findViewById(R.id.recycler_cellar_row_cellar_comment_text);
         buttonCollapse=view.findViewById(R.id.recycler_cellar_row_collapse_image);
         buttonEdit=view.findViewById(R.id.recycler_cellar_row_edit_image);
+        photoImage=view.findViewById(R.id.recycler_cellar_row_photo_image);
     }
 }

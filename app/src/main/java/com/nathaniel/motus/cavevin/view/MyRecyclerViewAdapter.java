@@ -4,9 +4,14 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Point;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.ColorRes;
@@ -17,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nathaniel.motus.cavevin.R;
+import com.nathaniel.motus.cavevin.controller.CellarPictureUtils;
 import com.nathaniel.motus.cavevin.controller.MainActivity;
 import com.nathaniel.motus.cavevin.model.Bottle;
 import com.nathaniel.motus.cavevin.model.Cell;
@@ -51,13 +57,25 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
 //                Get the current cellar position before callback (position is filtered cellar position)
         final int actualPosition=Cellar.getCellarPool().get(MainActivity.getCurrentCellarIndex()).getCellList().indexOf(mCellar.getCellList().get(position));
 
+        //calculate width of multilines textviews
+        int typeWidthPx= (int) mActivity.getResources().getDimension(dimen.recyclerview_cellar_row_type_width);
+        int photoImageWidthPx= (int) mActivity.getResources().getDimension(dimen.recyclerview_cellar_row_photo_width);
+        int vintageWidthPx= (int) mActivity.getResources().getDimension(dimen.recyclerview_cellar_row_vintage_width);
+        int buttonsWidthPx= (int) mActivity.getResources().getDimension(dimen.recyclerview_cellar_row_buttons_width);
+
+        int appellationWidth=CellarPictureUtils.getDisplayWidthPx(mContext)-typeWidthPx-photoImageWidthPx-vintageWidthPx-buttonsWidthPx;
+        int domainWidth=CellarPictureUtils.getDisplayWidthPx(mContext)-typeWidthPx-photoImageWidthPx-buttonsWidthPx;
+        int cuveeWidth=CellarPictureUtils.getDisplayWidthPx(mContext)-typeWidthPx-photoImageWidthPx-buttonsWidthPx;
+
+        holder.appellation.getLayoutParams().width=appellationWidth;
+        holder.domain.getLayoutParams().width=domainWidth;
+        holder.cuvee.getLayoutParams().width=cuveeWidth;
+
+
         final Cell cell=mCellar.getCellList().get(position);
         Bottle bottle=cell.getBottle();
         String color=bottle.getType();
         switch (color){
-            case "0":
-                holder.type.setBackgroundColor(mContext.getResources().getColor(R.color.redWine));
-                break;
             case "1":
                 holder.type.setBackgroundColor(mContext.getResources().getColor(R.color.whiteWine));
                 break;
@@ -77,6 +95,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
         holder.origin.setText(cell.getOrigin());
         holder.bottleComment.setText(bottle.getBottleComment());
         holder.cellarComment.setText(cell.getCellComment());
+//        holder.photoImage.setImageBitmap(CellarPictureUtils.decodeSampledBitmapFromResource(mActivity.getResources(), drawable.image_test,(int)mActivity.getResources().getDimension(dimen.recyclerview_cellar_row_photo_width),(int)mActivity.getResources().getDimension(dimen.recyclerview_cellar_row_photo_height)));
 
         createCallBackToParentActivity();
         holder.buttonEdit.setOnClickListener(new View.OnClickListener() {
