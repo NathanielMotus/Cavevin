@@ -5,8 +5,13 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.net.Uri;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.Toast;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class CellarPictureUtils {
 //    A utilitary class to manage pictures
@@ -69,6 +74,5 @@ public class CellarPictureUtils {
 
         return size.x;
     }
-
 
 }

@@ -55,10 +55,8 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     private static int sCurrentCellarIndex=0;
     private static String sCurrentTypeFilter="all";
     private static int sSortOption=0;
-    private static final int REQUEST_URI_CREATE=1;
-    private static final int REQUEST_URI_LOAD=2;
-    private static final String sFolderName="Cavevin";
-    private static final String sDataBaseFileName="Database.txt";
+    private static final int REQUEST_URI_CREATE=100;
+    private static final int REQUEST_URI_LOAD=101;
 
     //Following values are used to handle callback
     private static String sMenuTag;//to indicate where the callback comes from
@@ -445,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         //load all the datas
 
         File saveDir=getFilesDir();
-        File saveURI=CellarStorageUtils.createOrGetFile(saveDir,sFolderName,sDataBaseFileName);
+        File saveURI=CellarStorageUtils.createOrGetFile(saveDir,getResources().getString(R.string.database_folder_name),getResources().getString(R.string.database_file_name));
 
         CellarStorageUtils.loadDataBase(saveURI);
     }
@@ -454,9 +452,9 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         //save all the datas
 
         File saveDir=getFilesDir();
-        File saveURI=CellarStorageUtils.createOrGetFile(saveDir,sFolderName,sDataBaseFileName);
+        File saveFileName=CellarStorageUtils.createOrGetFile(saveDir,getResources().getString(R.string.database_folder_name),getResources().getString(R.string.database_file_name));
 
-        CellarStorageUtils.saveDataBase(saveURI);
+        CellarStorageUtils.saveDataBase(saveFileName);
     }
 
     private void showCellarChoiceDialogFragment(String dialogTitle,String menuTag){

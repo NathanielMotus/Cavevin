@@ -25,7 +25,8 @@
         android:layout_height="@dimen/recyclerview_cellar_row_photo_height"
         android:layout_toEndOf="@id/recycler_cellar_row_type_text"
         android:layout_alignParentTop="true"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_marginTop="@dimen/padding_small"
+        android:src="@drawable/photo_frame"/>
 
     <TextView
         android:id="@+id/recycler_cellar_row_appellation_text"

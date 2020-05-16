@@ -182,27 +182,50 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_big"
                 android:gravity="center">
 
-                <Button
-                    android:id="@+id/activity_edit_cellar_storage_button"
-                    android:layout_width="100dp"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Stockage"/>
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
 
-                <ImageView
-                    android:id="@+id/activity_edit_cellar_photo_image"
-                    android:layout_width="@dimen/recyclerview_cellar_row_photo_width"
-                    android:layout_height="@dimen/recyclerview_cellar_row_photo_height"
-                    android:src="@drawable/photo_frame"
-                    android:layout_marginBottom="@dimen/padding_normal"
-                    android:layout_marginTop="@dimen/padding_normal"/>
+                    <Button
+                        android:id="@+id/activity_edit_cellar_storage_button"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="Stockage"/>
 
-                <Button
-                    android:id="@+id/activity_edit_cellar_camera_button"
-                    android:layout_width="100dp"
+                    <Button
+                        android:id="@+id/activity_edit_cellar_camera_button"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="Camera"/>
+
+                    <Button
+                        android:id="@+id/activity_edit_cellar_delete_photo_button"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="Effacer"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Camera"/>
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/activity_edit_cellar_photo_image"
+                        android:layout_width="@dimen/recyclerview_cellar_row_photo_width"
+                        android:layout_height="@dimen/recyclerview_cellar_row_photo_height"
+                        android:src="@drawable/photo_frame"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

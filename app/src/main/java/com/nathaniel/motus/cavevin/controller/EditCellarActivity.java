@@ -1,12 +1,15 @@
 package com.nathaniel.motus.cavevin.controller;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -51,12 +55,29 @@ public class EditCellarActivity extends AppCompatActivity {
     EditText mOriginEdit;
     EditText mStockEdit;
     EditText mCellarCommentEdit;
+    Button mStorageButton;
+    Button mCameraButton;
+    Button mDeletePhotoButton;
     Button mOKButton;
     Button mDeleteButton;
+    ImageView mPhotoImage;
+
+//    **********************************************************************************************
+//    Intent request tags
+//    **********************************************************************************************
+    private static final int REQUEST_PHOTO_PATHNAME=200;
+    private static final int REQUEST_CAMERA_USE=201;
 
     //To always know the cellarindex
     private static int sCurrentCellarIndex=0;
     private static int sCellPosition=0;
+
+    //To know whether a photo was chosen
+    private static boolean sPhotoHasChanged=false;
+
+//    **********************************************************************************************
+//    EditCellarActivity events
+//    **********************************************************************************************
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +105,11 @@ public class EditCellarActivity extends AppCompatActivity {
         mCellarCommentEdit=findViewById(R.id.activity_edit_cellar_cellar_comment_edit);
         mOKButton=findViewById(R.id.activity_edit_cellar_ok_button);
         mDeleteButton=findViewById(R.id.activity_edit_cellar_delete_button);
+        mStorageButton=findViewById(R.id.activity_edit_cellar_storage_button);
+        mCameraButton=findViewById(R.id.activity_edit_cellar_camera_button);
+        mDeletePhotoButton=findViewById(R.id.activity_edit_cellar_delete_photo_button);
+        mPhotoImage=findViewById(R.id.activity_edit_cellar_photo_image);
+
 
         //if not creation "delete" is not visible
         if (sCellPosition==-1) mDeleteButton.setVisibility(View.GONE);
@@ -100,7 +126,13 @@ public class EditCellarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 deleteCellarEntry();
-//                finish();
+            }
+        });
+
+        mStorageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendGetPhotoPathNameIntent();
             }
         });
 
@@ -117,10 +149,95 @@ public class EditCellarActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        //pathname request
+        if (requestCode==REQUEST_PHOTO_PATHNAME && resultCode==RESULT_OK){
+            Uri uri=data.getData();
+            Bitmap bitmap= CellarStorageUtils.getBitmapFromUri(getApplicationContext(),uri);
+            mPhotoImage.setImageBitmap(bitmap);
+            sPhotoHasChanged=true;
+
+//            mPhotoImage.setImageBitmap(CellarPictureUtils.decodeSampledBitmapFromFile(realPathName,
+//                    (int)getResources().getDimension(R.dimen.recyclerview_cellar_row_photo_width),
+//                    (int)getResources().getDimension(R.dimen.recyclerview_cellar_row_photo_height)));
+
+
+
+        }
+
+        //Camera use request
+        if (requestCode==REQUEST_CAMERA_USE && resultCode==RESULT_OK){
+
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+//    **********************************************************************************************
+//    Configuration subs
+//    **********************************************************************************************
+
     private void configureToolBar(){
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
+
+    private void initializeFields(){
+        //initialize cellar editor fields
+
+        updateAutoCompletionTextViewAdapter();
+
+        if (sCellPosition==-1) {
+            mTitleText.setText("Créer une entrée");
+            mAppellationACTV.setText("");
+            mDomainACTV.setText("");
+            mCuveeACTV.setText("");
+            mRedWineRadio.setChecked(true);
+            mVintageEdit.setText("");
+            mCapacitySpinner.setSelection(0);
+            mBottleCommentEdit.setText("");
+            mOriginEdit.setText("");
+            mStockEdit.setText("1");
+            mCellarCommentEdit.setText("");
+        } else {
+            mTitleText.setText("Modifier une entrée");
+            Cell cell=Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(sCellPosition);
+            Bottle bottle=cell.getBottle();
+            mAppellationACTV.setText(bottle.getAppellation());
+            mDomainACTV.setText(bottle.getDomain());
+            mCuveeACTV.setText(bottle.getCuvee());
+            switch (bottle.getType()){
+                case "0":
+                    mRedWineRadio.setChecked(true);
+                    break;
+                case "1":
+                    mWhiteWineRadio.setChecked(true);
+                    break;
+                case "2":
+                    mPinkWineRadio.setChecked(true);
+                    break;
+                default:
+                    mRedWineRadio.setChecked(true);
+            }
+            mVintageEdit.setText(bottle.getVintage());
+            int i=0;
+            String bottleName=bottle.getBottleName();
+            while (bottleNameList.get(i).compareTo(bottleName)!=0) i++;
+            mCapacitySpinner.setSelection(i);
+            mBottleCommentEdit.setText(bottle.getBottleComment());
+            mOriginEdit.setText(cell.getOrigin());
+            mStockEdit.setText(Integer.toString(cell.getStock()));
+            mCellarCommentEdit.setText(cell.getCellComment());
+        }
+    }
+
+
+
+//    **********************************************************************************************
+//    Working subs
+//    **********************************************************************************************
 
     private void createEntry(){
         //collect all the datas submitted and create a new bottle in the current cellar
@@ -213,9 +330,19 @@ public class EditCellarActivity extends AppCompatActivity {
         int stock=Integer.parseInt(mStockEdit.getText().toString());
         String cellarComment=CellarInputUtils.replaceForbiddenCharacters(this,mCellarCommentEdit.getText().toString());
 
+        //manage the new photo
+        String photoPathName="";
+        if(sPhotoHasChanged){
+            sPhotoHasChanged=false;
+
+            Bitmap bitmap=((BitmapDrawable)mPhotoImage.getDrawable()).getBitmap();
+            photoPathName=CellarStorageUtils.saveBottleImageToInternalStorage(getFilesDir(),getResources().getString(R.string.photo_folder_name),bitmap);
+            Log.i(TAG,photoPathName);
+        }
+
         //Create new objects if it is a creation
         if (sCellPosition==-1) {
-            Bottle bottle = new Bottle(appellation, domain, cuvee, type, vintage, bottleName, capacity, bottleComment, true);
+            Bottle bottle = new Bottle(appellation, domain, cuvee, type, vintage, bottleName, capacity, bottleComment,photoPathName, true);
             Cell cell = new Cell(bottle, origin, stock, cellarComment, true);
             Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().add(cell);
 
@@ -234,61 +361,13 @@ public class EditCellarActivity extends AppCompatActivity {
             bottle.setBottleName(bottleName);
             bottle.setCapacity(capacity);
             bottle.setBottleComment(bottleComment);
+            bottle.setPhotoPathName(photoPathName);
             cell.setOrigin(origin);
             cell.setStock(stock);
             cell.setCellComment(cellarComment);
 
             Toast.makeText(this,"Entrée modifiée",Toast.LENGTH_SHORT).show();
             finish();
-        }
-    }
-
-    private void initializeFields(){
-        //initialize cellar editor fields
-
-        updateAutoCompletionTextViewAdapter();
-
-        if (sCellPosition==-1) {
-            mTitleText.setText("Créer une entrée");
-            mAppellationACTV.setText("");
-            mDomainACTV.setText("");
-            mCuveeACTV.setText("");
-            mRedWineRadio.setChecked(true);
-            mVintageEdit.setText("");
-            mCapacitySpinner.setSelection(0);
-            mBottleCommentEdit.setText("");
-            mOriginEdit.setText("");
-            mStockEdit.setText("1");
-            mCellarCommentEdit.setText("");
-        } else {
-            mTitleText.setText("Modifier une entrée");
-            Cell cell=Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(sCellPosition);
-            Bottle bottle=cell.getBottle();
-            mAppellationACTV.setText(bottle.getAppellation());
-            mDomainACTV.setText(bottle.getDomain());
-            mCuveeACTV.setText(bottle.getCuvee());
-            switch (bottle.getType()){
-                case "0":
-                    mRedWineRadio.setChecked(true);
-                    break;
-                case "1":
-                    mWhiteWineRadio.setChecked(true);
-                    break;
-                case "2":
-                    mPinkWineRadio.setChecked(true);
-                    break;
-                default:
-                    mRedWineRadio.setChecked(true);
-            }
-            mVintageEdit.setText(bottle.getVintage());
-            int i=0;
-            String bottleName=bottle.getBottleName();
-            while (bottleNameList.get(i).compareTo(bottleName)!=0) i++;
-            mCapacitySpinner.setSelection(i);
-            mBottleCommentEdit.setText(bottle.getBottleComment());
-            mOriginEdit.setText(cell.getOrigin());
-            mStockEdit.setText(Integer.toString(cell.getStock()));
-            mCellarCommentEdit.setText(cell.getCellComment());
         }
     }
 
@@ -371,6 +450,18 @@ public class EditCellarActivity extends AppCompatActivity {
 
         ArrayAdapter<String> cuveeAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line,getCuveeAutoCompletionList());
         mCuveeACTV.setAdapter(cuveeAdapter);
+    }
+
+//    **********************************************************************************************
+//    Sending intents
+//    **********************************************************************************************
+
+    private void sendGetPhotoPathNameIntent(){
+        //get the pathname of a photo chosen by user
+
+        Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent,REQUEST_PHOTO_PATHNAME);
     }
 
 

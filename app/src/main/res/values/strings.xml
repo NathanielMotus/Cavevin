@@ -19,4 +19,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="photo_folder_name">Cavevin/photos</string>
+    <string name="database_folder_name">Cavevin</string>
+    <string name="database_file_name">Database.txt</string>
+
 </resources>

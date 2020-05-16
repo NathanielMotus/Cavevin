@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Bottle {
 
     //**********************************************************************************************
-    //Variables de déboggage
+    //Debug values
     private static final String TAG="Bottle";
     //**********************************************************************************************
 
@@ -58,6 +58,9 @@ public class Bottle {
 
     //Commentaire : champ libre propre à la bouteille
     private String mBottleComment;
+
+    //Link to an image
+    private String mPhotoPathName;
 
     //**********************************************************************************************
     //Getters and setters
@@ -131,6 +134,14 @@ public class Bottle {
         mBottleComment = bottleComment;
     }
 
+    public String getPhotoPathName() {
+        return mPhotoPathName;
+    }
+
+    public void setPhotoPathName(String photoPathName) {
+        mPhotoPathName = photoPathName;
+    }
+
     public static ArrayList<Bottle> getBottleCatalog() {
         return sBottleCatalog;
     }
@@ -151,13 +162,14 @@ public class Bottle {
         mDomain="";
         mCuvee="";
         mBottleComment ="";
+        mPhotoPathName="";
 
         if(isReferenced) {
             sBottleCatalog.add(this);
         }
     }
 
-    public Bottle(String appellation,String domain,String cuvee,String type, String vintage,String bottleName, Float capacity,String bottleComment,Boolean isReferenced){
+    public Bottle(String appellation,String domain,String cuvee,String type, String vintage,String bottleName, Float capacity,String bottleComment,String photoPathName,Boolean isReferenced){
         //creates a complete bottle
 
         mAppellation=appellation;
@@ -168,6 +180,7 @@ public class Bottle {
         mBottleName=bottleName;
         mCapacity=capacity;
         mBottleComment=bottleComment;
+        mPhotoPathName=photoPathName;
 
         if(isReferenced) {
             sBottleCatalog.add(this);

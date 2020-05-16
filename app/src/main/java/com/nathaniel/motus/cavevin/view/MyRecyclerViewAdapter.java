@@ -1,28 +1,18 @@
 package com.nathaniel.motus.cavevin.view;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Point;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Toast;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nathaniel.motus.cavevin.R;
 import com.nathaniel.motus.cavevin.controller.CellarPictureUtils;
+import com.nathaniel.motus.cavevin.controller.CellarStorageUtils;
 import com.nathaniel.motus.cavevin.controller.MainActivity;
 import com.nathaniel.motus.cavevin.model.Bottle;
 import com.nathaniel.motus.cavevin.model.Cell;
@@ -95,7 +85,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
         holder.origin.setText(cell.getOrigin());
         holder.bottleComment.setText(bottle.getBottleComment());
         holder.cellarComment.setText(cell.getCellComment());
-//        holder.photoImage.setImageBitmap(CellarPictureUtils.decodeSampledBitmapFromResource(mActivity.getResources(), drawable.image_test,(int)mActivity.getResources().getDimension(dimen.recyclerview_cellar_row_photo_width),(int)mActivity.getResources().getDimension(dimen.recyclerview_cellar_row_photo_height)));
+
+        //load photo image
+        String photoPathName=bottle.getPhotoPathName();
+        if(photoPathName.compareTo("")!=0)
+//            holder.photoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(mContext.getFilesDir(), mContext.getResources().getString(string.photo_folder_name),photoPathName));
+            holder.photoImage.setImageBitmap(CellarStorageUtils.decodeSampledBitmapFromFile(mContext.getFilesDir(),mContext.getResources().getString(string.photo_folder_name),
+                    photoPathName,(int)mContext.getResources().getDimension(dimen.recyclerview_cellar_row_photo_width),(int)mContext.getResources().getDimension(dimen.recyclerview_cellar_row_photo_height)));
+        else
+            holder.photoImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.photo_frame));
 
         createCallBackToParentActivity();
         holder.buttonEdit.setOnClickListener(new View.OnClickListener() {

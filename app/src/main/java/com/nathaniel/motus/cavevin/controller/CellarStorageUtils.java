@@ -1,7 +1,12 @@
 package com.nathaniel.motus.cavevin.controller;
 
+import android.app.Application;
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +18,9 @@ import com.nathaniel.motus.cavevin.model.JsonObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,7 +29,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CellarStorageUtils {
     //Utilitary class meant to convert cellars, cells and bottles to string
@@ -45,6 +55,7 @@ public class CellarStorageUtils {
     private static final String JSON_CAPACITY="capacity";
     private static final String JSON_TYPE="type";
     private static final String JSON_BOTTLE_COMMENT="bottle comment";
+    private static final String JSON_BOTTLE_PHOTO_PATHNAME="photo pathname";
 
 //    JSON for cell
     private static final String JSON_CELLS="cells";
@@ -87,6 +98,7 @@ public class CellarStorageUtils {
             jsonObject.addKeyValue(JSON_BOTTLE_NAME,bottle.getBottleName());
             jsonObject.addKeyValue(JSON_CAPACITY,Float.toString(bottle.getCapacity()));
             jsonObject.addKeyValue(JSON_BOTTLE_COMMENT,bottle.getBottleComment());
+            jsonObject.addKeyValue(JSON_BOTTLE_PHOTO_PATHNAME,bottle.getPhotoPathName());
         }
         return jsonObject;
     }
@@ -332,7 +344,8 @@ public class CellarStorageUtils {
             currentJsonObject=(JsonObject)bottleJsonObjectArrayList.get(i);
             Bottle bottle=new Bottle(currentJsonObject.getKeyValue(JSON_APPELLATION),currentJsonObject.getKeyValue(JSON_DOMAIN),currentJsonObject.getKeyValue(JSON_CUVEE),
                     currentJsonObject.getKeyValue(JSON_TYPE),currentJsonObject.getKeyValue(JSON_VINTAGE),currentJsonObject.getKeyValue(JSON_BOTTLE_NAME),
-                    Float.parseFloat(currentJsonObject.getKeyValue(JSON_CAPACITY)),currentJsonObject.getKeyValue(JSON_BOTTLE_COMMENT),true);
+                    Float.parseFloat(currentJsonObject.getKeyValue(JSON_CAPACITY)),currentJsonObject.getKeyValue(JSON_BOTTLE_COMMENT),
+                    currentJsonObject.getKeyValue(JSON_BOTTLE_PHOTO_PATHNAME),true);
         }
 
         //Create cells
@@ -364,8 +377,84 @@ public class CellarStorageUtils {
         Bottle.clearBottleCatalog();
     }
 
+    public static String saveBottleImageToInternalStorage(File destination,String folderName,Bitmap bitmap){
+        //save the photo to the internal storage and return the pathname
+        //the photo name is a timestamp
+
+        String timeStamp=new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
+        File file=createOrGetFile(destination,folderName,timeStamp);
+
+        try{
+            file.getParentFile().mkdirs();
+            OutputStream stream=new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+            stream.flush();
+            stream.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return timeStamp;
+    }
+
+    public static Bitmap getBitmapFromInternalStorage(File destination,String folderName,String fileName){
+        //get the photo in internal storage
+
+        File file=createOrGetFile(destination,folderName,fileName);
+        Bitmap bitmap=null;
+
+        try{
+            file.getParentFile().mkdirs();
+            InputStream stream=new FileInputStream(file);
+            bitmap= BitmapFactory.decodeStream(stream);
+            stream.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
 
 
+    public static Bitmap getBitmapFromUri(Context context, Uri uri){
+        //get a bitmap from an Uri
 
+        Bitmap bitmap=null;
+        try {
+            InputStream stream = context.getContentResolver().openInputStream(uri);
+            bitmap=BitmapFactory.decodeStream(stream);
+        }catch (FileNotFoundException e){
+            Toast.makeText(context,"Erreur",Toast.LENGTH_SHORT).show();
+        }
+        return bitmap;
+    }
 
+    public static Bitmap decodeSampledBitmapFromFile(File destination,String folderName,String fileName,int reqWidth, int reqHeight) {
+
+        File file = createOrGetFile(destination, folderName, fileName);
+        Bitmap bitmap = null;
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+
+        try {
+            file.getParentFile().mkdirs();
+            options.inJustDecodeBounds = true;
+            InputStream stream = new FileInputStream(file);
+            bitmap = BitmapFactory.decodeStream(stream, null, options);
+            stream.close();
+
+            // Calculate inSampleSize
+            options.inSampleSize = CellarPictureUtils.calculateInSampleSize(options, reqWidth, reqHeight);
+
+            // Decode bitmap with inSampleSize set
+            InputStream stream1=new FileInputStream(file);
+            options.inJustDecodeBounds = false;
+            bitmap = BitmapFactory.decodeStream(stream1, null, options);
+            stream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            bitmap = null;
+        }
+        return bitmap;
+    }
 }
