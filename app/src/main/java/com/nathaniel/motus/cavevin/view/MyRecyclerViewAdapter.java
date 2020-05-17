@@ -2,7 +2,6 @@ package com.nathaniel.motus.cavevin.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +86,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
         holder.cellarComment.setText(cell.getCellComment());
 
         //load photo image
-        String photoPathName=bottle.getPhotoPathName();
+        String photoPathName=bottle.getPhotoName();
         if(photoPathName.compareTo("")!=0)
 //            holder.photoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(mContext.getFilesDir(), mContext.getResources().getString(string.photo_folder_name),photoPathName));
             holder.photoImage.setImageBitmap(CellarStorageUtils.decodeSampledBitmapFromFile(mContext.getFilesDir(),mContext.getResources().getString(string.photo_folder_name),

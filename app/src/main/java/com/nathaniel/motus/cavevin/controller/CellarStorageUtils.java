@@ -1,12 +1,9 @@
 package com.nathaniel.motus.cavevin.controller;
 
-import android.app.Application;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -55,7 +52,7 @@ public class CellarStorageUtils {
     private static final String JSON_CAPACITY="capacity";
     private static final String JSON_TYPE="type";
     private static final String JSON_BOTTLE_COMMENT="bottle comment";
-    private static final String JSON_BOTTLE_PHOTO_PATHNAME="photo pathname";
+    private static final String JSON_BOTTLE_PHOTO_NAME="photo name";
 
 //    JSON for cell
     private static final String JSON_CELLS="cells";
@@ -98,7 +95,7 @@ public class CellarStorageUtils {
             jsonObject.addKeyValue(JSON_BOTTLE_NAME,bottle.getBottleName());
             jsonObject.addKeyValue(JSON_CAPACITY,Float.toString(bottle.getCapacity()));
             jsonObject.addKeyValue(JSON_BOTTLE_COMMENT,bottle.getBottleComment());
-            jsonObject.addKeyValue(JSON_BOTTLE_PHOTO_PATHNAME,bottle.getPhotoPathName());
+            jsonObject.addKeyValue(JSON_BOTTLE_PHOTO_NAME,bottle.getPhotoName());
         }
         return jsonObject;
     }
@@ -345,7 +342,7 @@ public class CellarStorageUtils {
             Bottle bottle=new Bottle(currentJsonObject.getKeyValue(JSON_APPELLATION),currentJsonObject.getKeyValue(JSON_DOMAIN),currentJsonObject.getKeyValue(JSON_CUVEE),
                     currentJsonObject.getKeyValue(JSON_TYPE),currentJsonObject.getKeyValue(JSON_VINTAGE),currentJsonObject.getKeyValue(JSON_BOTTLE_NAME),
                     Float.parseFloat(currentJsonObject.getKeyValue(JSON_CAPACITY)),currentJsonObject.getKeyValue(JSON_BOTTLE_COMMENT),
-                    currentJsonObject.getKeyValue(JSON_BOTTLE_PHOTO_PATHNAME),true);
+                    currentJsonObject.getKeyValue(JSON_BOTTLE_PHOTO_NAME),true);
         }
 
         //Create cells
@@ -456,5 +453,13 @@ public class CellarStorageUtils {
             bitmap = null;
         }
         return bitmap;
+    }
+
+    public static void deleteFileFromInternalStorage(File destination,String folderName, String fileName){
+        //delete a file frome internal storage
+        //use to delete bottle photos
+
+        File file=createOrGetFile(destination,folderName,fileName);
+        boolean deleted=file.delete();
     }
 }

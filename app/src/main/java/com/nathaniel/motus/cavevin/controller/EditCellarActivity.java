@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -73,7 +72,11 @@ public class EditCellarActivity extends AppCompatActivity {
     private static int sCellPosition=0;
 
     //To know whether a photo was chosen
-    private static boolean sPhotoHasChanged=false;
+    private static final String PHOTO_IS_NEW="photo is new";
+    private static final String PHOTO_HAS_NOT_CHANGED="photo has not changed";
+    private static final String PHOTO_WAS_DELETED="photo was deleted";
+    private static String sPhotoHasChanged=PHOTO_HAS_NOT_CHANGED;
+
 
 //    **********************************************************************************************
 //    EditCellarActivity events
@@ -125,6 +128,7 @@ public class EditCellarActivity extends AppCompatActivity {
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deleteBottlePhoto();
                 deleteCellarEntry();
             }
         });
@@ -136,6 +140,12 @@ public class EditCellarActivity extends AppCompatActivity {
             }
         });
 
+        mDeletePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteBottlePhoto();
+            }
+        });
 
         initializeFields();
 
@@ -157,13 +167,7 @@ public class EditCellarActivity extends AppCompatActivity {
             Uri uri=data.getData();
             Bitmap bitmap= CellarStorageUtils.getBitmapFromUri(getApplicationContext(),uri);
             mPhotoImage.setImageBitmap(bitmap);
-            sPhotoHasChanged=true;
-
-//            mPhotoImage.setImageBitmap(CellarPictureUtils.decodeSampledBitmapFromFile(realPathName,
-//                    (int)getResources().getDimension(R.dimen.recyclerview_cellar_row_photo_width),
-//                    (int)getResources().getDimension(R.dimen.recyclerview_cellar_row_photo_height)));
-
-
+            sPhotoHasChanged=PHOTO_IS_NEW;
 
         }
 
@@ -201,6 +205,7 @@ public class EditCellarActivity extends AppCompatActivity {
             mOriginEdit.setText("");
             mStockEdit.setText("1");
             mCellarCommentEdit.setText("");
+            mPhotoImage.setImageDrawable(getResources().getDrawable(R.drawable.photo_frame));
         } else {
             mTitleText.setText("Modifier une entrée");
             Cell cell=Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(sCellPosition);
@@ -230,6 +235,12 @@ public class EditCellarActivity extends AppCompatActivity {
             mOriginEdit.setText(cell.getOrigin());
             mStockEdit.setText(Integer.toString(cell.getStock()));
             mCellarCommentEdit.setText(cell.getCellComment());
+            if(bottle.getPhotoName().compareTo("")!=0)
+                mPhotoImage.setImageBitmap(CellarStorageUtils.decodeSampledBitmapFromFile(getFilesDir(),getResources().getString(R.string.photo_folder_name),
+                        bottle.getPhotoName(),(int)getResources().getDimension(R.dimen.recyclerview_cellar_row_photo_width),
+                        (int)getResources().getDimension(R.dimen.recyclerview_cellar_row_photo_height)));
+            else
+                mPhotoImage.setImageDrawable(getResources().getDrawable(R.drawable.photo_frame));
         }
     }
 
@@ -330,19 +341,18 @@ public class EditCellarActivity extends AppCompatActivity {
         int stock=Integer.parseInt(mStockEdit.getText().toString());
         String cellarComment=CellarInputUtils.replaceForbiddenCharacters(this,mCellarCommentEdit.getText().toString());
 
-        //manage the new photo
-        String photoPathName="";
-        if(sPhotoHasChanged){
-            sPhotoHasChanged=false;
+        //handle the new photo
+        String photoName="";
+        if(sPhotoHasChanged==PHOTO_IS_NEW){
+            sPhotoHasChanged=PHOTO_HAS_NOT_CHANGED;
 
             Bitmap bitmap=((BitmapDrawable)mPhotoImage.getDrawable()).getBitmap();
-            photoPathName=CellarStorageUtils.saveBottleImageToInternalStorage(getFilesDir(),getResources().getString(R.string.photo_folder_name),bitmap);
-            Log.i(TAG,photoPathName);
+            photoName=CellarStorageUtils.saveBottleImageToInternalStorage(getFilesDir(),getResources().getString(R.string.photo_folder_name),bitmap);
         }
 
         //Create new objects if it is a creation
         if (sCellPosition==-1) {
-            Bottle bottle = new Bottle(appellation, domain, cuvee, type, vintage, bottleName, capacity, bottleComment,photoPathName, true);
+            Bottle bottle = new Bottle(appellation, domain, cuvee, type, vintage, bottleName, capacity, bottleComment,photoName, true);
             Cell cell = new Cell(bottle, origin, stock, cellarComment, true);
             Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().add(cell);
 
@@ -361,7 +371,7 @@ public class EditCellarActivity extends AppCompatActivity {
             bottle.setBottleName(bottleName);
             bottle.setCapacity(capacity);
             bottle.setBottleComment(bottleComment);
-            bottle.setPhotoPathName(photoPathName);
+            bottle.setPhotoName(photoName);
             cell.setOrigin(origin);
             cell.setStock(stock);
             cell.setCellComment(cellarComment);
@@ -394,6 +404,17 @@ public class EditCellarActivity extends AppCompatActivity {
                 .create()
                 .show();
 
+    }
+
+    private void deleteBottlePhoto(){
+        //delete the photo when delete photo is clicked
+
+        CellarStorageUtils.deleteFileFromInternalStorage(getFilesDir(),
+                getResources().getString(R.string.photo_folder_name),
+                Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(sCellPosition).getBottle().getPhotoName());
+
+        mPhotoImage.setImageDrawable(getResources().getDrawable(R.drawable.photo_frame));
+        sPhotoHasChanged=PHOTO_WAS_DELETED;
     }
 
 //    **********************************************************************************************

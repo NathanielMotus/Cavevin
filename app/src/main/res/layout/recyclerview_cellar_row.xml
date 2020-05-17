@@ -15,8 +15,8 @@
         android:layout_marginStart="@dimen/padding_small"
         android:layout_marginTop="@dimen/padding_small"
         android:layout_marginBottom="@dimen/padding_small"
-        android:layout_alignTop="@id/recycler_cellar_row_appellation_text"
-        android:layout_alignBottom="@id/recycler_cellar_row_bottle_name_text"
+        android:layout_alignTop="@id/recycler_cellar_row_photo_image"
+        android:layout_alignBottom="@id/recycler_cellar_row_photo_image"
         android:text=""/>
 
     <ImageView

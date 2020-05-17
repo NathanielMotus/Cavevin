@@ -60,7 +60,7 @@ public class Bottle {
     private String mBottleComment;
 
     //Link to an image
-    private String mPhotoPathName;
+    private String mPhotoName;
 
     //**********************************************************************************************
     //Getters and setters
@@ -134,12 +134,12 @@ public class Bottle {
         mBottleComment = bottleComment;
     }
 
-    public String getPhotoPathName() {
-        return mPhotoPathName;
+    public String getPhotoName() {
+        return mPhotoName;
     }
 
-    public void setPhotoPathName(String photoPathName) {
-        mPhotoPathName = photoPathName;
+    public void setPhotoName(String photoName) {
+        mPhotoName = photoName;
     }
 
     public static ArrayList<Bottle> getBottleCatalog() {
@@ -162,14 +162,14 @@ public class Bottle {
         mDomain="";
         mCuvee="";
         mBottleComment ="";
-        mPhotoPathName="";
+        mPhotoName ="";
 
         if(isReferenced) {
             sBottleCatalog.add(this);
         }
     }
 
-    public Bottle(String appellation,String domain,String cuvee,String type, String vintage,String bottleName, Float capacity,String bottleComment,String photoPathName,Boolean isReferenced){
+    public Bottle(String appellation, String domain, String cuvee, String type, String vintage, String bottleName, Float capacity, String bottleComment, String photoName, Boolean isReferenced){
         //creates a complete bottle
 
         mAppellation=appellation;
@@ -180,7 +180,7 @@ public class Bottle {
         mBottleName=bottleName;
         mCapacity=capacity;
         mBottleComment=bottleComment;
-        mPhotoPathName=photoPathName;
+        mPhotoName = photoName;
 
         if(isReferenced) {
             sBottleCatalog.add(this);
