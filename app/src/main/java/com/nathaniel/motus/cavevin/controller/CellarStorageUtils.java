@@ -3,6 +3,7 @@ package com.nathaniel.motus.cavevin.controller;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
@@ -378,19 +379,27 @@ public class CellarStorageUtils {
         //save the photo to the internal storage and return the pathname
         //the photo name is a timestamp
 
-        String timeStamp=new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
-        File file=createOrGetFile(destination,folderName,timeStamp);
+        String timeStamp=new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
 
-        try{
+        saveBitmapToInternalStorage(destination,folderName,timeStamp,bitmap);
+        return timeStamp;
+    }
+
+    public static void saveBitmapToInternalStorage(File destination,String folderName,String photoName,Bitmap bitmap){
+        //save any bitmap to any location
+
+        File file=createOrGetFile(destination,folderName,photoName);
+
+        try {
             file.getParentFile().mkdirs();
-            OutputStream stream=new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
-            stream.flush();
-            stream.close();
-        }catch (IOException e){
+            OutputStream outputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return timeStamp;
     }
 
     public static Bitmap getBitmapFromInternalStorage(File destination,String folderName,String fileName){
@@ -404,9 +413,21 @@ public class CellarStorageUtils {
             InputStream stream=new FileInputStream(file);
             bitmap= BitmapFactory.decodeStream(stream);
             stream.close();
+
+            //check orientation
+            ExifInterface exifInterface=new ExifInterface(file.toString());
+            if(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("6")){
+                bitmap= CellarPictureUtils.rotate(bitmap, 90);
+            } else if(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("8")){
+                bitmap= CellarPictureUtils.rotate(bitmap, 270);
+            } else if(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("3")){
+                bitmap= CellarPictureUtils.rotate(bitmap, 180);
+            }
+
         }catch (IOException e){
             e.printStackTrace();
         }
+
         return bitmap;
     }
 
@@ -418,7 +439,23 @@ public class CellarStorageUtils {
         try {
             InputStream stream = context.getContentResolver().openInputStream(uri);
             bitmap=BitmapFactory.decodeStream(stream);
-        }catch (FileNotFoundException e){
+            stream.close();
+
+            //check orientation
+            stream=context.getContentResolver().openInputStream(uri);
+            androidx.exifinterface.media.ExifInterface exifInterface=new androidx.exifinterface.media.ExifInterface(stream);
+            stream.close();
+
+            if(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("6")){
+                bitmap= CellarPictureUtils.rotate(bitmap, 90);
+            } else if(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("8")){
+                bitmap= CellarPictureUtils.rotate(bitmap, 270);
+            } else if(exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION).equalsIgnoreCase("3")){
+                bitmap= CellarPictureUtils.rotate(bitmap, 180);
+            }
+
+
+        }catch (IOException e){
             Toast.makeText(context,"Erreur",Toast.LENGTH_SHORT).show();
         }
         return bitmap;

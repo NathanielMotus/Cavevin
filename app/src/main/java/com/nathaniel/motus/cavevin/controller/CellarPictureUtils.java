@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.net.Uri;
 import android.view.Display;
@@ -73,6 +74,16 @@ public class CellarPictureUtils {
         display.getRealSize(size);
 
         return size.x;
+    }
+
+    public static Bitmap rotate(Bitmap bitmap, int degree) {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+
+        Matrix mtx = new Matrix();
+        mtx.setRotate(degree);
+
+        return Bitmap.createBitmap(bitmap,0,0,w,h, mtx, true);
     }
 
 }

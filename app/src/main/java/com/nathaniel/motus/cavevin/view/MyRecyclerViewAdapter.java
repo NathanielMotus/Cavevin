@@ -88,9 +88,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
         //load photo image
         String photoPathName=bottle.getPhotoName();
         if(photoPathName.compareTo("")!=0)
-//            holder.photoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(mContext.getFilesDir(), mContext.getResources().getString(string.photo_folder_name),photoPathName));
-            holder.photoImage.setImageBitmap(CellarStorageUtils.decodeSampledBitmapFromFile(mContext.getFilesDir(),mContext.getResources().getString(string.photo_folder_name),
-                    photoPathName,(int)mContext.getResources().getDimension(dimen.recyclerview_cellar_row_photo_width),(int)mContext.getResources().getDimension(dimen.recyclerview_cellar_row_photo_height)));
+            holder.photoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(mContext.getFilesDir(),
+                    mContext.getResources().getString(string.photo_folder_name),
+                    photoPathName+mContext.getResources().getString(string.photo_thumbnail_suffix)));
         else
             holder.photoImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.photo_frame));
 

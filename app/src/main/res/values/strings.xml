@@ -22,5 +22,6 @@
     <string name="photo_folder_name">Cavevin/photos</string>
     <string name="database_folder_name">Cavevin</string>
     <string name="database_file_name">Database.txt</string>
+    <string name="photo_thumbnail_suffix">_thumb</string>
 
 </resources>

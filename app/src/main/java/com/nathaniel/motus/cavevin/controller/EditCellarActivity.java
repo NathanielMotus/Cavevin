@@ -1,16 +1,14 @@
 package com.nathaniel.motus.cavevin.controller;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,11 +21,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.exifinterface.media.ExifInterface;
+
 import com.nathaniel.motus.cavevin.R;
 import com.nathaniel.motus.cavevin.model.Bottle;
 import com.nathaniel.motus.cavevin.model.Cell;
 import com.nathaniel.motus.cavevin.model.Cellar;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,6 +81,13 @@ public class EditCellarActivity extends AppCompatActivity {
     private static final String PHOTO_HAS_NOT_CHANGED="photo has not changed";
     private static final String PHOTO_WAS_DELETED="photo was deleted";
     private static String sPhotoHasChanged=PHOTO_HAS_NOT_CHANGED;
+
+    //the file in which the photo taken will be saved
+    //as to be a global field as it cannot be passed back through intent
+    private Uri mPhotoTakenUri;
+    private String mPhotoTakenFolderName="DCIM";
+    private String mPhotoTakenName="temporary_pic.jpg";
+    private String mPhotoThumbnailSuffix="_thumb";
 
 
 //    **********************************************************************************************
@@ -147,6 +159,13 @@ public class EditCellarActivity extends AppCompatActivity {
             }
         });
 
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendTakePhotoIntent();
+            }
+        });
+
         initializeFields();
 
         configureToolBar();
@@ -166,14 +185,20 @@ public class EditCellarActivity extends AppCompatActivity {
         if (requestCode==REQUEST_PHOTO_PATHNAME && resultCode==RESULT_OK){
             Uri uri=data.getData();
             Bitmap bitmap= CellarStorageUtils.getBitmapFromUri(getApplicationContext(),uri);
-            mPhotoImage.setImageBitmap(bitmap);
+
+            //save photo to temporary_pic to get the exif
+            CellarStorageUtils.saveBitmapToInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName,bitmap);
+
+            mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName));
             sPhotoHasChanged=PHOTO_IS_NEW;
 
         }
 
         //Camera use request
         if (requestCode==REQUEST_CAMERA_USE && resultCode==RESULT_OK){
-
+            mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName));
+            CellarStorageUtils.deleteFileFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName);
+            sPhotoHasChanged=PHOTO_IS_NEW;
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -192,6 +217,8 @@ public class EditCellarActivity extends AppCompatActivity {
         //initialize cellar editor fields
 
         updateAutoCompletionTextViewAdapter();
+
+        sPhotoHasChanged=PHOTO_HAS_NOT_CHANGED;
 
         if (sCellPosition==-1) {
             mTitleText.setText("Créer une entrée");
@@ -236,9 +263,9 @@ public class EditCellarActivity extends AppCompatActivity {
             mStockEdit.setText(Integer.toString(cell.getStock()));
             mCellarCommentEdit.setText(cell.getCellComment());
             if(bottle.getPhotoName().compareTo("")!=0)
-                mPhotoImage.setImageBitmap(CellarStorageUtils.decodeSampledBitmapFromFile(getFilesDir(),getResources().getString(R.string.photo_folder_name),
-                        bottle.getPhotoName(),(int)getResources().getDimension(R.dimen.recyclerview_cellar_row_photo_width),
-                        (int)getResources().getDimension(R.dimen.recyclerview_cellar_row_photo_height)));
+                mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(getFilesDir(),
+                        getResources().getString(R.string.photo_folder_name),
+                        bottle.getPhotoName()+mPhotoThumbnailSuffix));
             else
                 mPhotoImage.setImageDrawable(getResources().getDrawable(R.drawable.photo_frame));
         }
@@ -343,11 +370,18 @@ public class EditCellarActivity extends AppCompatActivity {
 
         //handle the new photo
         String photoName="";
-        if(sPhotoHasChanged==PHOTO_IS_NEW){
-            sPhotoHasChanged=PHOTO_HAS_NOT_CHANGED;
+        Log.i(TAG,sPhotoHasChanged);
+        if(sPhotoHasChanged.compareTo(PHOTO_IS_NEW)==0){
 
             Bitmap bitmap=((BitmapDrawable)mPhotoImage.getDrawable()).getBitmap();
             photoName=CellarStorageUtils.saveBottleImageToInternalStorage(getFilesDir(),getResources().getString(R.string.photo_folder_name),bitmap);
+
+            //create a thumbnail
+            Bitmap thumbnail=CellarStorageUtils.decodeSampledBitmapFromFile(getFilesDir(),getResources().getString(R.string.photo_folder_name),photoName,
+                    (int)getResources().getDimension(R.dimen.recyclerview_cellar_row_photo_width),
+                    (int)getResources().getDimension(R.dimen.recyclerview_cellar_row_photo_height));
+            CellarStorageUtils.saveBitmapToInternalStorage(getFilesDir(),getResources().getString(R.string.photo_folder_name),photoName+mPhotoThumbnailSuffix,
+                    thumbnail);
         }
 
         //Create new objects if it is a creation
@@ -371,7 +405,7 @@ public class EditCellarActivity extends AppCompatActivity {
             bottle.setBottleName(bottleName);
             bottle.setCapacity(capacity);
             bottle.setBottleComment(bottleComment);
-            bottle.setPhotoName(photoName);
+            if (sPhotoHasChanged.compareTo(PHOTO_HAS_NOT_CHANGED)!=0) bottle.setPhotoName(photoName);
             cell.setOrigin(origin);
             cell.setStock(stock);
             cell.setCellComment(cellarComment);
@@ -412,8 +446,12 @@ public class EditCellarActivity extends AppCompatActivity {
         CellarStorageUtils.deleteFileFromInternalStorage(getFilesDir(),
                 getResources().getString(R.string.photo_folder_name),
                 Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(sCellPosition).getBottle().getPhotoName());
+        CellarStorageUtils.deleteFileFromInternalStorage(getFilesDir(),
+                getResources().getString(R.string.photo_folder_name),
+                Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(sCellPosition).getBottle().getPhotoName()+mPhotoThumbnailSuffix);
 
         mPhotoImage.setImageDrawable(getResources().getDrawable(R.drawable.photo_frame));
+        Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(sCellPosition).getBottle().setPhotoName("");
         sPhotoHasChanged=PHOTO_WAS_DELETED;
     }
 
@@ -483,6 +521,17 @@ public class EditCellarActivity extends AppCompatActivity {
         Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent,REQUEST_PHOTO_PATHNAME);
+    }
+
+    private void sendTakePhotoIntent() {
+        //ask for taking a photo and put it in predefined Uri
+        //that Uri has to be deleted after usage
+
+        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photo=new File(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName+"/"+mPhotoTakenName);
+        mPhotoTakenUri=Uri.fromFile(photo);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,mPhotoTakenUri);
+        startActivityForResult(intent,REQUEST_CAMERA_USE);
     }
 
 
