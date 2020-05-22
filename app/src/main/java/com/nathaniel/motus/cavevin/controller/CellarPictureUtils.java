@@ -1,6 +1,7 @@
 package com.nathaniel.motus.cavevin.controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,8 @@ import android.net.Uri;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.nathaniel.motus.cavevin.R;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -86,4 +89,14 @@ public class CellarPictureUtils {
         return Bitmap.createBitmap(bitmap,0,0,w,h, mtx, true);
     }
 
+    public static Uri getUriFromFileProvider(Context context,String photoName) {
+        //return a Uri to share a picture to other app
+
+        String photoPathName="content://"+context.getPackageName()+"/"+
+                context.getResources().getString(R.string.photo_folder_name)+"/"+
+                photoName;
+
+        return Uri.parse(photoPathName);
+
+    }
 }

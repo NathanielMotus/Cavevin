@@ -2,6 +2,7 @@ package com.nathaniel.motus.cavevin.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.nathaniel.motus.cavevin.controller.MainActivity;
 import com.nathaniel.motus.cavevin.model.Bottle;
 import com.nathaniel.motus.cavevin.model.Cell;
 import com.nathaniel.motus.cavevin.model.Cellar;
+
+import java.io.File;
 
 import static com.nathaniel.motus.cavevin.R.*;
 
@@ -86,15 +89,18 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
         holder.cellarComment.setText(cell.getCellComment());
 
         //load photo image
-        String photoPathName=bottle.getPhotoName();
-        if(photoPathName.compareTo("")!=0)
+        final String photoName=bottle.getPhotoName();
+        if(photoName.compareTo("")!=0)
             holder.photoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(mContext.getFilesDir(),
                     mContext.getResources().getString(string.photo_folder_name),
-                    photoPathName+mContext.getResources().getString(string.photo_thumbnail_suffix)));
+                    photoName+mContext.getResources().getString(string.photo_thumbnail_suffix)));
         else
             holder.photoImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.photo_frame));
 
         createCallBackToParentActivity();
+
+        //Click listeners
+
         holder.buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +123,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
                 Cell cell=Cellar.getCellarPool().get(MainActivity.getCurrentCellarIndex()).getCellList().get(actualPosition);
                 if (cell.getStock()>0) cell.setStock(cell.getStock()-1);
                 holder.quantity.setText(Integer.toString(cell.getStock()));
+            }
+        });
+
+        holder.photoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onItemClicked(v,actualPosition);
             }
         });
 

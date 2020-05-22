@@ -236,7 +236,20 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
     @Override
     public void onItemClicked(View view,int position) {
-        launchEditCellarActivity(position);
+
+        //Case edit button clicked
+        if (view.getId()==R.id.recycler_cellar_row_edit_image)
+            launchEditCellarActivity(position);
+
+        //Case photo clicked
+        if (view.getId() == R.id.recycler_cellar_row_photo_image) {
+            String photoName=Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(position).getBottle().getPhotoName();
+            if (photoName.compareTo("") != 0) {
+                Intent intent=new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(CellarPictureUtils.getUriFromFileProvider(getApplicationContext(),photoName),"image/*");
+                startActivity(intent);
+            }
+        }
     }
 
     @Override
@@ -430,15 +443,6 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 //    Working subs
 //    **********************************************************************************************
 
-    private void launchEditCellarActivity(int cellPosition){
-        //launch the cellar editor
-
-        Intent intent=new Intent(MainActivity.this,EditCellarActivity.class);
-        intent.putExtra(BUNDLE_EXTRA_CURRENT_CELLAR_INDEX,sCurrentCellarIndex);
-        intent.putExtra(BUNDLE_EXTRA_CELL_POSITION,cellPosition);
-        this.startActivity(intent);
-    }
-
     private void loadDatas(){
         //load all the datas
 
@@ -479,22 +483,6 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
     private void showSortOptionsEditor(){
         //user can create their own sort options
-    }
-
-    private void sendExportDataBaseIntent(){
-        //export the whole database to a file chosen by user
-
-        Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.setType("text/*");
-        startActivityForResult(intent,REQUEST_URI_CREATE);
-    }
-
-    private void sendImportDataBaseIntent(){
-        //import the whole database from file chose by user
-
-        Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("text/*");
-        startActivityForResult(intent,REQUEST_URI_LOAD);
     }
 
     private void showStats(){
@@ -544,6 +532,35 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         //create a first cellar
         ArrayList<Cell> cellArrayList=new ArrayList<>();
         Cellar cellar=new Cellar("Ma cave",cellArrayList,true);
+    }
+
+//    **********************************************************************************************
+//    Send intents
+//    **********************************************************************************************
+
+    private void launchEditCellarActivity(int cellPosition){
+        //launch the cellar editor
+
+        Intent intent=new Intent(MainActivity.this,EditCellarActivity.class);
+        intent.putExtra(BUNDLE_EXTRA_CURRENT_CELLAR_INDEX,sCurrentCellarIndex);
+        intent.putExtra(BUNDLE_EXTRA_CELL_POSITION,cellPosition);
+        this.startActivity(intent);
+    }
+
+    private void sendExportDataBaseIntent(){
+        //export the whole database to a file chosen by user
+
+        Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType("text/*");
+        startActivityForResult(intent,REQUEST_URI_CREATE);
+    }
+
+    private void sendImportDataBaseIntent(){
+        //import the whole database from file chose by user
+
+        Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("text/*");
+        startActivityForResult(intent,REQUEST_URI_LOAD);
     }
 
 }

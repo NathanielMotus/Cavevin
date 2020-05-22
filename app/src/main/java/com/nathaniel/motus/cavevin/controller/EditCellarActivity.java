@@ -166,6 +166,28 @@ public class EditCellarActivity extends AppCompatActivity {
             }
         });
 
+        mPhotoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sPhotoHasChanged.compareTo(PHOTO_HAS_NOT_CHANGED) == 0) {
+                    String photoName=Cellar.getCellarPool().get(sCurrentCellarIndex)
+                            .getCellList().get(sCellPosition)
+                            .getBottle().getPhotoName();
+                    if (photoName.compareTo("") != 0) {
+                        Intent intent=new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(CellarPictureUtils.getUriFromFileProvider(getApplicationContext(),photoName),"image/*");
+                        startActivity(intent);
+                    }
+                }
+
+                if (sPhotoHasChanged.compareTo(PHOTO_IS_NEW) == 0) {
+                    Intent intent=new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(CellarStorageUtils.createOrGetFile(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName)),"image/*");
+                    startActivity(intent);
+                }
+            }
+        });
+
         initializeFields();
 
         configureToolBar();
@@ -197,11 +219,18 @@ public class EditCellarActivity extends AppCompatActivity {
         //Camera use request
         if (requestCode==REQUEST_CAMERA_USE && resultCode==RESULT_OK){
             mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName));
-            CellarStorageUtils.deleteFileFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName);
             sPhotoHasChanged=PHOTO_IS_NEW;
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //delete temporary files
+        CellarStorageUtils.deleteFileFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName);
+
     }
 
 //    **********************************************************************************************

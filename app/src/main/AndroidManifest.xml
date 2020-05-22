@@ -14,6 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        
+        <provider
+            android:authorities="com.nathaniel.motus.cavevin"
+            android:name=".controller.PhotoProvider"
+            android:exported="true"/>
+        
         <activity android:name=".controller.EditCellarActivity"
             android:configChanges="orientation|screenSize"/>
 
