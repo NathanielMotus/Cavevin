@@ -132,13 +132,20 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         //Export database
         if (requestCode==REQUEST_URI_CREATE && resultCode==RESULT_OK) {
             Uri pathNameUri=data.getData();
-            CellarStorageUtils.writeDatabaseToExportFile(this,pathNameUri);
+//            CellarStorageUtils.writeDatabaseToExportFile(this,pathNameUri);
+            CellarStorageUtils.zipFileAtPath(getApplicationContext(),
+                    new File(getFilesDir(),getResources().getString(R.string.database_folder_name)).getPath(),
+                    pathNameUri);
         }
 
         //Import database
         if (requestCode==REQUEST_URI_LOAD && resultCode==RESULT_OK){
             Uri pathNameUri=data.getData();
-            CellarStorageUtils.readDataBaseFromImportFile(this,pathNameUri);
+//            CellarStorageUtils.readDataBaseFromImportFile(this,pathNameUri);
+            CellarStorageUtils.unpackZip(getApplicationContext(),
+                    getFilesDir().getPath(),
+                    pathNameUri);
+            loadDatas();
             sCurrentCellarIndex=0;
             setDrawerCellarTitle();
         }
