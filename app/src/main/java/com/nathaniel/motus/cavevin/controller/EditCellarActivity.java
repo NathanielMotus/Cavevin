@@ -208,7 +208,7 @@ public class EditCellarActivity extends AppCompatActivity {
             Uri uri=data.getData();
             Bitmap bitmap= CellarStorageUtils.getBitmapFromUri(getApplicationContext(),uri);
 
-            //save photo to temporary_pic to get the exif
+            //save photo to temporary_pic
             CellarStorageUtils.saveBitmapToInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName,bitmap);
 
             mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName));
@@ -226,11 +226,10 @@ public class EditCellarActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         //delete temporary files
         CellarStorageUtils.deleteFileFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName);
-
     }
 
 //    **********************************************************************************************
