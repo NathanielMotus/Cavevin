@@ -245,6 +245,17 @@ public class CellarStorageUtils {
         return new File(folder,fileName);
     }
 
+    public static void deleteRecursive(File fileOrFolder) {
+        //delete folders and files within
+
+        if (fileOrFolder.isDirectory()) {
+            for (File child : fileOrFolder.listFiles()) {
+                deleteRecursive(child);
+            }
+        }
+        fileOrFolder.delete();
+    }
+
     public static void saveDataBase(File file){
         //save the whole database
 

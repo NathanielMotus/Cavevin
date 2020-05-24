@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         //Export database
         if (requestCode==REQUEST_URI_CREATE && resultCode==RESULT_OK) {
             Uri pathNameUri=data.getData();
-//            CellarStorageUtils.writeDatabaseToExportFile(this,pathNameUri);
             CellarStorageUtils.zipFileAtPath(getApplicationContext(),
                     new File(getFilesDir(),getResources().getString(R.string.database_folder_name)).getPath(),
                     pathNameUri);
@@ -141,13 +140,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         //Import database
         if (requestCode==REQUEST_URI_LOAD && resultCode==RESULT_OK){
             Uri pathNameUri=data.getData();
-//            CellarStorageUtils.readDataBaseFromImportFile(this,pathNameUri);
-            CellarStorageUtils.unpackZip(getApplicationContext(),
-                    getFilesDir().getPath(),
-                    pathNameUri);
-            loadDatas();
-            sCurrentCellarIndex=0;
-            setDrawerCellarTitle();
+            importDatabase(pathNameUri);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -466,6 +459,20 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         File saveFileName=CellarStorageUtils.createOrGetFile(saveDir,getResources().getString(R.string.database_folder_name),getResources().getString(R.string.database_file_name));
 
         CellarStorageUtils.saveDataBase(saveFileName);
+    }
+
+    private void importDatabase(Uri pathNameUri) {
+        //import database from file chosen by user
+
+        //delete older files
+        CellarStorageUtils.deleteRecursive(new File(getFilesDir(),
+                getResources().getString(R.string.database_folder_name)));
+        CellarStorageUtils.unpackZip(getApplicationContext(),
+                getFilesDir().getPath(),
+                pathNameUri);
+        loadDatas();
+        sCurrentCellarIndex=0;
+        setDrawerCellarTitle();
     }
 
     private void showCellarChoiceDialogFragment(String dialogTitle,String menuTag){
