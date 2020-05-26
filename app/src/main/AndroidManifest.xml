@@ -20,6 +20,16 @@
             android:name=".controller.PhotoProvider"
             android:exported="true"/>
         
+        <provider
+            android:authorities="com.nathaniel.motus.cavevin.provider"
+            android:name="androidx.core.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths"/>
+        </provider>
+        
         <activity android:name=".controller.EditCellarActivity"
             android:configChanges="orientation|screenSize"/>
 

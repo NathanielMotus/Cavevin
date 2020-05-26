@@ -1,5 +1,6 @@
 package com.nathaniel.motus.cavevin.controller;
 
+import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.nathaniel.motus.cavevin.R;
@@ -85,7 +87,6 @@ public class EditCellarActivity extends AppCompatActivity {
     //the file in which the photo taken will be saved
     //as to be a global field as it cannot be passed back through intent
     private Uri mPhotoTakenUri;
-    private String mPhotoTakenFolderName="DCIM";
     private String mPhotoTakenName="temporary_pic.jpg";
     private String mPhotoThumbnailSuffix="_thumb";
 
@@ -182,7 +183,7 @@ public class EditCellarActivity extends AppCompatActivity {
 
                 if (sPhotoHasChanged.compareTo(PHOTO_IS_NEW) == 0) {
                     Intent intent=new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.fromFile(CellarStorageUtils.createOrGetFile(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName)),"image/*");
+                    intent.setDataAndType(CellarPictureUtils.getUriFromFileProvider(getApplicationContext(),mPhotoTakenName),"image/*");
                     startActivity(intent);
                 }
             }
@@ -209,16 +210,21 @@ public class EditCellarActivity extends AppCompatActivity {
             Bitmap bitmap= CellarStorageUtils.getBitmapFromUri(getApplicationContext(),uri);
 
             //save photo to temporary_pic
-            CellarStorageUtils.saveBitmapToInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName,bitmap);
+            CellarStorageUtils.saveBitmapToInternalStorage(getFilesDir(),
+                    getResources().getString(R.string.photo_folder_name),mPhotoTakenName,bitmap);
 
-            mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName));
+            mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(getFilesDir(),
+                    getResources().getString(R.string.photo_folder_name),
+                    mPhotoTakenName));
             sPhotoHasChanged=PHOTO_IS_NEW;
 
         }
 
         //Camera use request
         if (requestCode==REQUEST_CAMERA_USE && resultCode==RESULT_OK){
-            mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName));
+            mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(getFilesDir(),
+                    getResources().getString(R.string.photo_folder_name),
+                    mPhotoTakenName));
             sPhotoHasChanged=PHOTO_IS_NEW;
         }
 
@@ -229,7 +235,8 @@ public class EditCellarActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //delete temporary files
-        CellarStorageUtils.deleteFileFromInternalStorage(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName,mPhotoTakenName);
+        CellarStorageUtils.deleteFileFromInternalStorage(getFilesDir(),
+                getResources().getString(R.string.photo_folder_name),mPhotoTakenName);
     }
 
 //    **********************************************************************************************
@@ -556,8 +563,8 @@ public class EditCellarActivity extends AppCompatActivity {
         //that Uri has to be deleted after usage
 
         Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo=new File(Environment.getExternalStorageDirectory(),mPhotoTakenFolderName+"/"+mPhotoTakenName);
-        mPhotoTakenUri=Uri.fromFile(photo);
+        File photo=CellarStorageUtils.createOrGetFile(getFilesDir(),getResources().getString(R.string.photo_folder_name),mPhotoTakenName);
+        mPhotoTakenUri= FileProvider.getUriForFile(getApplicationContext(),getResources().getString(R.string.file_provider_authority),photo);
         intent.putExtra(MediaStore.EXTRA_OUTPUT,mPhotoTakenUri);
         startActivityForResult(intent,REQUEST_CAMERA_USE);
     }
