@@ -2,7 +2,6 @@ package com.nathaniel.motus.cavevin.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +17,10 @@ import com.nathaniel.motus.cavevin.model.Bottle;
 import com.nathaniel.motus.cavevin.model.Cell;
 import com.nathaniel.motus.cavevin.model.Cellar;
 
-import java.io.File;
-
-import static com.nathaniel.motus.cavevin.R.*;
+import static com.nathaniel.motus.cavevin.R.dimen;
+import static com.nathaniel.motus.cavevin.R.drawable;
+import static com.nathaniel.motus.cavevin.R.layout;
+import static com.nathaniel.motus.cavevin.R.string;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
 
@@ -97,6 +97,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
         else
             holder.photoImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.photo_frame));
 
+        //Expand or collapse, according to flag isExpanded
+        if (mCellar.getCellList().get(actualPosition).isExpanded) expandCard(holder);
+        else collapseCard(holder);
+
         createCallBackToParentActivity();
 
         //Click listeners
@@ -136,25 +140,12 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
         holder.buttonCollapse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (holder.originTitle.getVisibility()==View.VISIBLE) {
-                    holder.originTitle.setVisibility(View.GONE);
-                    holder.origin.setVisibility(View.GONE);
-                    holder.bottleCommentTitle.setVisibility(View.GONE);
-                    holder.bottleComment.setVisibility(View.GONE);
-                    holder.cellarCommentTitle.setVisibility(View.GONE);
-                    holder.cellarComment.setVisibility(View.GONE);
-                    holder.buttonEdit.setVisibility(View.GONE);
-                    holder.buttonCollapse.setImageResource(drawable.baseline_keyboard_arrow_down_white_18dp);
+                    if(mCellar.getCellList().get(actualPosition).isExpanded){
+                    collapseCard(holder);
+                        mCellar.getCellList().get(actualPosition).isExpanded =false;
                 }else{
-                    holder.originTitle.setVisibility(View.VISIBLE);
-                    holder.origin.setVisibility(View.VISIBLE);
-                    holder.bottleCommentTitle.setVisibility(View.VISIBLE);
-                    holder.bottleComment.setVisibility(View.VISIBLE);
-                    holder.cellarCommentTitle.setVisibility(View.VISIBLE);
-                    holder.cellarComment.setVisibility(View.VISIBLE);
-                    holder.buttonEdit.setVisibility(View.VISIBLE);
-                    holder.buttonCollapse.setImageResource(drawable.baseline_keyboard_arrow_up_white_18dp);
-
+                    expandCard(holder);
+                        mCellar.getCellList().get(actualPosition).isExpanded =true;
                 }
             }
         });
@@ -181,5 +172,35 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
         }catch (ClassCastException e){
             throw new ClassCastException(e.toString()+" must implement onItemClickedListener");
         }
+    }
+
+//    **********************************************************************************************
+//    Display subs
+//    **********************************************************************************************
+
+    private void collapseCard(MyViewHolder holder) {
+        //Collapse a card
+
+        holder.originTitle.setVisibility(View.GONE);
+        holder.origin.setVisibility(View.GONE);
+        holder.bottleCommentTitle.setVisibility(View.GONE);
+        holder.bottleComment.setVisibility(View.GONE);
+        holder.cellarCommentTitle.setVisibility(View.GONE);
+        holder.cellarComment.setVisibility(View.GONE);
+        holder.buttonEdit.setVisibility(View.GONE);
+        holder.buttonCollapse.setImageResource(drawable.baseline_keyboard_arrow_down_white_18dp);
+    }
+
+    private void expandCard(MyViewHolder holder) {
+        //Expand a card
+
+        holder.originTitle.setVisibility(View.VISIBLE);
+        holder.origin.setVisibility(View.VISIBLE);
+        holder.bottleCommentTitle.setVisibility(View.VISIBLE);
+        holder.bottleComment.setVisibility(View.VISIBLE);
+        holder.cellarCommentTitle.setVisibility(View.VISIBLE);
+        holder.cellarComment.setVisibility(View.VISIBLE);
+        holder.buttonEdit.setVisibility(View.VISIBLE);
+        holder.buttonCollapse.setImageResource(drawable.baseline_keyboard_arrow_up_white_18dp);
     }
 }

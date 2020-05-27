@@ -29,6 +29,9 @@ public class Cell {
     //Comment proper to the cellar
     private String mCellComment;
 
+    //Flag expanded, for recyclerview - is not saved in database
+    public boolean isExpanded=false;
+
     //**********************************************************************************************
     //Getters and setters
     //**********************************************************************************************
