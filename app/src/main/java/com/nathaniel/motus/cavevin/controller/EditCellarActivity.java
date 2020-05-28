@@ -163,7 +163,8 @@ public class EditCellarActivity extends AppCompatActivity {
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendTakePhotoIntent();
+                if (MainActivity.getCameraPermission())
+                    sendTakePhotoIntent();
             }
         });
 

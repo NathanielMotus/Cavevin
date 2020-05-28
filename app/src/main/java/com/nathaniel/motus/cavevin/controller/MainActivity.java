@@ -1,9 +1,12 @@
 package com.nathaniel.motus.cavevin.controller;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     private static int sSortOption=0;
     private static final int REQUEST_URI_CREATE=100;
     private static final int REQUEST_URI_LOAD=101;
+    private static final int REQUEST_PERMISSION =102;
+    private static final int WRITE_EXTERNAL_STORAGE_PERMISSION_INDEX=0;
+    private static final int CAMERA_PERMISSION_INDEX=1;
 
     //Following values are used to handle callback
     private static String sMenuTag;//to indicate where the callback comes from
@@ -90,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     private RadioButton sortOption1;
     private RadioButton sortOption2;
     private RadioGroup sortGroup;
+
+    //Permissions status
+    private static boolean sWriteExternalStoragePermission=true;
+    private static boolean sCameraPermission=true;
 
 //    **********************************************************************************************
 //    MainActivity events
@@ -126,6 +137,13 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         saveDatas();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPermissions();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
@@ -145,6 +163,23 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION:
+                if(grantResults[WRITE_EXTERNAL_STORAGE_PERMISSION_INDEX]==PackageManager.PERMISSION_GRANTED)
+                    sWriteExternalStoragePermission=true;
+                else
+                    sWriteExternalStoragePermission=false;
+                if (grantResults[CAMERA_PERMISSION_INDEX]==PackageManager.PERMISSION_GRANTED)
+                    sCameraPermission=true;
+                else
+                    sCameraPermission=false;
+            default:
+
+        }
+    }
+
 //    **********************************************************************************************
 //    Toolbar events
 //    **********************************************************************************************
@@ -156,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
@@ -172,7 +208,8 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                 return true;
 
             case R.id.menu_activity_main_export:
-                sendExportDataBaseIntent();
+                if (sWriteExternalStoragePermission)
+                    sendExportDataBaseIntent();
                 return true;
 
             case R.id.menu_activity_main_import:
@@ -230,7 +267,15 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         return sCurrentTypeFilter;
     }
 
-//    **********************************************************************************************
+    public static boolean getWriteExternalStoragePermission() {
+        return sWriteExternalStoragePermission;
+    }
+
+    public static boolean getCameraPermission() {
+        return sCameraPermission;
+    }
+
+    //    **********************************************************************************************
 //    Callbacks
 //    **********************************************************************************************
 
@@ -577,4 +622,21 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         startActivityForResult(intent,REQUEST_URI_LOAD);
     }
 
+//    **********************************************************************************************
+//    Check permissions
+//    **********************************************************************************************
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkPermissions() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            String[] permissionString={Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA};
+
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
+            ||checkSelfPermission(Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED)
+                requestPermissions(permissionString, REQUEST_PERMISSION);
+        }
+    }
 }
