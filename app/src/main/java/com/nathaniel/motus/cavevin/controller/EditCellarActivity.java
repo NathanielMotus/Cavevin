@@ -190,9 +190,9 @@ public class EditCellarActivity extends AppCompatActivity {
             }
         });
 
-        initializeFields();
-
         configureToolBar();
+
+        initializeFields();
     }
 
     @Override
@@ -219,6 +219,9 @@ public class EditCellarActivity extends AppCompatActivity {
                     mPhotoTakenName));
             sPhotoHasChanged=PHOTO_IS_NEW;
 
+            //Set focus on image
+            mPhotoImage.requestFocus();
+
         }
 
         //Camera use request
@@ -227,6 +230,9 @@ public class EditCellarActivity extends AppCompatActivity {
                     getResources().getString(R.string.photo_folder_name),
                     mPhotoTakenName));
             sPhotoHasChanged=PHOTO_IS_NEW;
+
+            //Set focus on image
+            mPhotoImage.requestFocus();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -269,6 +275,8 @@ public class EditCellarActivity extends AppCompatActivity {
             mStockEdit.setText("1");
             mCellarCommentEdit.setText("");
             mPhotoImage.setImageDrawable(getResources().getDrawable(R.drawable.photo_frame));
+            //set focus on first edittext
+            mAppellationACTV.requestFocus();
         } else {
             mTitleText.setText("Modifier une entrée");
             Cell cell=Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(sCellPosition);

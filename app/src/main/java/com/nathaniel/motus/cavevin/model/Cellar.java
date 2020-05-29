@@ -2,6 +2,8 @@ package com.nathaniel.motus.cavevin.model;
 
 import android.util.Log;
 
+import com.nathaniel.motus.cavevin.controller.CellarStorageUtils;
+
 import java.util.ArrayList;
 
 public class Cellar {

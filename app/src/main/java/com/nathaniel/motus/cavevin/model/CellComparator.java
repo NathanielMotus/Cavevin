@@ -65,7 +65,7 @@ public class CellComparator implements Comparator<Cell> {
     }
 
     public static void setSortingOrder(int appellationOrder,int domainOrder,int cuveeOrder,int vintageOrder,int stockOrder) {
-        //set the ordre for each sort keys (0 to 4)
+        //set the order for each sort keys (0 to 4)
         CellComparator.sortingOrder.set(0,appellationOrder);
         CellComparator.sortingOrder.set(1,domainOrder);
         CellComparator.sortingOrder.set(2,cuveeOrder);

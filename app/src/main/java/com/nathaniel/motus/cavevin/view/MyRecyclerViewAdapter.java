@@ -2,6 +2,7 @@ package com.nathaniel.motus.cavevin.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +99,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
             holder.photoImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.photo_frame));
 
         //Expand or collapse, according to flag isExpanded
-        if (mCellar.getCellList().get(actualPosition).isExpanded) expandCard(holder);
+        if (mCellar.getCellList().get(position).isExpanded) expandCard(holder);
         else collapseCard(holder);
 
         createCallBackToParentActivity();

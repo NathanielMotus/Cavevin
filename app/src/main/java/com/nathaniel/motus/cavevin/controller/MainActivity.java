@@ -57,7 +57,12 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     public static String BUNDLE_EXTRA_CURRENT_CELLAR_INDEX="BUNDLE_EXTRA_CURRENT_CELLAR_INDEX";
     public static String BUNDLE_EXTRA_CELL_POSITION="BUNDLE_EXTRA_CELL_POSITION";
     private static int sCurrentCellarIndex=0;
-    private static String sCurrentTypeFilter="all";
+    private static final String TYPE_FILTER_RED="red";
+    private static final String TYPE_FILTER_WHITE="white";
+    private static final String TYPE_FILTER_PINK="pink";
+    private static final String TYPE_FILTER_ALL="all";
+    private static String sCurrentTypeFilter=TYPE_FILTER_ALL;
+
     private static int sSortOption=0;
     private static final int REQUEST_URI_CREATE=100;
     private static final int REQUEST_URI_LOAD=101;
@@ -117,13 +122,13 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         cleanUpDatabase();
         getSharedPreferences();
 
-        if (Cellar.getNumberOfCellars()>0) Collections.sort(Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList(),new CellComparator());
-
         configureToolBar();
         configureDrawerLayout();
         configureNavigationView();
         configureBottomBar();
         configureSortOptions();
+
+        if (Cellar.getNumberOfCellars()>0) Collections.sort(Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList(),new CellComparator());
 
         setDrawerCellarTitle();
         configureAndShowCellarFragment();
@@ -142,6 +147,8 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     protected void onResume() {
         super.onResume();
         checkPermissions();
+        if (Cellar.getNumberOfCellars()>0) Collections.sort(Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList(),new CellComparator());
+
     }
 
     @Override
@@ -175,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
                     sCameraPermission=true;
                 else
                     sCameraPermission=false;
+                break;
             default:
 
         }
@@ -301,20 +309,20 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     public void onBottomBarItemClicked(View v, String buttonTag) {
         switch (buttonTag){
             case "red":
-                sCurrentTypeFilter="red";
+                sCurrentTypeFilter=TYPE_FILTER_RED;
                 break;
             case "white":
-                sCurrentTypeFilter="white";
+                sCurrentTypeFilter=TYPE_FILTER_WHITE;
                 break;
             case "pink":
-                sCurrentTypeFilter="pink";
+                sCurrentTypeFilter=TYPE_FILTER_PINK;
                 break;
             default:
-                sCurrentTypeFilter="all";
+                sCurrentTypeFilter=TYPE_FILTER_ALL;
         }
-        cellarFragment.updateCellarRecyclerView(Cellar.getCellarPool().get(sCurrentCellarIndex).typeFiltered(sCurrentTypeFilter));
         SharedPreferences preferences=getPreferences(MODE_PRIVATE);
         preferences.edit().putString(CURRENT_TYPE_FILTER,sCurrentTypeFilter).apply();
+        cellarFragment.updateCellarRecyclerView(Cellar.getCellarPool().get(sCurrentCellarIndex).typeFiltered(sCurrentTypeFilter));
     }
 
     @Override
@@ -480,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         //check current cellar index is relevant (in case of unexpected application fail)
         if (sCurrentCellarIndex>=Cellar.getCellarPool().size()) sCurrentCellarIndex=0;
 
-        sCurrentTypeFilter=getPreferences(MODE_PRIVATE).getString(CURRENT_TYPE_FILTER,"red");
+        sCurrentTypeFilter=getPreferences(MODE_PRIVATE).getString(CURRENT_TYPE_FILTER,TYPE_FILTER_ALL);
         sSortOption=getPreferences(MODE_PRIVATE).getInt(CURRENT_SORT_OPTION,0);
     }
 
