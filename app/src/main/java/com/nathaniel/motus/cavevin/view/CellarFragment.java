@@ -1,13 +1,18 @@
 package com.nathaniel.motus.cavevin.view;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +34,18 @@ public class CellarFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapter mAdapter;
 
+    //Remember recyclerview state
+    private static final String KEY_RECYCLER_STATE="key_recycler_view";
+    private static Bundle mSavedRecyclerState;
+
 
     public CellarFragment() {
         // Required empty public constructor
     }
 
+//    **********************************************************************************************
+//    Fragment events
+//    **********************************************************************************************
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +55,8 @@ public class CellarFragment extends Fragment {
 
         //Instantiate recyclerview
         mRecyclerView= result.findViewById(R.id.fragment_cellar_recycler_view);
+
+        Log.i(TAG,"ON CREATE VIEW");
 
         return result;
     }
@@ -64,7 +78,25 @@ public class CellarFragment extends Fragment {
         //update the recyclerview when coming back from cellar edit
         if(Cellar.getCellarPool().size()!=0)
             updateCellarRecyclerView(Cellar.getCellarPool().get(MainActivity.getCurrentCellarIndex()).typeFiltered(MainActivity.getCurrentTypeFilter()));
+
+        //Get back recyclerview state
+        if (mSavedRecyclerState != null) {
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerState.getParcelable(KEY_RECYCLER_STATE));
+        }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        //Save recyclerview state
+        mSavedRecyclerState=new Bundle();
+        mSavedRecyclerState.putParcelable(KEY_RECYCLER_STATE,mRecyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+//    **********************************************************************************************
+//    Working subs
+//    **********************************************************************************************
 
     public void updateCellarRecyclerView(Cellar cellar){
         //update cellar RecyclerView
