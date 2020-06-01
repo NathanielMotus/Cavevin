@@ -208,6 +208,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/recycler_cellar_row_collapse_image"
         android:layout_alignEnd="@id/recycler_cellar_row_collapse_image"
+        android:layout_marginEnd="100dp"
         android:src="@drawable/baseline_edit_white_18dp"
         android:visibility="gone"/>
 

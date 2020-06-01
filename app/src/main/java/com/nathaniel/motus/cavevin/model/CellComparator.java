@@ -18,13 +18,13 @@ public class CellComparator implements Comparator<Cell> {
     public int compare(Cell o1, Cell o2) {
 
         //compare appellation
-        compareResults.set(0,o1.getBottle().getAppellation().compareTo(o2.getBottle().getAppellation())*sortingSense.get(0));
+        compareResults.set(0,o1.getBottle().getAppellation().toLowerCase().compareTo(o2.getBottle().getAppellation().toLowerCase())*sortingSense.get(0));
 
         //compare domain
-        compareResults.set(1,o1.getBottle().getDomain().compareTo(o2.getBottle().getDomain())*sortingSense.get(1));
+        compareResults.set(1,o1.getBottle().getDomain().toLowerCase().compareTo(o2.getBottle().getDomain().toLowerCase())*sortingSense.get(1));
 
         //compare cuvee
-        compareResults.set(2,o1.getBottle().getCuvee().compareTo(o2.getBottle().getCuvee())*sortingSense.get(2));
+        compareResults.set(2,o1.getBottle().getCuvee().toLowerCase().compareTo(o2.getBottle().getCuvee().toLowerCase())*sortingSense.get(2));
 
         //compare vintage
         compareResults.set(3,o1.getBottle().getVintage().compareTo(o2.getBottle().getVintage())*sortingSense.get(3));

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -226,9 +227,18 @@ public class EditCellarActivity extends AppCompatActivity {
 
         //Camera use request
         if (requestCode==REQUEST_CAMERA_USE && resultCode==RESULT_OK){
-            mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(getFilesDir(),
-                    getResources().getString(R.string.photo_folder_name),
-                    mPhotoTakenName));
+            //Case Kitkat
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(getExternalFilesDir("image/*"),
+                        getResources().getString(R.string.photo_folder_name),
+                        mPhotoTakenName));
+            }
+            //Case > Kitkat
+            else {
+                mPhotoImage.setImageBitmap(CellarStorageUtils.getBitmapFromInternalStorage(getFilesDir(),
+                        getResources().getString(R.string.photo_folder_name),
+                        mPhotoTakenName));
+            }
             sPhotoHasChanged=PHOTO_IS_NEW;
 
             //Set focus on image
@@ -242,8 +252,18 @@ public class EditCellarActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //delete temporary files
-        CellarStorageUtils.deleteFileFromInternalStorage(getFilesDir(),
-                getResources().getString(R.string.photo_folder_name),mPhotoTakenName);
+
+        //Case Kitkat
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            CellarStorageUtils.deleteFileFromInternalStorage(getExternalFilesDir("image/*"),
+                    getResources().getString(R.string.photo_folder_name),
+                    mPhotoTakenName);
+        }
+        //Case > Kitkat
+        else {
+            CellarStorageUtils.deleteFileFromInternalStorage(getFilesDir(),
+                    getResources().getString(R.string.photo_folder_name), mPhotoTakenName);
+        }
     }
 
 //    **********************************************************************************************
@@ -571,9 +591,21 @@ public class EditCellarActivity extends AppCompatActivity {
         //ask for taking a photo and put it in predefined Uri
         //that Uri has to be deleted after usage
 
+        File photo;
         Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo=CellarStorageUtils.createOrGetFile(getFilesDir(),getResources().getString(R.string.photo_folder_name),mPhotoTakenName);
-        mPhotoTakenUri= FileProvider.getUriForFile(getApplicationContext(),getResources().getString(R.string.file_provider_authority),photo);
+
+        //Case Kitkat
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            photo=CellarStorageUtils.createOrGetFile(getExternalFilesDir("image/*"),
+                    getResources().getString(R.string.photo_folder_name),
+                    mPhotoTakenName);
+            mPhotoTakenUri=Uri.fromFile(photo);
+        }
+        //Case > Kitkat
+        else {
+            photo = CellarStorageUtils.createOrGetFile(getFilesDir(), getResources().getString(R.string.photo_folder_name), mPhotoTakenName);
+            mPhotoTakenUri = FileProvider.getUriForFile(getApplicationContext(), getResources().getString(R.string.file_provider_authority), photo);
+        }
         intent.putExtra(MediaStore.EXTRA_OUTPUT,mPhotoTakenUri);
         startActivityForResult(intent,REQUEST_CAMERA_USE);
     }
