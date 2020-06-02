@@ -1,6 +1,5 @@
 package com.nathaniel.motus.cavevin.controller;
 
-import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +27,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
-import androidx.exifinterface.media.ExifInterface;
 
 import com.nathaniel.motus.cavevin.R;
 import com.nathaniel.motus.cavevin.model.Bottle;
@@ -46,7 +44,10 @@ public class EditCellarActivity extends AppCompatActivity {
     private static final String TAG="EditCellarActivity";
 
     //List of bottle names
-    private static ArrayList<String> bottleNameList= new ArrayList<>(Arrays.asList("Bouteille","Piccolo","Quart","Demi","Pot","Magnum","Marie-Jeanne","Réhoboam","Jéroboam","Mathusalem","Salmanazar","Balthazar","Nabuchodonosor","Melchior"));
+//    private static ArrayList<String> sBottleNameList = new ArrayList<>(Arrays.asList("Standard","Piccolo","Quarter","Demi","Pot","Magnum","Marie-Jeanne","Rehoboam","Jeroboam","Methuselah","Salmanazar","Balthazar","Nebuchadnezzar","Melchior"));
+    private static ArrayList<String> sBottleNameList=new ArrayList<>();
+    private static ArrayList<Float> sBottleCapacityList=new ArrayList<>();
+    private static ArrayList<String> sSpinnerList=new ArrayList<>();
 
     //declaration of the views
     TextView mTitleText;
@@ -101,6 +102,32 @@ public class EditCellarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_cellar);
 
+        //Create the bottle list
+        sBottleNameList.clear();
+        Collections.addAll(sBottleNameList,getResources().getString(R.string.bottle_standard),
+                getResources().getString(R.string.bottle_piccolo),
+                getResources().getString(R.string.bottle_quarter),
+                getResources().getString(R.string.bottle_demi),
+                getResources().getString(R.string.bottle_pot),
+                getResources().getString(R.string.bottle_magnum),
+                getResources().getString(R.string.bottle_marie_jeanne),
+                getResources().getString(R.string.bottle_rehoboam),
+                getResources().getString(R.string.bottle_jeroboam),
+                getResources().getString(R.string.bottle_methuselah),
+                getResources().getString(R.string.bottle_salmanazar),
+                getResources().getString(R.string.bottle_balthazar),
+                getResources().getString(R.string.bottle_nebuchadnezzar),
+                getResources().getString(R.string.bottle_melchior));
+
+        //Create the capacity list
+        sBottleCapacityList.clear();
+        Collections.addAll(sBottleCapacityList,0.75f,0.2f,0.25f,0.375f,0.46f,1.5f,3f,4.5f,5f,6f,9f,12f,15f,18f);
+
+        //Create the spinner adapter list
+        sSpinnerList.clear();
+        for (int i=0;i<sBottleCapacityList.size();i++)
+            sSpinnerList.add(sBottleNameList.get(i)+" ("+sBottleCapacityList.get(i)+" L)");
+
         //Get the current cellar index
         Intent intent=getIntent();
         sCurrentCellarIndex=intent.getIntExtra(MainActivity.BUNDLE_EXTRA_CURRENT_CELLAR_INDEX,0);
@@ -127,6 +154,10 @@ public class EditCellarActivity extends AppCompatActivity {
         mDeletePhotoButton=findViewById(R.id.activity_edit_cellar_delete_photo_button);
         mPhotoImage=findViewById(R.id.activity_edit_cellar_photo_image);
 
+
+        //localize spinner
+        ArrayAdapter<String> spinnerAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,sSpinnerList);
+        mCapacitySpinner.setAdapter(spinnerAdapter);
 
         //if not creation "delete" is not visible
         if (sCellPosition==-1) mDeleteButton.setVisibility(View.GONE);
@@ -283,7 +314,7 @@ public class EditCellarActivity extends AppCompatActivity {
         sPhotoHasChanged=PHOTO_HAS_NOT_CHANGED;
 
         if (sCellPosition==-1) {
-            mTitleText.setText("Créer une entrée");
+            mTitleText.setText(R.string.activity_edit_cellar_new_entry);
             mAppellationACTV.setText("");
             mDomainACTV.setText("");
             mCuveeACTV.setText("");
@@ -298,7 +329,7 @@ public class EditCellarActivity extends AppCompatActivity {
             //set focus on first edittext
             mAppellationACTV.requestFocus();
         } else {
-            mTitleText.setText("Modifier une entrée");
+            mTitleText.setText(R.string.edit_cellar_activity_update_entry);
             Cell cell=Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(sCellPosition);
             Bottle bottle=cell.getBottle();
             mAppellationACTV.setText(bottle.getAppellation());
@@ -319,8 +350,10 @@ public class EditCellarActivity extends AppCompatActivity {
             }
             mVintageEdit.setText(bottle.getVintage());
             int i=0;
-            String bottleName=bottle.getBottleName();
-            while (bottleNameList.get(i).compareTo(bottleName)!=0) i++;
+//            String bottleName=bottle.getBottleName();
+//            while (sBottleNameList.get(i).compareTo(bottleName)!=0) i++;
+            float bottleCapacity=bottle.getCapacity();
+            while (sBottleCapacityList.get(i)!=bottleCapacity) i++;
             mCapacitySpinner.setSelection(i);
             mBottleCommentEdit.setText(bottle.getBottleComment());
             mOriginEdit.setText(cell.getOrigin());
@@ -354,76 +387,76 @@ public class EditCellarActivity extends AppCompatActivity {
         if (mPinkWineRadio.isChecked()) type="2";
         String vintage=CellarInputUtils.replaceForbiddenCharacters(this,mVintageEdit.getText().toString());
         int capacityIndex=mCapacitySpinner.getSelectedItemPosition();
-        String bottleName="Bouteille";
+        String bottleName=getString(R.string.bottle_standard);
         Float capacity=0.75f;
         switch (capacityIndex) {
             case 0: {
-                bottleName = "Bouteille";
+                bottleName = getString(R.string.bottle_standard);
                 capacity = 0.75f;
                 break;
             }
             case 1: {
-                bottleName = "Piccolo";
+                bottleName = getString(R.string.bottle_piccolo);
                 capacity = 0.2f;
                 break;
             }
             case 2: {
-                bottleName = "Quart";
+                bottleName = getString(R.string.bottle_quarter);
                 capacity = 0.25f;
                 break;
             }
             case 3: {
-                bottleName = "Demi";
+                bottleName = getString(R.string.bottle_demi);
                 capacity = 0.375f;
                 break;
             }
             case 4: {
-                bottleName = "Pot";
+                bottleName = getString(R.string.bottle_pot);
                 capacity = 0.46f;
                 break;
             }
             case 5: {
-                bottleName = "Magnum";
+                bottleName = getString(R.string.bottle_magnum);
                 capacity = 1.5f;
                 break;
             }
             case 6: {
-                bottleName = "Marie-Jeanne";
+                bottleName = getString(R.string.bottle_marie_jeanne);
                 capacity = 3f;
                 break;
             }
             case 7: {
-                bottleName = "Réhoboam";
+                bottleName = getString(R.string.bottle_rehoboam);
                 capacity = 4.5f;
                 break;
             }
             case 8: {
-                bottleName = "Jéroboam";
+                bottleName = getString(R.string.bottle_jeroboam);
                 capacity = 5f;
                 break;
             }
             case 9: {
-                bottleName = "Mathusalem";
+                bottleName = getString(R.string.bottle_methuselah);
                 capacity = 6f;
                 break;
             }
             case 10: {
-                bottleName = "Salmanazar";
+                bottleName = getString(R.string.bottle_salmanazar);
                 capacity = 9f;
                 break;
             }
             case 11: {
-                bottleName = "Balthazar";
+                bottleName = getString(R.string.bottle_balthazar);
                 capacity = 12f;
                 break;
             }
             case 12: {
-                bottleName = "Nabuchodonosor";
+                bottleName = getString(R.string.bottle_nebuchadnezzar);
                 capacity = 15f;
                 break;
             }
             case 13: {
-                bottleName = "Melchior";
+                bottleName = getString(R.string.bottle_melchior);
                 capacity = 18f;
             }
         }
@@ -455,7 +488,7 @@ public class EditCellarActivity extends AppCompatActivity {
             Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().add(cell);
 
             initializeFields();
-            Toast.makeText(this,"Entrée créée",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.edit_cellar_activity_entry_saved,Toast.LENGTH_SHORT).show();
             mAppellationACTV.requestFocus();
         } else {
             //modify the existing entry
@@ -474,7 +507,7 @@ public class EditCellarActivity extends AppCompatActivity {
             cell.setStock(stock);
             cell.setCellComment(cellarComment);
 
-            Toast.makeText(this,"Entrée modifiée",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.edit_cellar_activity_entry_updated,Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -483,13 +516,13 @@ public class EditCellarActivity extends AppCompatActivity {
         //delete entry when delete is clicked
 
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setTitle("Attention !")
-                .setMessage("Etes-vous sûr de vouloir supprimer cette entrée ?")
+        builder.setTitle(R.string.edit_cellar_activity_warning)
+                .setMessage(R.string.edit_cellar_activity_sure_delete_entry)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().get(sCellPosition).removeCell();
-                        Toast.makeText(getApplicationContext(),"Entrée supprimée",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.edit_cellar_activity_entry_deleted,Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 })

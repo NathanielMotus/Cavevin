@@ -3,6 +3,8 @@ package com.nathaniel.motus.cavevin.controller;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.nathaniel.motus.cavevin.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -37,7 +39,7 @@ public class CellarInputUtils {
         }
 
         if (initialInputString.compareTo(inputString)!=0){
-            Toast.makeText(context,"Caractères interdits remplacés par *",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.cellar_input_utils_forbidden_characters,Toast.LENGTH_SHORT).show();
         }
 
         return inputString;

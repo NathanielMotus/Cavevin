@@ -56,8 +56,6 @@ public class CellarFragment extends Fragment {
         //Instantiate recyclerview
         mRecyclerView= result.findViewById(R.id.fragment_cellar_recycler_view);
 
-        Log.i(TAG,"ON CREATE VIEW");
-
         return result;
     }
 

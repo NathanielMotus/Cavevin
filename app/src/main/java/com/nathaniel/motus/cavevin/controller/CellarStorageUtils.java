@@ -20,13 +20,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -238,7 +236,7 @@ public class CellarStorageUtils {
         return jsonObject;
     }
 
-    public static String cellToCsvLine(Cell cell) {
+    public static String cellToCsvLine(Context context,Cell cell) {
         //Convert a cell to a string, meant to be added to a CSV file
 
         String csvString="";
@@ -247,13 +245,13 @@ public class CellarStorageUtils {
         String type;
         switch (bottle.getType()) {
             case "0":
-                type="Rouge";
+                type=context.getString(R.string.wine_red);
                 break;
             case "1":
-                type="Blanc";
+                type=context.getString(R.string.wine_white);
                 break;
             default:
-                type="Rosé";
+                type= context.getString(R.string.wine_pink);
         }
 
         csvString=csvString+type+CSV_SEPARATOR;
@@ -304,10 +302,10 @@ public class CellarStorageUtils {
                 Log.i(TAG,dataBaseToJsonObject().jsonToString());
             }finally {
                 w.close();
-                Log.i(TAG,"Database enregistrée");
+                Log.i(TAG,"Database saved");
             }
         }catch (IOException e){
-            Log.i(TAG,"Enregistrement de la database raté");
+            Log.i(TAG,"Failed saving database");
         }
     }
 
@@ -329,10 +327,10 @@ public class CellarStorageUtils {
                     }
                 }finally {
                     bufferedReader.close();
-                    Log.i(TAG, "Chargement de la database réussi");
+                    Log.i(TAG, "Database loaded");
                 }
             }catch (IOException e){
-                Log.i(TAG,"Chargement de la database raté");
+                Log.i(TAG,"Failed load database");
             }
         }
         if (dataBaseString!="") {
@@ -353,14 +351,14 @@ public class CellarStorageUtils {
             BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
             bw.write(csvHeader);
             for (int i=0;i<Cellar.getCellarPool().get(MainActivity.getCurrentCellarIndex()).getCellList().size();i++){
-                bw.append(cellToCsvLine(Cellar.getCellarPool().get(MainActivity.getCurrentCellarIndex()).getCellList().get(i))+"\n");
+                bw.append(cellToCsvLine(context,Cellar.getCellarPool().get(MainActivity.getCurrentCellarIndex()).getCellList().get(i))+"\n");
                 i++;
             }
             bw.flush();
             bw.close();
             Toast.makeText(context,"CSV created",Toast.LENGTH_SHORT).show();
         }catch (IOException e){
-            Toast.makeText(context,"Export to CSV failed",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Failed export to CSV",Toast.LENGTH_SHORT).show();
         }
     }
 

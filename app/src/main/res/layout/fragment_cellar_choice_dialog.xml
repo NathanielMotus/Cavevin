@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choix de la cave : "/>
+        android:text="@string/fragment_cellar_choice_dialog_choose_cellar"/>
 
     <Spinner
         android:tag="SPINNER"

@@ -7,13 +7,13 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/activity_main_drawer_choose_cellar"
-                    android:title="Choisir une cave"/>
+                    android:title="@string/activity_main_menu_drawer_choose_cellar"/>
                 <item
                     android:id="@+id/activity_main_drawer_create_cellar"
-                    android:title="Nouvelle cave"/>
+                    android:title="@string/activity_main_menu_drawer_new_cellar"/>
                 <item
                     android:id="@+id/activity_main_drawer_rename_cellar"
-                    android:title="Renommer la cave"/>
+                    android:title="@string/activity_main_menu_drawer_rename_cellar"/>
             </group>
 
 </menu>

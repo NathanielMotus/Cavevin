@@ -28,46 +28,46 @@
                 android:id="@+id/activity_edit_cellar_title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Créer une entrée"
+                android:text="@string/activity_edit_cellar_new_entry"
                 android:textSize="20sp"
                 android:paddingBottom="@dimen/padding_normal"/>
             <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Appellation"/>
+            android:text="@string/appellation"/>
 
             <AutoCompleteTextView
                 android:id="@+id/activity_edit_cellar_appellation_ACTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Côtes du Kifébo"/>
+                android:hint="@string/activity_edit_cellar_hint_appellation"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Domaine"/>
+                android:text="@string/domain"/>
 
             <AutoCompleteTextView
                 android:id="@+id/activity_edit_cellar_domain_ACTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Château Cétrobon"/>
+                android:hint="@string/activity_edit_cellar_hint_domain"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cuvée"/>
+                android:text="@string/cuvee"/>
 
             <AutoCompleteTextView
                 android:id="@+id/activity_edit_cellar_cuvee_ACTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Cuvée du siècle"/>
+                android:hint="@string/activity_edit_cellar_hint_cuvee"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Type"/>
+                android:text="@string/wine_type"/>
 
             <RadioGroup
                 android:layout_width="match_parent"
@@ -80,25 +80,25 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="true"
-                    android:text="Rouge"/>
+                    android:text="@string/wine_red"/>
                 <RadioButton
                     android:id="@+id/activity_edit_cellar_white_radio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Blanc"/>
+                    android:text="@string/wine_white"/>
                 <RadioButton
                     android:id="@+id/activity_edit_cellar_pink_radio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Rosé"/>
+                    android:text="@string/wine_pink"/>
             </RadioGroup>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Millésime"/>
+                android:text="@string/vintage"/>
 
             <EditText
                 android:id="@+id/activity_edit_cellar_vintage_edit"
@@ -114,7 +114,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Contenance : "/>
+                    android:text="@string/activity_edit_cellar_capacity"/>
 
                 <Spinner
                     android:id="@+id/activity_edit_cellar_capacity_spinner"
@@ -127,26 +127,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Commentaires sur le vin"/>
+                android:text="@string/wine_comment"/>
 
             <EditText
                 android:id="@+id/activity_edit_cellar_bottle_comment_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:hint="Accompagne parfaitement la viande rouge"/>
+                android:hint="@string/activity_edit_cellar_hint_wine_comment"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Origine"/>
+                android:text="@string/origin"/>
 
             <EditText
                 android:id="@+id/activity_edit_cellar_origin_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:hint="Comment j'ai eu ou découvert ce vin"/>
+                android:hint="@string/activity_edit_cellar_hint_origin"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -155,7 +155,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Stock : "/>
+                    android:text="@string/activity_edit_cellar_stock"/>
                 <EditText
                     android:id="@+id/activity_edit_cellar_stock_edit"
                     android:layout_width="match_parent"
@@ -167,19 +167,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Commentaires sur la mise en cave"/>
+                android:text="@string/cellar_comment"/>
 
             <EditText
                 android:id="@+id/activity_edit_cellar_cellar_comment_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:hint="A racheter si l'occasion se présente"/>
+                android:hint="@string/activity_edit_cellar_hint_cellar_comment"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ajouter une photo"/>
+                android:text="@string/add_photo"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -198,19 +198,19 @@
                         android:id="@+id/activity_edit_cellar_storage_button"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="Stockage"/>
+                        android:text="@string/storage"/>
 
                     <Button
                         android:id="@+id/activity_edit_cellar_camera_button"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="Camera"/>
+                        android:text="@string/camera"/>
 
                     <Button
                         android:id="@+id/activity_edit_cellar_delete_photo_button"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:text="Effacer"/>
+                        android:text="@string/delete_photo"/>
 
                 </LinearLayout>
 
@@ -239,12 +239,12 @@
                     android:id="@+id/activity_edit_cellar_ok_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="OK"/>
+                    android:text="@string/ok"/>
                 <Button
                     android:id="@+id/activity_edit_cellar_delete_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DELETE"/>
+                    android:text="@string/delete"/>
             </LinearLayout>
 
         </LinearLayout>

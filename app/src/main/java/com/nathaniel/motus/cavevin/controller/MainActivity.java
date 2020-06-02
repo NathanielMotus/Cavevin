@@ -172,8 +172,8 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
         //Export CSV
         if (requestCode == REQUEST_CSV_URI_CREATE && resultCode == RESULT_OK) {
-            Uri cvsUri=data.getData();
-            CellarStorageUtils.exportCellarToCsvFile(this,cvsUri);
+            Uri csvUri=data.getData();
+            CellarStorageUtils.exportCellarToCsvFile(this,csvUri);
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -220,8 +220,8 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             case R.id.menu_activity_main_delete_cellar:
 //                delete a chosen cellar
                 if (Cellar.getCellarPool().size()>1){
-                    showCellarChoiceDialogFragment("Supprimer une cave",MENU_ITEM_DELETE_CELLAR);
-                }else Toast.makeText(this,"Il doit rester au moins une cave",Toast.LENGTH_SHORT).show();
+                    showCellarChoiceDialogFragment(getString(R.string.main_activity_delete_cellar),MENU_ITEM_DELETE_CELLAR);
+                }else Toast.makeText(this, R.string.main_activity_at_least_one_cellar,Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.menu_activity_main_export:
@@ -258,13 +258,13 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
         switch (id){
             case R.id.activity_main_drawer_choose_cellar:
-                showCellarChoiceDialogFragment("Choisir une cave",MENU_ITEM_CHOOSE_CELLAR);
+                showCellarChoiceDialogFragment(getString(R.string.main_activity_choose_cellar),MENU_ITEM_CHOOSE_CELLAR);
                 break;
             case R.id.activity_main_drawer_create_cellar:
-                showEditDialogFragment("Créer une cave","Nom de la cave","",MENU_ITEM_CREATE_CELLAR);
+                showEditDialogFragment(getString(R.string.main_activity_new_cellar),getString(R.string.main_activity_cellar_name),"",MENU_ITEM_CREATE_CELLAR);
                 break;
             case R.id.activity_main_drawer_rename_cellar:
-                showEditDialogFragment("Renommer la cave","Nouveau nom",Cellar.getCellarPool().get(sCurrentCellarIndex).getCellarName(),MENU_ITEM_RENAME_CELLAR);
+                showEditDialogFragment(getString(R.string.main_activity_rename_cellar),getString(R.string.main_activity_new_cellar_name),Cellar.getCellarPool().get(sCurrentCellarIndex).getCellarName(),MENU_ITEM_RENAME_CELLAR);
                 break;
             default:
                 break;
@@ -570,18 +570,18 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
 
-        String message="Stats globales:\n\n";
-        message=message+Cellar.getNumberOfCellars()+" cave(s)\n";
-        message=message+Bottle.getNumberOfReferences()+" référence(s)\n";
-        message=message+Cellar.totalStock()+" bouteille(s) stockée(s)\n\n\n";
+        String message=getString(R.string.main_activity_global_stats)+"\n\n";
+        message=message+Cellar.getNumberOfCellars()+getString(R.string.main_activity_cellars)+"\n";
+        message=message+Bottle.getNumberOfReferences()+getString(R.string.main_activity_references)+"\n";
+        message=message+Cellar.totalStock()+getString(R.string.main_activity_stocked_bottles)+"\n\n\n";
         message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getCellarName()+" :\n\n";
-        message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().size()+" référence(s) en stock\n";
-        message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getStock()+" bouteille(s) stockée(s), dont :\n";
-        message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getStock(RED_WINE)+" de rouge\n";
-        message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getStock(WHITE_WINE)+" de blanc\n";
-        message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getStock(PINK_WINE)+" de rosé\n";
+        message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getCellList().size()+getString(R.string.main_activity_ref_in_stock)+"\n";
+        message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getStock()+getString(R.string.main_activity_stocked_bottles_among_them)+"\n";
+        message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getStock(RED_WINE)+getString(R.string.main_activity_stock_red)+"\n";
+        message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getStock(WHITE_WINE)+getString(R.string.main_activity_stock_white)+"\n";
+        message=message+Cellar.getCellarPool().get(sCurrentCellarIndex).getStock(PINK_WINE)+getString(R.string.main_activity_stock_pink)+"\n";
 
-        builder.setTitle("Stats")
+        builder.setTitle(R.string.main_activity_stats)
                 .setMessage(message)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -611,7 +611,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
         //create a first cellar
         ArrayList<Cell> cellArrayList=new ArrayList<>();
-        Cellar cellar=new Cellar("Ma cave",cellArrayList,true);
+        Cellar cellar=new Cellar(getString(R.string.main_activity_my_cellar),cellArrayList,true);
     }
 
 //    **********************************************************************************************

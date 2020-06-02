@@ -19,27 +19,27 @@
         <menu>
             <item
                 android:id="@+id/menu_activity_main_export"
-                android:title="Exporter les données"
+                android:title="@string/menu_main_export_database"
                 app:showAsAction="ifRoom"/>
 
             <item
                 android:id="@+id/menu_activity_main_import"
-                android:title="Importer les données"
+                android:title="@string/menu_main_import_database"
                 app:showAsAction="ifRoom"/>
 
             <item
                 android:id="@+id/menu_activity_main_csv_export"
-                android:title="Exporter en CSV"
+                android:title="@string/menu_main_export_csv"
                 app:showAsAction="ifRoom"/>
 
             <item
                 android:id="@+id/menu_activity_main_delete_cellar"
-                android:title="Supprimer une cave"
+                android:title="@string/menu_main_delete_cellar"
                 app:showAsAction="ifRoom"/>
 
             <item
                 android:id="@+id/menu_activity_main_stats"
-                android:title="Stats"
+                android:title="@string/menu_main_stats"
                 app:showAsAction="ifRoom"/>
 
         </menu>

@@ -1,29 +1,91 @@
 <resources>
-    <string name="app_name">Cave à vin</string>
-    <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="app_name" translatable="false">Cave à vin</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
-    <!-- Strings used in code -->
-    <string name="separator">|</string>
+    <string name="photo_folder_name" translatable="false">Cavevin/photos</string>
+    <string name="database_folder_name" translatable="false">Cavevin</string>
+    <string name="database_file_name" translatable="false">Database.txt</string>
+    <string name="photo_thumbnail_suffix" translatable="false">_thumb</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="photo_folder_name">Cavevin/photos</string>
-    <string name="database_folder_name">Cavevin</string>
-    <string name="database_file_name">Database.txt</string>
-    <string name="photo_thumbnail_suffix">_thumb</string>
-
-    <string name="file_provider_authority">com.nathaniel.motus.cavevin.provider</string>
+    <string name="file_provider_authority" translatable="false">com.nathaniel.motus.cavevin.provider</string>
+    <string name="cellar_input_utils_forbidden_characters">Forbidden characters replaced with *</string>
+    <string name="wine_red">Red</string>
+    <string name="wine_white">White</string>
+    <string name="wine_pink">Pink</string>
+    <string name="bottle_standard">Standard</string>
+    <string name="bottle_piccolo">Piccolo</string>
+    <string name="bottle_quarter">Quarter</string>
+    <string name="bottle_demi">Demi</string>
+    <string name="bottle_pot">Pot</string>
+    <string name="bottle_magnum">Magnum</string>
+    <string name="bottle_marie_jeanne">Marie-Jeanne</string>
+    <string name="bottle_rehoboam">Rehoboam</string>
+    <string name="bottle_jeroboam">Jeroboam</string>
+    <string name="bottle_methuselah">Methuselah</string>
+    <string name="bottle_salmanazar">Salmanazar</string>
+    <string name="bottle_balthazar">Balthazar</string>
+    <string name="bottle_nebuchadnezzar">Nebuchadnezzar</string>
+    <string name="bottle_melchior">Melchior</string>
+    <string name="edit_cellar_activity_entry_saved">Entry saved</string>
+    <string name="edit_cellar_activity_entry_updated">Entry updated</string>
+    <string name="edit_cellar_activity_warning">Warning !</string>
+    <string name="edit_cellar_activity_sure_delete_entry">Are you sure you want to delete this entry ?</string>
+    <string name="edit_cellar_activity_entry_deleted">Entry deleted</string>
+    <string name="main_activity_delete_cellar">Delete cellar</string>
+    <string name="main_activity_at_least_one_cellar">There must remain at least one cellar</string>
+    <string name="main_activity_choose_cellar">Choose cellar</string>
+    <string name="main_activity_new_cellar">New cellar</string>
+    <string name="main_activity_cellar_name">Cellar name</string>
+    <string name="main_activity_rename_cellar">Rename cellar</string>
+    <string name="main_activity_new_cellar_name">New cellar name</string>
+    <string name="main_activity_global_stats">Overall :</string>
+    <string name="main_activity_cellars">" cellar(s)"</string>
+    <string name="main_activity_references">" reference(s)"</string>
+    <string name="main_activity_stocked_bottles">" bottle(s) in stock"</string>
+    <string name="main_activity_ref_in_stock">" reference(s) in stock"</string>
+    <string name="main_activity_stocked_bottles_among_them">" bottle(s) in stock, included :"</string>
+    <string name="main_activity_stock_red">" of red wine"</string>
+    <string name="main_activity_stock_white">" of white wine"</string>
+    <string name="main_activity_stock_pink">" of pink wine"</string>
+    <string name="main_activity_stats">Stats</string>
+    <string name="main_activity_my_cellar">My cellar</string>
+    <string name="activity_edit_cellar_new_entry">New entry</string>
+    <string name="appellation">Appellation</string>
+    <string name="domain">Domain</string>
+    <string name="cuvee">Cuvee</string>
+    <string name="wine_type">Type</string>
+    <string name="vintage">Vintage</string>
+    <string name="capacity">Capacity</string>
+    <string name="wine_comment">Wine comments</string>
+    <string name="origin">Origin</string>
+    <string name="stock">Stock</string>
+    <string name="cellar_comment">Cellar comments</string>
+    <string name="add_photo">Add a photo</string>
+    <string name="storage">Storage</string>
+    <string name="camera">Camera</string>
+    <string name="delete_photo">Delete</string>
+    <string name="activity_edit_cellar_hint_appellation">ex : Côtes du Kifébo</string>
+    <string name="activity_edit_cellar_hint_domain">ex : Château Cétrobon</string>
+    <string name="activity_edit_cellar_hint_cuvee">ex : Cuvée du siècle</string>
+    <string name="activity_edit_cellar_hint_wine_comment">ex : get along well with red meat</string>
+    <string name="activity_edit_cellar_hint_origin">How did I get or discover this wine</string>
+    <string name="activity_edit_cellar_hint_cellar_comment">ex : to buy again</string>
+    <string name="ok">OK</string>
+    <string name="delete">DELETE</string>
+    <string name="activity_main_sort_options">Sort options</string>
+    <string name="fragment_cellar_choice_dialog_choose_cellar">Choose cellar</string>
+    <string name="activity_main_menu_drawer_choose_cellar">Choose cellar :</string>
+    <string name="activity_main_menu_drawer_new_cellar">New cellar</string>
+    <string name="activity_main_menu_drawer_rename_cellar">Rename cellar</string>
+    <string name="menu_main_export_database">Export database</string>
+    <string name="menu_main_import_database">Import database</string>
+    <string name="menu_main_export_csv">Export to CSV</string>
+    <string name="menu_main_delete_cellar">Delete cellar</string>
+    <string name="menu_main_stats">Stats</string>
+    <string name="edit_cellar_activity_update_entry">Update entry</string>
+    <string name="activity_edit_cellar_capacity">Capacity :</string>
+    <string name="activity_edit_cellar_stock">Stock :</string>
 
 </resources>

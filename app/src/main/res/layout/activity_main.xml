@@ -49,7 +49,7 @@
             android:layout_marginStart="@dimen/padding_normal"
             android:orientation="vertical">
             <TextView
-                android:text="Options de tri"
+                android:text="@string/activity_main_sort_options"
                 android:layout_marginBottom="@dimen/padding_normal"
                 android:textColor="@color/colorOnBackground"
                 android:layout_width="wrap_content"

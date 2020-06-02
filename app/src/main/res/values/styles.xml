@@ -66,8 +66,5 @@
     </style>
 
 <!--    Drawer title style-->
-    <style name="DrawerTitleStyle">
-        <item name="android:textStyle">italic</item>
-    </style>
 
 </resources>
