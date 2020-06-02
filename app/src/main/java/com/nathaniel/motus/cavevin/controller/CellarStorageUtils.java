@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.nathaniel.motus.cavevin.R;
 import com.nathaniel.motus.cavevin.model.Bottle;
 import com.nathaniel.motus.cavevin.model.Cell;
 import com.nathaniel.motus.cavevin.model.Cellar;
@@ -29,6 +30,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +49,7 @@ public class CellarStorageUtils {
     //**********************************************************************************************
 
     private static final String SEPARATOR="|";
+    private static final String CSV_SEPARATOR=";";
 
 //    JSON for bottle
     private static final String JSON_BOTTLES="bottles";
@@ -233,7 +236,39 @@ public class CellarStorageUtils {
         jsonObject.addJsonObject(cellarPoolToJsonObject());
 
         return jsonObject;
+    }
 
+    public static String cellToCsvLine(Cell cell) {
+        //Convert a cell to a string, meant to be added to a CSV file
+
+        String csvString="";
+        Bottle bottle=cell.getBottle();
+
+        String type;
+        switch (bottle.getType()) {
+            case "0":
+                type="Rouge";
+                break;
+            case "1":
+                type="Blanc";
+                break;
+            default:
+                type="Rosé";
+        }
+
+        csvString=csvString+type+CSV_SEPARATOR;
+        csvString=csvString+bottle.getAppellation()+CSV_SEPARATOR;
+        csvString=csvString+bottle.getDomain()+CSV_SEPARATOR;
+        csvString=csvString+bottle.getCuvee()+CSV_SEPARATOR;
+        csvString=csvString+bottle.getBottleName()+CSV_SEPARATOR;
+        csvString=csvString+bottle.getCapacity() +CSV_SEPARATOR;
+        csvString=csvString+bottle.getVintage()+CSV_SEPARATOR;
+        csvString=csvString+bottle.getBottleComment()+CSV_SEPARATOR;
+        csvString=csvString+cell.getStock()+CSV_SEPARATOR;
+        csvString=csvString+cell.getOrigin()+CSV_SEPARATOR;
+        csvString=csvString+cell.getCellComment()+CSV_SEPARATOR;
+
+        return csvString;
     }
 
     //**********************************************************************************************
@@ -306,42 +341,27 @@ public class CellarStorageUtils {
         }
     }
 
-    public static void writeDatabaseToExportFile(Context context,Uri uri){
-        //write the database once the export file is open
+    public static void exportCellarToCsvFile(Context context,Uri uri){
+        //Export the cellar to a CSV file
+
+        //Header string
+        String csvHeader="Type;Appellation;Domaine;Cuvée;Bouteille;Capacité;Millésime;Commentaires sur la bouteille;Stock;Origine;Commentaires sur la mise en cave\n";
 
         OutputStream outputStream;
         try {
             outputStream=context.getContentResolver().openOutputStream(uri);
-            BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(outputStream));
-            bw.write(CellarStorageUtils.dataBaseToJsonObject().jsonToString());
+            BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+            bw.write(csvHeader);
+            for (int i=0;i<Cellar.getCellarPool().get(MainActivity.getCurrentCellarIndex()).getCellList().size();i++){
+                bw.append(cellToCsvLine(Cellar.getCellarPool().get(MainActivity.getCurrentCellarIndex()).getCellList().get(i))+"\n");
+                i++;
+            }
             bw.flush();
             bw.close();
-            Toast.makeText(context,"DataBase saved",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"CSV created",Toast.LENGTH_SHORT).show();
         }catch (IOException e){
-            Toast.makeText(context,"Save failed",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Export to CSV failed",Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public static void readDataBaseFromImportFile(Context context,Uri uri){
-        //read the database once the import file is open
-
-        InputStream inputStream;
-        String dataBaseString="";
-        try {
-            inputStream=context.getContentResolver().openInputStream(uri);
-            BufferedReader br=new BufferedReader(new InputStreamReader(inputStream));
-            String readString=br.readLine();
-            while (readString!=null){
-                dataBaseString=dataBaseString+readString;
-                readString=br.readLine();
-            }
-        }catch (IOException e){
-            Toast.makeText(context,"Load failed",Toast.LENGTH_SHORT).show();
-        }
-        JsonObject jsonDatabase=new JsonObject();
-        jsonDatabase=JsonObject.stringToJsonObject(dataBaseString);
-        clearDataBase();
-        createDataBase(jsonDatabase);
     }
 
     private static void createDataBase(JsonObject jsonDataBase){

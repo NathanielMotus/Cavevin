@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
     private static final int REQUEST_URI_CREATE=100;
     private static final int REQUEST_URI_LOAD=101;
     private static final int REQUEST_PERMISSION =102;
+    private static final int REQUEST_CSV_URI_CREATE=103;
     private static final int WRITE_EXTERNAL_STORAGE_PERMISSION_INDEX=0;
     private static final int CAMERA_PERMISSION_INDEX=1;
 
@@ -168,6 +169,13 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
             Uri pathNameUri=data.getData();
             importDatabase(pathNameUri);
         }
+
+        //Export CSV
+        if (requestCode == REQUEST_CSV_URI_CREATE && resultCode == RESULT_OK) {
+            Uri cvsUri=data.getData();
+            CellarStorageUtils.exportCellarToCsvFile(this,cvsUri);
+        }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -223,6 +231,10 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
 
             case R.id.menu_activity_main_import:
                 sendImportDataBaseIntent();
+                return true;
+
+            case R.id.menu_activity_main_csv_export:
+                sendExportCsvIntent();
                 return true;
 
             case R.id.menu_activity_main_stats:
@@ -622,6 +634,15 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         intent.setType("text/*");
         startActivityForResult(intent,REQUEST_URI_CREATE);
     }
+
+    private void sendExportCsvIntent(){
+        //export the whole database to a file chosen by user in CSV format
+
+        Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType("text/*");
+        startActivityForResult(intent,REQUEST_CSV_URI_CREATE);
+    }
+
 
     private void sendImportDataBaseIntent(){
         //import the whole database from file chose by user

@@ -28,6 +28,11 @@
                 app:showAsAction="ifRoom"/>
 
             <item
+                android:id="@+id/menu_activity_main_csv_export"
+                android:title="Exporter en CSV"
+                app:showAsAction="ifRoom"/>
+
+            <item
                 android:id="@+id/menu_activity_main_delete_cellar"
                 android:title="Supprimer une cave"
                 app:showAsAction="ifRoom"/>
