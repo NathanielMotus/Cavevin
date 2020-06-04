@@ -46,7 +46,7 @@ public class EditCellarActivity extends AppCompatActivity {
     //List of bottle names
 //    private static ArrayList<String> sBottleNameList = new ArrayList<>(Arrays.asList("Standard","Piccolo","Quarter","Demi","Pot","Magnum","Marie-Jeanne","Rehoboam","Jeroboam","Methuselah","Salmanazar","Balthazar","Nebuchadnezzar","Melchior"));
     private static ArrayList<String> sBottleNameList=new ArrayList<>();
-    private static ArrayList<Float> sBottleCapacityList=new ArrayList<>();
+    private static ArrayList<String> sBottleCapacityList=new ArrayList<>();
     private static ArrayList<String> sSpinnerList=new ArrayList<>();
 
     //declaration of the views
@@ -121,7 +121,20 @@ public class EditCellarActivity extends AppCompatActivity {
 
         //Create the capacity list
         sBottleCapacityList.clear();
-        Collections.addAll(sBottleCapacityList,0.75f,0.2f,0.25f,0.375f,0.46f,1.5f,3f,4.5f,5f,6f,9f,12f,15f,18f);
+        Collections.addAll(sBottleCapacityList,getResources().getString(R.string.capacity_standard),
+                getResources().getString(R.string.capacity_piccolo),
+                getResources().getString(R.string.capacity_quarter),
+                getResources().getString(R.string.capacity_demi),
+                getResources().getString(R.string.capacity_pot),
+                getResources().getString(R.string.capacity_magnum),
+                getResources().getString(R.string.capacity_marie_jeanne),
+                getResources().getString(R.string.capacity_rehoboam),
+                getResources().getString(R.string.capacity_jeroboam),
+                getResources().getString(R.string.capacity_methuselah),
+                getResources().getString(R.string.capacity_salmanazar),
+                getResources().getString(R.string.capacity_balthazar),
+                getResources().getString(R.string.capacity_nebuchadnezzar),
+                getResources().getString(R.string.capacity_melchior));
 
         //Create the spinner adapter list
         sSpinnerList.clear();
@@ -350,10 +363,8 @@ public class EditCellarActivity extends AppCompatActivity {
             }
             mVintageEdit.setText(bottle.getVintage());
             int i=0;
-//            String bottleName=bottle.getBottleName();
-//            while (sBottleNameList.get(i).compareTo(bottleName)!=0) i++;
             float bottleCapacity=bottle.getCapacity();
-            while (sBottleCapacityList.get(i)!=bottleCapacity) i++;
+            while (sBottleCapacityList.get(i).compareTo(bottleCapacity+"")!=0) i++;
             mCapacitySpinner.setSelection(i);
             mBottleCommentEdit.setText(bottle.getBottleComment());
             mOriginEdit.setText(cell.getOrigin());

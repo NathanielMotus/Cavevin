@@ -309,7 +309,7 @@ public class CellarStorageUtils {
         }
     }
 
-    public static void loadDataBase(File file){
+    public static void loadDataBase(Context context,File file){
         //load the whole database
 
         String dataBaseString= "";
@@ -335,7 +335,7 @@ public class CellarStorageUtils {
         }
         if (dataBaseString!="") {
             JsonObject jsonDatabase = JsonObject.stringToJsonObject(dataBaseString);
-            createDataBase(jsonDatabase);
+            createDataBase(context,jsonDatabase);
         }
     }
 
@@ -343,7 +343,18 @@ public class CellarStorageUtils {
         //Export the cellar to a CSV file
 
         //Header string
-        String csvHeader="Type;Appellation;Domaine;Cuvée;Bouteille;Capacité;Millésime;Commentaires sur la bouteille;Stock;Origine;Commentaires sur la mise en cave\n";
+//        String csvHeader="Type;Appellation;Domaine;Cuvée;Bouteille;Capacité;Millésime;Commentaires sur la bouteille;Stock;Origine;Commentaires sur la mise en cave\n";
+        String csvHeader=context.getResources().getString(R.string.wine_type)+CSV_SEPARATOR+
+                context.getResources().getString(R.string.appellation)+CSV_SEPARATOR+
+                context.getResources().getString(R.string.domain)+CSV_SEPARATOR+
+                context.getResources().getString(R.string.cuvee)+CSV_SEPARATOR+
+                context.getResources().getString(R.string.bottle)+CSV_SEPARATOR+
+                context.getResources().getString(R.string.capacity)+CSV_SEPARATOR+
+                context.getResources().getString(R.string.vintage)+CSV_SEPARATOR+
+                context.getResources().getString(R.string.wine_comment)+CSV_SEPARATOR+
+                context.getResources().getString(R.string.stock)+CSV_SEPARATOR+
+                context.getResources().getString(R.string.origin)+CSV_SEPARATOR+
+                context.getResources().getString(R.string.cellar_comment)+"\n";
 
         OutputStream outputStream;
         try {
@@ -362,7 +373,7 @@ public class CellarStorageUtils {
         }
     }
 
-    private static void createDataBase(JsonObject jsonDataBase){
+    private static void createDataBase(Context context,JsonObject jsonDataBase){
         //create database from readfile JsonObject
 
         clearDataBase();
@@ -372,12 +383,36 @@ public class CellarStorageUtils {
         //Create bottles
         ArrayList<Object> bottleJsonObjectArrayList=jsonDataBase.getKeyValueArray(JSON_BOTTLES);
 
+        String bottleName="";
+        String bottleCapacity;
         for (int i=0;i<bottleJsonObjectArrayList.size();i++){
             currentJsonObject=(JsonObject)bottleJsonObjectArrayList.get(i);
-            Bottle bottle=new Bottle(currentJsonObject.getKeyValue(JSON_APPELLATION),currentJsonObject.getKeyValue(JSON_DOMAIN),currentJsonObject.getKeyValue(JSON_CUVEE),
-                    currentJsonObject.getKeyValue(JSON_TYPE),currentJsonObject.getKeyValue(JSON_VINTAGE),currentJsonObject.getKeyValue(JSON_BOTTLE_NAME),
-                    Float.parseFloat(currentJsonObject.getKeyValue(JSON_CAPACITY)),currentJsonObject.getKeyValue(JSON_BOTTLE_COMMENT),
-                    currentJsonObject.getKeyValue(JSON_BOTTLE_PHOTO_NAME),true);
+            bottleCapacity=currentJsonObject.getKeyValue(JSON_CAPACITY);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_melchior))==0) bottleName=context.getResources().getString(R.string.bottle_melchior);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_nebuchadnezzar))==0) bottleName=context.getResources().getString(R.string.bottle_nebuchadnezzar);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_balthazar))==0) bottleName=context.getResources().getString(R.string.bottle_balthazar);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_salmanazar))==0) bottleName=context.getResources().getString(R.string.bottle_salmanazar);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_methuselah))==0) bottleName=context.getResources().getString(R.string.bottle_methuselah);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_jeroboam))==0) bottleName=context.getResources().getString(R.string.bottle_jeroboam);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_rehoboam))==0) bottleName=context.getResources().getString(R.string.bottle_rehoboam);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_marie_jeanne))==0) bottleName=context.getResources().getString(R.string.bottle_marie_jeanne);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_magnum))==0) bottleName=context.getResources().getString(R.string.bottle_magnum);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_pot))==0) bottleName=context.getResources().getString(R.string.bottle_pot);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_demi))==0) bottleName=context.getResources().getString(R.string.bottle_demi);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_quarter))==0) bottleName=context.getResources().getString(R.string.bottle_quarter);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_piccolo))==0) bottleName=context.getResources().getString(R.string.bottle_piccolo);
+            if (bottleCapacity.compareTo(context.getResources().getString(R.string.capacity_standard))==0) bottleName=context.getResources().getString(R.string.bottle_standard);
+
+            Bottle bottle=new Bottle(currentJsonObject.getKeyValue(JSON_APPELLATION),
+                    currentJsonObject.getKeyValue(JSON_DOMAIN),
+                    currentJsonObject.getKeyValue(JSON_CUVEE),
+                    currentJsonObject.getKeyValue(JSON_TYPE),
+                    currentJsonObject.getKeyValue(JSON_VINTAGE),
+                    bottleName,
+                    Float.parseFloat(bottleCapacity),
+                    currentJsonObject.getKeyValue(JSON_BOTTLE_COMMENT),
+                    currentJsonObject.getKeyValue(JSON_BOTTLE_PHOTO_NAME),
+                    true);
         }
 
         //Create cells

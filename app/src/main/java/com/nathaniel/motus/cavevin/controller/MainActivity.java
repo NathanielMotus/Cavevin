@@ -515,7 +515,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         File saveDir=getFilesDir();
         File saveURI=CellarStorageUtils.createOrGetFile(saveDir,getResources().getString(R.string.database_folder_name),getResources().getString(R.string.database_file_name));
 
-        CellarStorageUtils.loadDataBase(saveURI);
+        CellarStorageUtils.loadDataBase(getApplicationContext(),saveURI);
     }
 
     private void saveDatas(){

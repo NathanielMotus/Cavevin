@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Cave à vin</string>
+    <string name="app_name">Wine cellar</string>
 
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
@@ -15,19 +15,33 @@
     <string name="wine_white">White</string>
     <string name="wine_pink">Pink</string>
     <string name="bottle_standard">Standard</string>
+    <string name="capacity_standard" translatable="false">0.75</string>
     <string name="bottle_piccolo">Piccolo</string>
+    <string name="capacity_piccolo" translatable="false">0.2</string>
     <string name="bottle_quarter">Quarter</string>
+    <string name="capacity_quarter" translatable="false">0.25</string>
     <string name="bottle_demi">Demi</string>
+    <string name="capacity_demi" translatable="false">0.375</string>
     <string name="bottle_pot">Pot</string>
+    <string name="capacity_pot" translatable="false">0.46</string>
     <string name="bottle_magnum">Magnum</string>
+    <string name="capacity_magnum" translatable="false">1.5</string>
     <string name="bottle_marie_jeanne">Marie-Jeanne</string>
+    <string name="capacity_marie_jeanne" translatable="false">3</string>
     <string name="bottle_rehoboam">Rehoboam</string>
+    <string name="capacity_rehoboam" translatable="false">4.5</string>
     <string name="bottle_jeroboam">Jeroboam</string>
+    <string name="capacity_jeroboam" translatable="false">5</string>
     <string name="bottle_methuselah">Methuselah</string>
+    <string name="capacity_methuselah" translatable="false">6</string>
     <string name="bottle_salmanazar">Salmanazar</string>
+    <string name="capacity_salmanazar" translatable="false">9</string>
     <string name="bottle_balthazar">Balthazar</string>
+    <string name="capacity_balthazar" translatable="false">12</string>
     <string name="bottle_nebuchadnezzar">Nebuchadnezzar</string>
+    <string name="capacity_nebuchadnezzar" translatable="false">15</string>
     <string name="bottle_melchior">Melchior</string>
+    <string name="capacity_melchior" translatable="false">18</string>
     <string name="edit_cellar_activity_entry_saved">Entry saved</string>
     <string name="edit_cellar_activity_entry_updated">Entry updated</string>
     <string name="edit_cellar_activity_warning">Warning !</string>
@@ -57,6 +71,7 @@
     <string name="cuvee">Cuvee</string>
     <string name="wine_type">Type</string>
     <string name="vintage">Vintage</string>
+    <string name="bottle">Bottle</string>
     <string name="capacity">Capacity</string>
     <string name="wine_comment">Wine comments</string>
     <string name="origin">Origin</string>

@@ -77,4 +77,6 @@
     <string name="edit_cellar_activity_update_entry">Modifier une entrée</string>
     <string name="activity_edit_cellar_capacity">Contenance :</string>
     <string name="activity_edit_cellar_stock">Stock :</string>
+    <string name="bottle">Bouteille</string>
+    <string name="app_name">Cave à vin</string>
 </resources>
