@@ -141,12 +141,12 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
         holder.buttonCollapse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if(mCellar.getCellList().get(actualPosition).isExpanded){
+                    if(mCellar.getCellList().get(position).isExpanded){
                     collapseCard(holder);
-                        mCellar.getCellList().get(actualPosition).isExpanded =false;
+                        mCellar.getCellList().get(position).isExpanded =false;
                 }else{
                     expandCard(holder);
-                        mCellar.getCellList().get(actualPosition).isExpanded =true;
+                        mCellar.getCellList().get(position).isExpanded =true;
                 }
             }
         });
