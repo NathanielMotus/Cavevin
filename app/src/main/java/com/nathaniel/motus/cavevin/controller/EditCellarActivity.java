@@ -308,6 +308,9 @@ public class EditCellarActivity extends AppCompatActivity {
             CellarStorageUtils.deleteFileFromInternalStorage(getFilesDir(),
                     getResources().getString(R.string.photo_folder_name), mPhotoTakenName);
         }
+
+        //Save datas
+        saveDatas();
     }
 
 //    **********************************************************************************************
@@ -653,6 +656,17 @@ public class EditCellarActivity extends AppCompatActivity {
         intent.putExtra(MediaStore.EXTRA_OUTPUT,mPhotoTakenUri);
         startActivityForResult(intent,REQUEST_CAMERA_USE);
     }
+
+
+    private void saveDatas(){
+        //save all the datas
+
+        File saveDir=getFilesDir();
+        File saveFileName=CellarStorageUtils.createOrGetFile(saveDir,getResources().getString(R.string.database_folder_name),getResources().getString(R.string.database_file_name));
+
+        CellarStorageUtils.saveDataBase(saveFileName);
+    }
+
 
 
 
