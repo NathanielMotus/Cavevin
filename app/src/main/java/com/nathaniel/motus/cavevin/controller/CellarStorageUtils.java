@@ -363,7 +363,6 @@ public class CellarStorageUtils {
             bw.write(csvHeader);
             for (int i=0;i<Cellar.getCellarPool().get(MainActivity.getCurrentCellarIndex()).getCellList().size();i++){
                 bw.append(cellToCsvLine(context,Cellar.getCellarPool().get(MainActivity.getCurrentCellarIndex()).getCellList().get(i))+"\n");
-                i++;
             }
             bw.flush();
             bw.close();
