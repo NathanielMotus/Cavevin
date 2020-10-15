@@ -7,5 +7,5 @@ This app is a wine cellar manager. Features:<ul>
 <li>Type filter</li>
 <li>Many pre-defined sort options.</li></ul>
 
-What's new in v1.1 ?
-Database is now saved when leaving the bottle editor, so that it is saved even though you quit the app by killing it
+What's new in v1.2 ?
+CSV export works fine
