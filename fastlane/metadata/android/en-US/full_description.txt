@@ -7,5 +7,5 @@ This app is a wine cellar manager. Features:<ul>
 <li>Type filter</li>
 <li>Many pre-defined sort options.</li></ul>
 
-What's new in v1.2 ?
-CSV export works fine
+What's new in v1.3 ?
+Standard export works fine
