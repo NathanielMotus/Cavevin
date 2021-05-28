@@ -631,7 +631,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         //export the whole database to a file chosen by user
 
         Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.setType("text/*");
+        intent.setType("*/*");
         startActivityForResult(intent,REQUEST_URI_CREATE);
     }
 
@@ -648,7 +648,7 @@ public class MainActivity extends AppCompatActivity implements MyRecyclerViewAda
         //import the whole database from file chose by user
 
         Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("text/*");
+        intent.setType("*/*");
         startActivityForResult(intent,REQUEST_URI_LOAD);
     }
 
