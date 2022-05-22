@@ -194,13 +194,13 @@
         android:textSize="@dimen/text_normal"
         android:visibility="gone"/>
 
-    <ImageView
-        android:id="@+id/recycler_cellar_row_collapse_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recycler_cellar_row_cellar_comment_text"
-        android:src="@drawable/baseline_keyboard_arrow_down_white_18dp"
-        android:gravity="center"/>
+        <ImageView
+            android:id="@+id/recycler_cellar_row_collapse_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recycler_cellar_row_cellar_comment_text"
+            android:gravity="center"
+            android:src="@drawable/baseline_keyboard_arrow_down_white_18dp" />
 
     <ImageView
         android:id="@+id/recycler_cellar_row_edit_image"
