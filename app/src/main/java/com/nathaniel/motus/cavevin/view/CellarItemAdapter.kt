@@ -1,17 +1,11 @@
 package com.nathaniel.motus.cavevin.view
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.nathaniel.motus.cavevin.data.CellarEntry
 import com.nathaniel.motus.cavevin.data.CellarItem
-import com.nathaniel.motus.cavevin.data.cellar_database.CellarDatabase
 import com.nathaniel.motus.cavevin.databinding.CellarItemViewBinding
 
 class CellarItemAdapter(
@@ -41,13 +35,20 @@ class CellarItemAdapter(
             binding.cellarItemViewAppellationText.text=cellarItem.appellation
             binding.cellarItemViewDomainText.text=cellarItem.domain
             binding.cellarItemViewCuveeText.text=cellarItem.cuvee
+            binding.cellarItemViewRatingView.rating=cellarItem.rating
+            binding.cellarItemViewRatingView.displayMode=RatingView.VIEW_MODE
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CellarItemViewHolder {
-        val viewHolder=CellarItemViewHolder(CellarItemViewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
-        return viewHolder
+        return CellarItemViewHolder(
+            CellarItemViewBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: CellarItemViewHolder, position: Int) {
