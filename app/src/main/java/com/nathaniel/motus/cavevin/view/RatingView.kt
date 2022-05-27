@@ -1,9 +1,11 @@
 package com.nathaniel.motus.cavevin.view
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -27,6 +29,13 @@ class RatingView(context: Context, attrs: AttributeSet?) : LinearLayout(context,
         set(value) {
             field = value
             updateImageViews()
+            if (displayMode == EDITABLE_MODE)
+                setMainListener()
+            if (displayMode == EDIT_MODE) {
+                setClearListener()
+                setRatingListeners()
+            }
+
             invalidate()
             requestLayout()
         }
@@ -52,13 +61,13 @@ class RatingView(context: Context, attrs: AttributeSet?) : LinearLayout(context,
 
         setImage(
             0,
-            AppCompatResources.getDrawable(context,R.drawable.outline_clear_black_24dp)!!,
+            AppCompatResources.getDrawable(context, R.drawable.outline_clear_black_24dp)!!,
             ContextCompat.getColor(context, R.color.colorPrimary)
         )
 
         setImage(
             6,
-            AppCompatResources.getDrawable(context,R.drawable.outline_edit_black_24dp)!!,
+            AppCompatResources.getDrawable(context, R.drawable.outline_edit_black_24dp)!!,
             ContextCompat.getColor(context, R.color.colorPrimary)
         )
     }
@@ -91,17 +100,52 @@ class RatingView(context: Context, attrs: AttributeSet?) : LinearLayout(context,
         for (i in 1..rating)
             setImage(
                 i,
-                AppCompatResources.getDrawable(context,R.drawable.outline_star_black_24dp)!!,
+                AppCompatResources.getDrawable(context, R.drawable.outline_star_black_24dp)!!,
                 ContextCompat.getColor(context, android.R.color.holo_orange_light)
             )
 
-        for (i in rating+1..5)
+        for (i in rating + 1..5)
             setImage(
                 i,
-                AppCompatResources.getDrawable(context,R.drawable.outline_star_outline_black_24dp)!!,
-                ContextCompat.getColor(context,android.R.color.holo_orange_light)
+                AppCompatResources.getDrawable(
+                    context,
+                    R.drawable.outline_star_outline_black_24dp
+                )!!,
+                ContextCompat.getColor(context, android.R.color.holo_orange_light)
             )
     }
+
+    private fun setMainListener() {
+        var nestedView: RatingView? = null
+        this.setOnClickListener {
+            it as RatingView
+            nestedView = RatingView(it.context).apply {
+                displayMode = EDIT_MODE
+                rating = it.rating
+            }
+            AlertDialog.Builder(it.context)
+                .setView(nestedView)
+                .setNeutralButton("Cancel") { _, _ -> }
+                .setPositiveButton("OK") { _, _ ->
+                    it.rating = nestedView!!.rating
+                }
+                .show()
+        }
+    }
+
+    private fun setClearListener() {
+        this.imageViews[0].setOnClickListener {
+            this.rating = 0
+        }
+    }
+
+    private fun setRatingListeners() {
+        for (i in 1..5)
+            this.imageViews[i].setOnClickListener {
+                this.rating = i
+            }
+    }
+
 
     companion object {
         const val VIEW_MODE = 0

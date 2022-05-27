@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
@@ -66,5 +65,4 @@
     </style>
 
 <!--    Drawer title style-->
-
 </resources>
