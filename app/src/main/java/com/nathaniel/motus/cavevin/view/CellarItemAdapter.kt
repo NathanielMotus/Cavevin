@@ -2,14 +2,20 @@ package com.nathaniel.motus.cavevin.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.nathaniel.motus.cavevin.R
+import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.data.CellarItem
+import com.nathaniel.motus.cavevin.data.cellar_database.Stock
 import com.nathaniel.motus.cavevin.databinding.CellarItemViewBinding
+import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
+import java.util.*
 
-class CellarItemAdapter(
-) : ListAdapter<CellarItem, CellarItemAdapter.CellarItemViewHolder>(DiffCallBack) {
+class CellarItemAdapter(val bottleListViewModel: BottleListViewModel) :
+    ListAdapter<CellarItem, CellarItemAdapter.CellarItemViewHolder>(DiffCallBack) {
 
     companion object {
         private val DiffCallBack = object : DiffUtil.ItemCallback<CellarItem>() {
@@ -30,15 +36,67 @@ class CellarItemAdapter(
         }
     }
 
-    class CellarItemViewHolder(private val binding: CellarItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(cellarItem: CellarItem){
-            binding.cellarItemViewAppellationText.text=cellarItem.appellation
-            binding.cellarItemViewDomainText.text=cellarItem.domain
-            binding.cellarItemViewCuveeText.text=cellarItem.cuvee
-            binding.cellarItemViewRatingView.rating=cellarItem.rating
-            binding.cellarItemViewRatingView.displayMode=RatingView.VIEW_MODE
+    class CellarItemViewHolder(
+        private val binding: CellarItemViewBinding,
+        private val viewModel: BottleListViewModel,
+    ) : RecyclerView.ViewHolder(binding.root), StockView.Observer {
+
+        private var cellarId = 0
+        private var bottleId = 0
+        private var alreadyObservesStock = false
+        private var timer: Timer? = null
+
+        fun bind(cellarItem: CellarItem) {
+            cellarId = cellarItem.cellarId
+            bottleId = cellarItem.bottleId
+            binding.cellarItemViewAppellationText.text = cellarItem.appellation
+            binding.cellarItemViewDomainText.text = cellarItem.domain
+            binding.cellarItemViewCuveeText.text = cellarItem.cuvee
+            binding.cellarItemViewRatingView.rating = cellarItem.rating
+            binding.cellarItemViewRatingView.displayMode = RatingView.VIEW_MODE
+            binding.cellarItemViewBottleNameText.text = cellarItem.bottleName
+            binding.cellarItemViewCapacityText.text = "${cellarItem.capacity} L"
+            binding.cellarItemViewVintageText.text = cellarItem.vintage
+            setBottleImage(cellarItem.picture)
+            if (!alreadyObservesStock) {
+                binding.cellarItemStock.observe(this)
+                alreadyObservesStock = true
+            }
+            binding.cellarItemStock.stock = cellarItem.quantity
         }
 
+        private fun setBottleImage(imageName: String?) {
+            if (imageName != null)
+                binding.cellarItemViewPhotoImage.setImageBitmap(
+                    CellarStorageUtils.getBitmapFromInternalStorage(
+                        binding.root.context.filesDir,
+                        binding.root.context.resources.getString(R.string.photo_folder_name),
+                        imageName + binding.root.context.resources.getString(R.string.photo_thumbnail_suffix)
+                    )
+                )
+            else
+                binding.cellarItemViewPhotoImage.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        binding.root.context,
+                        R.drawable.photo_frame
+                    )
+                )
+        }
+
+
+        override fun notifyNewStock(stock: Int) {
+            //the timer is used to prevent update stock from db before db is updated by stockview
+            //it waits 1 s before updating db
+            timer?.cancel()
+
+            timer = object : Timer() {}.apply {
+                schedule(object : TimerTask() {
+                    override fun run() {
+                        viewModel.updateStock(Stock(cellarId, bottleId, stock))
+                    }
+                }, 1000)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CellarItemViewHolder {
@@ -47,7 +105,7 @@ class CellarItemAdapter(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), bottleListViewModel
         )
     }
 

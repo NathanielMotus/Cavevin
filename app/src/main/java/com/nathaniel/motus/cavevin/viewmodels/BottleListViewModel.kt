@@ -1,17 +1,10 @@
 package com.nathaniel.motus.cavevin.viewmodels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.*
-import com.nathaniel.motus.cavevin.utils.findBaseLanguage
-import com.nathaniel.motus.cavevin.utils.systemLanguage
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.lang.IllegalArgumentException
 
 class BottleListViewModel(
@@ -26,7 +19,7 @@ class BottleListViewModel(
     fun updateBottleListViewModel() {
         viewModelScope.launch {
             cellarRepository.getCellarEntries().collect {
-                updateCellarItems(it)
+                createCellarItems(it)
             }
         }
     }
@@ -87,6 +80,12 @@ class BottleListViewModel(
     fun insertBottle(bottle: Bottle) {
         viewModelScope.launch {
             bottleRepository.insertBottle(bottle)
+        }
+    }
+
+    fun updateBottle(bottle:Bottle){
+        viewModelScope.launch {
+            bottleRepository.updateBottle(bottle)
         }
     }
 
@@ -158,7 +157,7 @@ class BottleListViewModel(
         findBottleById(cellarEntry.bottleId).picture
     )
 
-    private suspend fun updateCellarItems(newCellarEntries: List<CellarEntry>) {
+    private suspend fun createCellarItems(newCellarEntries: List<CellarEntry>) {
         var items: MutableList<CellarItem> = mutableListOf()
         newCellarEntries.forEach {
             items.add(createCellarItem(it))

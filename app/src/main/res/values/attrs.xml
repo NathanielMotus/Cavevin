@@ -8,4 +8,9 @@
         </attr>
         <attr name="rating" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="StockView">
+        <attr name="stock" format="integer"/>
+        <attr name="isLocked" format="boolean"/>
+    </declare-styleable>
 </resources>

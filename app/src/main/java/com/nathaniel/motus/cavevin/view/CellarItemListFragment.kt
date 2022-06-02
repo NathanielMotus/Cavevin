@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nathaniel.motus.cavevin.databinding.FragmentCellarBinding
@@ -45,11 +46,12 @@ class CellarItemListFragment : Fragment() {
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext())
 
-        var adapter: CellarItemAdapter? = CellarItemAdapter()
+        var adapter: CellarItemAdapter? = CellarItemAdapter(viewModel)
         recyclerView.adapter = adapter
         viewModel.cellarItems.observe(viewLifecycleOwner) {
             adapter?.submitList(it)
         }
+        (recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations=false
     }
 
     override fun onDestroy() {
