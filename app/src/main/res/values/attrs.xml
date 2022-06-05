@@ -13,4 +13,10 @@
         <attr name="stock" format="integer"/>
         <attr name="isLocked" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="WineView">
+        <attr name="wineColor" format="string"/>
+        <attr name="wineStillness" format="string"/>
+    </declare-styleable>
+
 </resources>

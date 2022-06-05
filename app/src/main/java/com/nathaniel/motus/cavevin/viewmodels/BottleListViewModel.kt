@@ -139,8 +139,11 @@ class BottleListViewModel(
         findBottleById(cellarEntry.bottleId).domain,
         findBottleById(cellarEntry.bottleId).cuvee,
         findBottleById(cellarEntry.bottleId).vintage,
+        findBottleById(cellarEntry.bottleId).wineColor,
         findWineColorTranslation(findBottleById(cellarEntry.bottleId).wineColor, language),
+        findBottleById(cellarEntry.bottleId).wineStillness,
         findWineStillnessTranslation(findBottleById(cellarEntry.bottleId).wineStillness, language),
+        findBottleById(cellarEntry.bottleId).bottleTypeId,
         findBottleTypeByIdAndLanguage(
             findBottleById(cellarEntry.bottleId).bottleTypeId,
             language

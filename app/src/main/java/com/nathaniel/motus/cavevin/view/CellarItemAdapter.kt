@@ -1,5 +1,6 @@
 package com.nathaniel.motus.cavevin.view
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
@@ -57,6 +58,8 @@ class CellarItemAdapter(val bottleListViewModel: BottleListViewModel) :
             binding.cellarItemViewBottleNameText.text = cellarItem.bottleName
             binding.cellarItemViewCapacityText.text = "${cellarItem.capacity} L"
             binding.cellarItemViewVintageText.text = cellarItem.vintage
+            binding.cellarItemViewWineView.wineColor=cellarItem.neutralWineColor
+            binding.cellarItemViewWineView.wineStillness=cellarItem.neutralWineStillness
             setBottleImage(cellarItem.picture)
             if (!alreadyObservesStock) {
                 binding.cellarItemStock.observe(this)
@@ -66,7 +69,7 @@ class CellarItemAdapter(val bottleListViewModel: BottleListViewModel) :
         }
 
         private fun setBottleImage(imageName: String?) {
-            if (imageName != null)
+            if (imageName != null && imageName != "")
                 binding.cellarItemViewPhotoImage.setImageBitmap(
                     CellarStorageUtils.getBitmapFromInternalStorage(
                         binding.root.context.filesDir,
