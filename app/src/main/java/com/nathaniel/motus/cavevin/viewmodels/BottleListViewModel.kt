@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.*
+import com.nathaniel.motus.cavevin.transformers.CellarItemComparator
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -44,6 +45,20 @@ class BottleListViewModel(
 
     val cellarItems: MutableLiveData<List<CellarItem>> by lazy { MutableLiveData<List<CellarItem>>() }
 
+    private var sortPattern = arrayListOf(
+        arrayListOf(0, 1),
+        arrayListOf(1, 1),
+        arrayListOf(2, 1),
+        arrayListOf(3, 1),
+        arrayListOf(4, 1),
+        arrayListOf(5, 1),
+        arrayListOf(6, 1),
+        arrayListOf(7, 1),
+        arrayListOf(8, 1),
+        arrayListOf(9, 1),
+        arrayListOf(10, 1)
+    )
+
     //**********************************************************************************************
     //Cellar
     //**********************************************************************************************
@@ -83,7 +98,7 @@ class BottleListViewModel(
         }
     }
 
-    fun updateBottle(bottle:Bottle){
+    fun updateBottle(bottle: Bottle) {
         viewModelScope.launch {
             bottleRepository.updateBottle(bottle)
         }
@@ -165,7 +180,7 @@ class BottleListViewModel(
         newCellarEntries.forEach {
             items.add(createCellarItem(it))
         }
-        cellarItems.value = items
+        cellarItems.value = items.sortedWith(CellarItemComparator(sortPattern))
     }
 
 }

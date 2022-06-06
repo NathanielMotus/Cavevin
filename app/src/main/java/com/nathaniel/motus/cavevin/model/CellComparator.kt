@@ -13,13 +13,13 @@ class CellComparator {
         //ascending or descending
         //in any order specified in ArrayList order (2,0,1,3,4) for example sort by domain first, then cuvee...
         //each fields is modified by ArrayList sortingSense, where 1 is upwards and -1 downwards
-        private val compareResults = ArrayList(Arrays.asList(0, 0, 0, 0, 0))
+        private val compareResults = ArrayList(listOf(0, 0, 0, 0, 0))
 
         //    **********************************************************************************************
         //    Getters and setters
         //    **********************************************************************************************
-        val sortingSense = ArrayList(Arrays.asList(1, 1, 1, 1, 1))
-        val sortingOrder = ArrayList(Arrays.asList(0, 1, 2, 3, 4))
+        val sortingSense = ArrayList(listOf(1, 1, 1, 1, 1))
+        val sortingOrder = ArrayList(listOf(0, 1, 2, 3, 4))
         fun setSortingSense(
             appellationSense: Int,
             domainSense: Int,
