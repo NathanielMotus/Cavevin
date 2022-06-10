@@ -67,7 +67,7 @@ class UpGraderToVersionCode5(
                         "2" -> WineColor.PINK
                         else -> WineColor.RED
                     },
-                    null,
+                    "still",
                     it.bottle.bottleComment + it.cellComment,
                     safeFindBottleTypeById(it.bottle.capacity),
                     null,

@@ -7,6 +7,7 @@ import com.nathaniel.motus.cavevin.data.cellar_database.*
 import com.nathaniel.motus.cavevin.transformers.CellarItemComparator
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
+import java.util.function.Predicate
 
 class BottleListViewModel(
     application: Application
@@ -43,20 +44,35 @@ class BottleListViewModel(
     private var currentCellarId = 1
     private var language = "en_US"
 
+    private var _redIsEnable = MutableLiveData(true)
+    val redIsEnable: LiveData<Boolean>
+        get() = _redIsEnable
+
+    private var _whiteIsEnable = MutableLiveData(true)
+    val whiteIsEnable: LiveData<Boolean>
+        get() = _whiteIsEnable
+
+    private var _pinkIsEnable = MutableLiveData(true)
+    val pinkIsEnable: LiveData<Boolean>
+        get() = _pinkIsEnable
+
+    private var _stillIsEnable = MutableLiveData(true)
+    val stillIsEnable: LiveData<Boolean>
+        get() = _stillIsEnable
+
+    private var _sparklingIsEnable = MutableLiveData(true)
+    val sparklingIsEnable: LiveData<Boolean>
+        get() = _sparklingIsEnable
+
+    private var _emptyIsEnable = MutableLiveData(true)
+    val emptyIsEnable: LiveData<Boolean>
+        get() = _emptyIsEnable
+
     val cellarItems: MutableLiveData<List<CellarItem>> by lazy { MutableLiveData<List<CellarItem>>() }
 
     private var sortPattern = arrayListOf(
-        arrayListOf(0, 1),
-        arrayListOf(1, 1),
-        arrayListOf(2, 1),
-        arrayListOf(3, 1),
-        arrayListOf(4, 1),
-        arrayListOf(5, 1),
-        arrayListOf(6, 1),
-        arrayListOf(7, 1),
-        arrayListOf(8, 1),
-        arrayListOf(9, 1),
-        arrayListOf(10, 1)
+        arrayListOf(3, 0, 1, 2, 4, 5, 6, 7, 8, 9, 10),
+        arrayListOf(-1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
     )
 
     //**********************************************************************************************
@@ -119,26 +135,12 @@ class BottleListViewModel(
     //*************************************
     //Wine color
     //*************************************
-    fun insertWineColor(wineColor: WineColor) =
-        viewModelScope.launch { wineColorRepository.insertWineColor(wineColor) }
-
-    private suspend fun getWineColorLanguages(id: String): List<String> =
-        wineColorRepository.getWineColorLanguages(id)
-
     private suspend fun findWineColorTranslation(id: String, language: String): String =
         wineColorRepository.findWineColorTranslation(id, language)
 
     //************************************
     //Wine stillness
     //************************************
-    fun insertWineStillness(wineStillness: WineStillness) =
-        viewModelScope.launch { wineStillnessRepository.insertWineStillness(wineStillness) }
-
-    private suspend fun getWineStillnessLanguages(id: String?): List<String>? =
-        if (id != null)
-            wineStillnessRepository.getWineStillnessLanguages(id)
-        else null
-
     private suspend fun findWineStillnessTranslation(id: String?, language: String): String? =
         if (id != null)
             wineStillnessRepository.findWineStillnessTranslation(id, language)
@@ -180,9 +182,48 @@ class BottleListViewModel(
         newCellarEntries.forEach {
             items.add(createCellarItem(it))
         }
-        cellarItems.value = items.sortedWith(CellarItemComparator(sortPattern))
+        cellarItems.value = filters(items.sortedWith(CellarItemComparator(sortPattern)))
     }
 
+    private fun filters(cellarItems: List<CellarItem>): List<CellarItem> {
+        val conditions = ArrayList<(CellarItem) -> Boolean>()
+        if (!redIsEnable.value!!)
+            conditions.add { it.neutralWineColor != "red" }
+        if (!whiteIsEnable.value!!)
+            conditions.add { it.neutralWineColor != "white" }
+        if (!pinkIsEnable.value!!)
+            conditions.add { it.neutralWineColor != "pink" }
+        if (!stillIsEnable.value!!)
+            conditions.add { it.neutralWineStillness != "still" }
+        if (!sparklingIsEnable.value!!)
+            conditions.add { it.neutralWineStillness != "sparkling" }
+        if (!emptyIsEnable.value!!)
+            conditions.add { it.quantity != 0 }
+
+        return cellarItems.filter { candidate -> conditions.all { it(candidate) } }
+    }
+
+    fun changeFilter(filter: String) {
+        when (filter) {
+            STILL_FILTER -> _stillIsEnable.value = !stillIsEnable.value!!
+            SPARKLING_FILTER -> _sparklingIsEnable.value = !sparklingIsEnable.value!!
+            RED_FILTER -> _redIsEnable.value = !redIsEnable.value!!
+            WHITE_FILTER -> _whiteIsEnable.value = !whiteIsEnable.value!!
+            PINK_FILTER -> _pinkIsEnable.value = !pinkIsEnable.value!!
+            EMPTY_FILTER -> _emptyIsEnable.value = !emptyIsEnable.value!!
+        }
+        updateBottleListViewModel()
+    }
+
+
+    companion object {
+        const val STILL_FILTER = "stillFilter"
+        const val SPARKLING_FILTER = "sparklingFilter"
+        const val RED_FILTER = "redFilter"
+        const val WHITE_FILTER = "whiteFilter"
+        const val PINK_FILTER = "pinkFilter"
+        const val EMPTY_FILTER = "emptyFilter"
+    }
 }
 
 class CellarViewModelFactory(

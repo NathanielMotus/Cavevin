@@ -1,41 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="36dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:theme="@style/ToolbarTheme">
+    android:layout_height="36sp">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/bottombar_all_wines_button"
-        android:tag="all"
+        android:id="@+id/bottomBarStillButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:src="@drawable/all_wines_icon"/>
-
+        android:src="@drawable/ic_baseline_wine_bar_full_48"
+        android:tint="@color/colorAccent"/>
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/bottombar_red_button"
-        android:tag="red"
+        android:id="@+id/bottomBarSparklingButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:src="@drawable/red_wine_circle"/>
+        android:src="@drawable/ic_baseline_wine_bar_full_sparkling_48"
+        android:tint="@color/colorAccent"/>
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/bottombar_white_button"
-        android:tag="white"
+        android:id="@+id/bottomBarRedButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:src="@drawable/white_wine_circle"/>
+        android:src="@drawable/ic_baseline_wine_bar_full_48"
+        android:tint="@color/redWine"/>
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/bottombar_pink_button"
-        android:tag="pink"
+        android:id="@+id/bottomBarWhiteButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:src="@drawable/pink_wine_circle"/>
+        android:src="@drawable/ic_baseline_wine_bar_full_48"
+        android:tint="@color/whiteWine"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bottomBarPinkButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/ic_baseline_wine_bar_full_48"
+        android:tint="@color/pinkWine"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bottomBarEmptyButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/ic_outline_wine_bar_empty_48"
+        android:tint="@color/colorAccent"/>
+
 
 </LinearLayout>

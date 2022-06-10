@@ -25,10 +25,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="100"/>
-        <FrameLayout
+    <!--    <FrameLayout
             android:id="@+id/activity_main_bottom_bar_frame_layout"
             android:layout_width="match_parent"
             android:layout_height="36dp"/>
+            -->
 
     </LinearLayout>
 

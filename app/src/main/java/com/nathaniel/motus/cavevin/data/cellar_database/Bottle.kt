@@ -18,7 +18,7 @@ data class Bottle(
     @ColumnInfo(name = "wine_color")
     val wineColor:String,
     @ColumnInfo(name = "wine_stillness")
-    val wineStillness:String?,
+    val wineStillness:String,
     val comment:String?,
     @ColumnInfo(name="bottle_type_id")
     val bottleTypeId:Int,

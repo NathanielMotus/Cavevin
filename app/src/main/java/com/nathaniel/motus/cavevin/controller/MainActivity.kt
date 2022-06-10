@@ -3,7 +3,6 @@ package com.nathaniel.motus.cavevin.controller
 import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import com.nathaniel.motus.cavevin.view.MyRecyclerViewAdapter.onItemClickedListener
-import com.nathaniel.motus.cavevin.view.BottomBarFragment.onBottomBarClickedListener
 import com.google.android.material.navigation.NavigationView
 import com.nathaniel.motus.cavevin.view.CellarChoiceDialogFragment.onCellarChoiceFragmentClickListener
 import com.nathaniel.motus.cavevin.view.EditDialogFragment.onEditDialogClickListener
@@ -20,7 +19,6 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import android.net.Uri
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,23 +26,19 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.coroutineScope
 import com.nathaniel.motus.cavevin.model.*
 import com.nathaniel.motus.cavevin.view.*
 import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
 import com.nathaniel.motus.cavevin.viewmodels.CellarViewModelFactory
-import kotlinx.coroutines.launch
 import java.io.File
-import java.lang.Exception
 import java.util.*
 
-class MainActivity : AppCompatActivity(), onItemClickedListener, onBottomBarClickedListener,
+class MainActivity : AppCompatActivity(), onItemClickedListener,
     NavigationView.OnNavigationItemSelectedListener, onCellarChoiceFragmentClickListener,
     onEditDialogClickListener {
     //Fragments declaration
     private var cellarFragment: CellarFragment? = null
     private var cellarItemListFragment:CellarItemListFragment?=null
-    private var bottomBarFragment: BottomBarFragment? = null
 
     //Views declaration
     private lateinit var toolbar: Toolbar
@@ -56,11 +50,6 @@ class MainActivity : AppCompatActivity(), onItemClickedListener, onBottomBarClic
     private lateinit var sortOption2: RadioButton
     private lateinit var sortGroup: RadioGroup
 
-    private val bottleListViewModel: BottleListViewModel by viewModels {
-        CellarViewModelFactory(
-            this.application
-        )
-    }
     //todo : when loading database, ask for overwriting new bottle type names if a new release take into account language bottle type names
     //todo : add possibility to overwrite user entered bottle type names with built-in bottle type names at any moment
 
@@ -82,7 +71,7 @@ class MainActivity : AppCompatActivity(), onItemClickedListener, onBottomBarClic
         configureToolBar()
         configureDrawerLayout()
         configureNavigationView()
-        configureBottomBar()
+        //configureBottomBar()
         configureSortOptions()
         if (Cellar.numberOfCellars > 0) Collections.sort(
             Cellar.cellarPool[currentCellarIndex].cellList,
@@ -264,22 +253,6 @@ class MainActivity : AppCompatActivity(), onItemClickedListener, onBottomBarClic
         }
     }
 
-    override fun onBottomBarItemClicked(v: View?, buttonTag: String?) {
-        when (buttonTag) {
-            "red" -> currentTypeFilter = TYPE_FILTER_RED
-            "white" -> currentTypeFilter = TYPE_FILTER_WHITE
-            "pink" -> currentTypeFilter = TYPE_FILTER_PINK
-            else -> currentTypeFilter = TYPE_FILTER_ALL
-        }
-        val preferences = getPreferences(MODE_PRIVATE)
-        preferences.edit().putString(CURRENT_TYPE_FILTER, currentTypeFilter).apply()
-        cellarFragment!!.updateCellarRecyclerView(
-            Cellar.cellarPool[currentCellarIndex].typeFiltered(
-                currentTypeFilter
-            )
-        )
-    }
-
     override fun onCellarChoiceFragmentClick(position: Int) {
 //        coming back from CellarChoiceDialog
 //        sMenuTag decides what to do
@@ -337,30 +310,11 @@ class MainActivity : AppCompatActivity(), onItemClickedListener, onBottomBarClic
 //    Initialization subs
 //    **********************************************************************************************
     private fun configureAndShowCellarFragment() {
-/*        cellarFragment =
-            supportFragmentManager.findFragmentById(R.id.activity_main_frame_layout) as CellarFragment?
-        if (cellarFragment == null) {
-            cellarFragment = CellarFragment()
-            supportFragmentManager.beginTransaction()
-                .add(R.id.activity_main_frame_layout, cellarFragment!!).commit()
-        }
-
- */
         cellarItemListFragment=supportFragmentManager.findFragmentById(R.id.activity_main_frame_layout) as CellarItemListFragment?
         if (cellarItemListFragment==null){
             cellarItemListFragment= CellarItemListFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.activity_main_frame_layout,cellarItemListFragment!!).commit()
-        }
-    }
-
-    private fun configureBottomBar() {
-        bottomBarFragment =
-            supportFragmentManager.findFragmentById(R.id.activity_main_bottom_bar_frame_layout) as BottomBarFragment?
-        if (bottomBarFragment == null) {
-            bottomBarFragment = BottomBarFragment()
-            supportFragmentManager.beginTransaction()
-                .add(R.id.activity_main_bottom_bar_frame_layout, bottomBarFragment!!).commit()
         }
     }
 

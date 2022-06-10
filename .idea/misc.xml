@@ -9,12 +9,15 @@
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/drawable/ic_baseline_wine_bar_full_sparkling_48.xml" value="0.2375" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/drawable/ic_baseline_wine_bar_sparkling_24.xml" value="0.1" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3375" />
+        <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/drawable/ic_outline_wine_bar_empty_48.xml" value="0.161" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/drawable/pink_wine_circle.xml" value="0.3375" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/drawable/red_wine_circle.xml" value="0.3375" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/drawable/white_wine_circle.xml" value="0.3375" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/layout-v21/cellar_card.xml" value="0.5900562851782364" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/layout-v21/cellar_item_view.xml" value="0.36666666666666664" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/layout/fragment_bottom_bar.xml" value="0.33" />
+        <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/layout/fragment_cellar.xml" value="0.18854166666666666" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/layout/fragment_cellar_item_list.xml" value="0.36666666666666664" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/layout/rating_layout.xml" value="0.25" />
         <entry key="..\:/Dossier Nanat/16-Android/Cavevin/app/src/main/res/layout/recyclerview_cellar_row.xml" value="0.36666666666666664" />

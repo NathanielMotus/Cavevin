@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="36dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/ToolbarTheme">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bottombar_all_wines_button"
+        android:tag="all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/all_wines_icon"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bottombar_red_button"
+        android:tag="red"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:tint="@color/redWine"
+        android:src="@drawable/ic_baseline_wine_bar_full_48"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bottombar_white_button"
+        android:tag="white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:alpha=".1"
+        android:tint="@color/whiteWine"
+        android:src="@drawable/ic_baseline_wine_bar_full_48"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bottombar_pink_button"
+        android:tag="pink"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/pink_wine_circle"/>
+
+</LinearLayout>

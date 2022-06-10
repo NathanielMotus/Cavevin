@@ -3,8 +3,9 @@ package com.nathaniel.motus.cavevin.transformers
 import com.nathaniel.motus.cavevin.data.CellarItem
 
 class CellarItemComparator(val sortPattern: ArrayList<ArrayList<Int>>) : Comparator<CellarItem> {
-    //ArrayList of (sortItemIndex, sortSense)
+    //ArrayList of (sortSequence[0..10], sortSense[0..10])
     //sortSense is +1 for ascending, -1 for descending
+    //in db, sortSequence and sortPattern associated have the same id
     //0 : appellation
     //1 : domain
     //2 : cuvee
@@ -119,8 +120,8 @@ class CellarItemComparator(val sortPattern: ArrayList<ArrayList<Int>>) : Compara
         }
 
         var i = 0
-        while (i < sortPattern.size-1 && comparisons[sortPattern[i][0]] == 0)
+        while (i < sortPattern[0].size-1 && comparisons[sortPattern[0][i]] == 0)
             i++
-        return comparisons[sortPattern[i][0]] * sortPattern[i][1]
+        return comparisons[sortPattern[0][i]] * sortPattern[1][i]
     }
 }
