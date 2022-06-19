@@ -61,13 +61,13 @@ class RatingView(context: Context, attrs: AttributeSet?) : LinearLayout(context,
 
         setImage(
             0,
-            AppCompatResources.getDrawable(context, R.drawable.outline_clear_black_24dp)!!,
+            AppCompatResources.getDrawable(context, R.drawable.ic_baseline_clear_48)!!,
             ContextCompat.getColor(context, R.color.colorPrimary)
         )
 
         setImage(
             6,
-            AppCompatResources.getDrawable(context, R.drawable.outline_edit_black_24dp)!!,
+            AppCompatResources.getDrawable(context, R.drawable.ic_baseline_edit_48)!!,
             ContextCompat.getColor(context, R.color.colorPrimary)
         )
     }
@@ -100,7 +100,7 @@ class RatingView(context: Context, attrs: AttributeSet?) : LinearLayout(context,
         for (i in 1..rating)
             setImage(
                 i,
-                AppCompatResources.getDrawable(context, R.drawable.outline_star_black_24dp)!!,
+                AppCompatResources.getDrawable(context, R.drawable.ic_baseline_star_rate_48)!!,
                 ContextCompat.getColor(context, android.R.color.holo_orange_light)
             )
 
@@ -109,7 +109,7 @@ class RatingView(context: Context, attrs: AttributeSet?) : LinearLayout(context,
                 i,
                 AppCompatResources.getDrawable(
                     context,
-                    R.drawable.outline_star_outline_black_24dp
+                    R.drawable.ic_baseline_star_outline_48
                 )!!,
                 ContextCompat.getColor(context, android.R.color.holo_orange_light)
             )

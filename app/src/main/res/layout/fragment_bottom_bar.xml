@@ -1,56 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="36sp">
+    android:layout_height="36sp"
+    android:background="@color/colorPrimary">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/bottomBarStillButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_wine_bar_full_48"
-        android:tint="@color/colorAccent"/>
+        android:tint="@color/colorNeutral"
+        android:background="@color/colorPrimaryVariant"
+        android:padding="1dp"
+        />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/bottomBarSparklingButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_wine_bar_full_sparkling_48"
-        android:tint="@color/colorAccent"/>
+        android:tint="@color/colorNeutral"
+        android:background="@color/colorPrimaryVariant"
+        android:padding="1dp"
+        />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/bottomBarRedButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_wine_bar_full_48"
-        android:tint="@color/redWine"/>
+        android:tint="@color/redWine"
+        android:background="@color/colorPrimaryVariant"
+        android:padding="1dp"
+        />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/bottomBarWhiteButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_wine_bar_full_48"
-        android:tint="@color/whiteWine"/>
+        android:tint="@color/whiteWine"
+        android:background="@color/colorPrimaryVariant"
+        android:padding="1dp"
+        />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/bottomBarPinkButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_wine_bar_full_48"
-        android:tint="@color/pinkWine"/>
+        android:tint="@color/pinkWine"
+        android:background="@color/colorPrimaryVariant"
+        android:padding="1dp"
+        />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/bottomBarEmptyButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_outline_wine_bar_empty_48"
-        android:tint="@color/colorAccent"/>
+        android:tint="@color/colorNeutral"
+        android:background="@color/colorPrimaryVariant"
+        android:padding="1dp"
+        />
 
 
 </LinearLayout>

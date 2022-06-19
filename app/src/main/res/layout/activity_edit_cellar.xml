@@ -9,7 +9,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context=".controller.EditCellarActivity"
-    android:theme="@style/EditorTheme">
+    >
 
     <include
         layout="@layout/toolbar"

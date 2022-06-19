@@ -12,7 +12,7 @@
         android:logo="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/Theme.WineCellar">
         
         <provider
             android:authorities="com.nathaniel.motus.cavevin"
@@ -35,7 +35,6 @@
         <activity
             android:name=".controller.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -26,6 +26,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.AppBarLayout
 import com.nathaniel.motus.cavevin.model.*
 import com.nathaniel.motus.cavevin.view.*
 import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel

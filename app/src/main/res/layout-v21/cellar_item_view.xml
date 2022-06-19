@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -18,17 +17,16 @@
             android:layout_alignParentLeft="true"
             android:src="@drawable/photo_frame" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/cellar_item_view_appellation_text"
-            android:layout_width="220dp"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
             android:layout_toEndOf="@id/cellar_item_view_photo_image"
-            android:gravity="left"
-            android:padding="5dp"
+            android:padding="@dimen/padding_small"
             android:text="Côtes du Rhône"
-            android:textSize="@dimen/text_big"
-            android:textStyle="normal" />
+            />
 
         <com.nathaniel.motus.cavevin.view.StockView
             android:id="@+id/cellar_item_stock"
@@ -38,77 +36,77 @@
             android:layout_height="wrap_content"
             />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/cellar_item_view_vintage_text"
-            android:layout_width="@dimen/recyclerview_cellar_row_vintage_width"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/cellar_item_view_appellation_text"
             android:layout_toStartOf="@id/cellar_item_stock"
             android:gravity="end"
             android:padding="@dimen/padding_small"
             android:text="2010"
-            android:textSize="@dimen/text_big" />
+            />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/cellar_item_view_domain_text"
+            style="@style/TextAppearance.Material3.BodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/cellar_item_view_appellation_text"
             android:layout_alignEnd="@id/cellar_item_view_vintage_text"
-            android:gravity="end"
             android:padding="@dimen/padding_small"
             android:text="Château Comme C'est Bon"
-            android:textSize="@dimen/text_normal" />
+            />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/cellar_item_view_cuvee_text"
+            style="@style/TextAppearance.Material3.BodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/cellar_item_view_domain_text"
             android:layout_alignEnd="@id/cellar_item_view_vintage_text"
-            android:gravity="end"
             android:padding="@dimen/padding_small"
             android:text="Cuvée la Meilleure"
-            android:textSize="@dimen/text_normal"
             android:textStyle="italic" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/cellar_item_view_bottle_name_text"
+            style="@style/TextAppearance.Material3.BodySmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/cellar_item_view_cuvee_text"
             android:layout_alignStart="@id/cellar_item_view_appellation_text"
-            android:gravity="left"
             android:padding="@dimen/padding_small"
             android:text="Nabuchodonosor"
-            android:textSize="@dimen/text_small" />
+            />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/cellar_item_view_capacity_text"
+            style="@style/TextAppearance.Material3.BodySmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/cellar_item_view_bottle_name_text"
             android:layout_toEndOf="@id/cellar_item_view_bottle_name_text"
-            android:gravity="left"
             android:padding="@dimen/padding_small"
             android:text="0.75 L"
-            android:textSize="@dimen/text_small" />
+            />
 
         <com.nathaniel.motus.cavevin.view.RatingView
             android:id="@+id/cellar_item_view_rating_view"
             android:layout_width="wrap_content"
             android:layout_height="16sp"
             android:layout_alignBaseline="@id/cellar_item_view_bottle_name_text"
-            android:layout_toLeftOf="@id/cellar_item_stock" />
+            android:layout_toStartOf="@id/cellar_item_stock" />
 
         <com.nathaniel.motus.cavevin.view.WineView
             android:id="@+id/cellar_item_view_wine_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@id/cellar_item_view_photo_image"/>
 
 
     </RelativeLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

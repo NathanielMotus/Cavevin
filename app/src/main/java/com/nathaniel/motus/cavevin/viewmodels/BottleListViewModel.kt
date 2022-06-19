@@ -34,10 +34,6 @@ class BottleListViewModel(
     private val wineStillnessRepository =
         WineStillnessRepository(CellarDatabase.getDatabase(application))
 
-    val cellars = cellarRepository.getCellars()
-    val bottleTypes: LiveData<List<BottleType>> = bottleTypeRepository.getBottleTypes()
-    val stocks: LiveData<List<Stock>> = stockRepository.getStocks()
-
     //***********************************
     //State
     //***********************************
@@ -102,7 +98,7 @@ class BottleListViewModel(
 
     suspend fun getBottleTypeIds() = bottleTypeRepository.getBottleTypeIds()
 
-    suspend fun findBottleTypeByIdAndLanguage(id: Int, language: String) =
+    private suspend fun findBottleTypeByIdAndLanguage(id: Int, language: String) =
         bottleTypeRepository.findBottleTypeByIdAndLanguage(id, language)
 
     //**********************************************************************************************
@@ -178,7 +174,7 @@ class BottleListViewModel(
     )
 
     private suspend fun createCellarItems(newCellarEntries: List<CellarEntry>) {
-        var items: MutableList<CellarItem> = mutableListOf()
+        val items: MutableList<CellarItem> = mutableListOf()
         newCellarEntries.forEach {
             items.add(createCellarItem(it))
         }
