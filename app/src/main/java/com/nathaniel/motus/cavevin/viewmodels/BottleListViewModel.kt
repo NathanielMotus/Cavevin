@@ -222,7 +222,7 @@ class BottleListViewModel(
     }
 }
 
-class CellarViewModelFactory(
+class BottleListViewModelFactory(
     private val application: Application
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

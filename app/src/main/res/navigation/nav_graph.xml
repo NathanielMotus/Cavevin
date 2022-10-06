@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/cellarItemListFragment">
+
+    <fragment
+        android:id="@+id/cellarItemListFragment"
+        android:name="com.nathaniel.motus.cavevin.view.CellarItemListFragment"
+        android:label="CellarItemListFragment" >
+        <action
+            android:id="@+id/action_cellarItemListFragment_to_bottleFragment"
+            app:destination="@id/bottleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bottleFragment"
+        android:name="com.nathaniel.motus.cavevin.view.BottleDetailFragment"
+        android:label="BottleFragment" >
+        <argument
+            android:name="bottleId"
+            app:argType="integer" />
+    </fragment>
+</navigation>

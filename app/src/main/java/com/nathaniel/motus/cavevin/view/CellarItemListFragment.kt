@@ -12,13 +12,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nathaniel.motus.cavevin.databinding.FragmentCellarBinding
 import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
+import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModelFactory
 import kotlinx.coroutines.launch
 
 class CellarItemListFragment : Fragment(), BottomBarFragment.BottomBarParentFragment {
 
     private var _binding: FragmentCellarBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: BottleListViewModel by viewModels()
+    private val viewModel: BottleListViewModel by viewModels{
+        BottleListViewModelFactory(requireActivity().application)
+    }
     private lateinit var recyclerView: RecyclerView
     private var bottomBarFragment: BottomBarFragment? = null
 
@@ -70,32 +73,32 @@ class CellarItemListFragment : Fragment(), BottomBarFragment.BottomBarParentFrag
     private fun setFilterStatesObserver() {
         viewModel.emptyIsEnable.observe(viewLifecycleOwner) {
             bottomBarFragment?.emptyButtonState = it
-            bottomBarFragment?.setButtonStates()
+            bottomBarFragment?.applyButtonStates()
         }
 
         viewModel.sparklingIsEnable.observe(viewLifecycleOwner){
             bottomBarFragment?.sparklingButtonState=it
-            bottomBarFragment?.setButtonStates()
+            bottomBarFragment?.applyButtonStates()
         }
 
         viewModel.pinkIsEnable.observe(viewLifecycleOwner){
             bottomBarFragment?.pinkButtonState=it
-            bottomBarFragment?.setButtonStates()
+            bottomBarFragment?.applyButtonStates()
         }
 
         viewModel.redIsEnable.observe(viewLifecycleOwner){
             bottomBarFragment?.redButtonState=it
-            bottomBarFragment?.setButtonStates()
+            bottomBarFragment?.applyButtonStates()
         }
 
         viewModel.whiteIsEnable.observe(viewLifecycleOwner){
             bottomBarFragment?.whiteButtonState=it
-            bottomBarFragment?.setButtonStates()
+            bottomBarFragment?.applyButtonStates()
         }
 
         viewModel.stillIsEnable.observe(viewLifecycleOwner){
             bottomBarFragment?.stillButtonState=it
-            bottomBarFragment?.setButtonStates()
+            bottomBarFragment?.applyButtonStates()
         }
     }
 

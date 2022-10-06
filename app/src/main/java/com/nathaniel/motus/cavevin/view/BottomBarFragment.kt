@@ -35,7 +35,7 @@ class BottomBarFragment(private val fragment: BottomBarParentFragment) : Fragmen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setButtonTags()
-        setButtonStates()
+        applyButtonStates()
     }
 
     private fun setButtonTags(){
@@ -53,16 +53,16 @@ class BottomBarFragment(private val fragment: BottomBarParentFragment) : Fragmen
         binding?.bottomBarEmptyButton?.setOnClickListener(buttonClickListener)
     }
 
-    fun setButtonStates(){
-        setButtonState(binding?.bottomBarEmptyButton,emptyButtonState)
-        setButtonState(binding?.bottomBarRedButton,redButtonState)
-        setButtonState(binding?.bottomBarPinkButton,pinkButtonState)
-        setButtonState(binding?.bottomBarSparklingButton,sparklingButtonState)
-        setButtonState(binding?.bottomBarStillButton,stillButtonState)
-        setButtonState(binding?.bottomBarWhiteButton,whiteButtonState)
+    fun applyButtonStates(){
+        applyButtonState(binding?.bottomBarEmptyButton,emptyButtonState)
+        applyButtonState(binding?.bottomBarRedButton,redButtonState)
+        applyButtonState(binding?.bottomBarPinkButton,pinkButtonState)
+        applyButtonState(binding?.bottomBarSparklingButton,sparklingButtonState)
+        applyButtonState(binding?.bottomBarStillButton,stillButtonState)
+        applyButtonState(binding?.bottomBarWhiteButton,whiteButtonState)
     }
 
-    private fun setButtonState(imageView: ImageView?, state:Boolean){
+    private fun applyButtonState(imageView: ImageView?, state:Boolean){
         if (state)
             imageView?.alpha=1f
         else imageView?.alpha=0.1f

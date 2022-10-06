@@ -10,9 +10,10 @@
     <item name="colorSecondary">@color/colorSecondary</item>
     <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
     <item name="colorOnSecondary">@color/colorOnSecondary</item>
+    <!--
     <item name="android:colorBackground">@color/colorBackground</item>
     <item name="colorOnBackground">@color/colorOnBackground</item>
-
+-->
     <item name="colorAccent">@color/colorSecondary</item>
 </style>
 

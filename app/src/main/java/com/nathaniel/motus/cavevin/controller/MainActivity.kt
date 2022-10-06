@@ -26,11 +26,15 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentContainerView
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.nathaniel.motus.cavevin.model.*
 import com.nathaniel.motus.cavevin.view.*
 import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
-import com.nathaniel.motus.cavevin.viewmodels.CellarViewModelFactory
 import java.io.File
 import java.util.*
 
@@ -39,7 +43,9 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
     onEditDialogClickListener {
     //Fragments declaration
     private var cellarFragment: CellarFragment? = null
-    private var cellarItemListFragment:CellarItemListFragment?=null
+    private var cellarItemListFragment: CellarItemListFragment? = null
+
+    private lateinit var navController: NavController
 
     //Views declaration
     private lateinit var toolbar: Toolbar
@@ -79,7 +85,8 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
             CellComparator
         )
         setDrawerCellarTitle()
-        configureAndShowCellarFragment()
+        configureNavController()
+        //configureAndShowCellarFragment()
     }
 
     override fun onDestroy() {
@@ -310,13 +317,22 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
     //    **********************************************************************************************
 //    Initialization subs
 //    **********************************************************************************************
+    private fun configureNavController() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
+        navController=navHostFragment.navController
+    }
+
     private fun configureAndShowCellarFragment() {
+        /*
         cellarItemListFragment=supportFragmentManager.findFragmentById(R.id.activity_main_frame_layout) as CellarItemListFragment?
         if (cellarItemListFragment==null){
             cellarItemListFragment= CellarItemListFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.activity_main_frame_layout,cellarItemListFragment!!).commit()
         }
+
+         */
     }
 
     private fun configureNavigationView() {
@@ -474,6 +490,7 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
         menuTag: String
     ) {
 //        display edit dialog
+
         sMenuTag = menuTag
         val fm = supportFragmentManager
         val edf = EditDialogFragment.newInstance(dialogTitle, invite, preFilledInput)
@@ -561,10 +578,14 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
 //    **********************************************************************************************
     private fun launchEditCellarActivity(cellPosition: Int) {
         //launch the cellar editor
+        navController.navigate(R.id.action_cellarItemListFragment_to_bottleFragment)
+        /*
         val intent = Intent(this@MainActivity, EditCellarActivity::class.java)
         intent.putExtra(BUNDLE_EXTRA_CURRENT_CELLAR_INDEX, currentCellarIndex)
         intent.putExtra(BUNDLE_EXTRA_CELL_POSITION, cellPosition)
         this.startActivity(intent)
+
+         */
     }
 
     private fun sendExportDataBaseIntent() {

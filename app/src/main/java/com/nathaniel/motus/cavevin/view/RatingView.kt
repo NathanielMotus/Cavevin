@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.ui.input.key.Key.Companion.W
 import androidx.core.content.ContextCompat
 import com.nathaniel.motus.cavevin.R
 
@@ -83,7 +84,7 @@ class RatingView(context: Context, attrs: AttributeSet?) : LinearLayout(context,
         imageViews.forEach {
             addView(
                 it,
-                LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                LayoutParams(LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT,1f)
             )
         }
     }

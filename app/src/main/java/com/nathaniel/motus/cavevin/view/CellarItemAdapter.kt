@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -114,5 +115,9 @@ class CellarItemAdapter(val bottleListViewModel: BottleListViewModel) :
 
     override fun onBindViewHolder(holder: CellarItemViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemView.setOnClickListener {
+            val action=CellarItemListFragmentDirections.actionCellarItemListFragmentToBottleFragment(1)
+            holder.itemView.findNavController().navigate(action)
+        }
     }
 }
