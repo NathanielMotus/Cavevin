@@ -116,7 +116,7 @@ class CellarItemAdapter(val bottleListViewModel: BottleListViewModel) :
     override fun onBindViewHolder(holder: CellarItemViewHolder, position: Int) {
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
-            val action=CellarItemListFragmentDirections.actionCellarItemListFragmentToBottleFragment(1)
+            val action=CellarItemListFragmentDirections.actionCellarItemListFragmentToBottleFragment(getItem(position).bottleId)
             holder.itemView.findNavController().navigate(action)
         }
     }

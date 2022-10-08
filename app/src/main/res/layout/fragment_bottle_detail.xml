@@ -98,6 +98,7 @@
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
                 <LinearLayout
+                    android:id="@+id/priceLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
@@ -119,6 +120,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/agingCapacityLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
