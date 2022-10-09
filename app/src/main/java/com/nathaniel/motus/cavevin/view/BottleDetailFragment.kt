@@ -78,7 +78,40 @@ class BottleDetailFragment : Fragment() {
             } else
                 binding.agingCapacityLinearLayout.visibility = View.GONE
         }
+        viewModel.wineColor.observe(viewLifecycleOwner){
+            if (it!=""){
+                binding.bottleDetailWineView.wineColor=it
+                binding.bottleDetailWineView.visibility=View.VISIBLE
+            }else
+                binding.bottleDetailWineView.visibility=View.GONE
+        }
+        viewModel.wineStillness.observe(viewLifecycleOwner){
+            if (it!=""){
+                binding.bottleDetailWineView.wineStillness=it
+                binding.bottleDetailWineView.visibility=View.VISIBLE
+            }else
+                binding.bottleDetailWineView.visibility=View.GONE
+        }
+        viewModel.origin.observe(viewLifecycleOwner){
+            if (it!=""){
+                binding.originTextView.text=it
+                binding.originDataCardView.visibility=View.VISIBLE
+            }else
+                binding.originDataCardView.visibility=View.GONE
+        }
+        viewModel.comment.observe(viewLifecycleOwner){
+            if (it!=""){
+                binding.commentTextView.text=it
+                binding.commentDataCardView.visibility=View.VISIBLE
+            }else
+                binding.commentDataCardView.visibility=View.GONE
+        }
     }
+
+    //todo : implement rating observer
+    //todo : fix localization
+    //todo : implement top bar
+    //todo : implement photo observer (and collapse if absent)
 
     companion object {
         const val BOTTLE_ID = "bottleId"

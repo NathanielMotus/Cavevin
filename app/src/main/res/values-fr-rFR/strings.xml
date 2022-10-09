@@ -79,4 +79,5 @@
     <string name="activity_edit_cellar_stock">Stock :</string>
     <string name="bottle">Bouteille</string>
     <string name="app_name">Cave à vin</string>
+    <string name="fragment_bottle_comments">Commentaires</string>
 </resources>

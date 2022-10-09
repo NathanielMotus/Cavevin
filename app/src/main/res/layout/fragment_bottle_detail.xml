@@ -73,7 +73,7 @@
                     android:orientation="horizontal">
 
                     <com.nathaniel.motus.cavevin.view.WineView
-                        android:id="@+id/wineView2"
+                        android:id="@+id/bottleDetailWineView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -130,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        app:srcCompat="@drawable/ic_baseline_event_busy_48" />
+                        app:srcCompat="@drawable/ic_baseline_event_available_48" />
 
                     <TextView
                         android:id="@+id/agingCapacityTextView"
@@ -168,7 +168,7 @@
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <TextView
-                    android:id="@+id/commentTextView"
+                    android:id="@+id/originTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -203,7 +203,7 @@
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <TextView
-                    android:id="@+id/originTextView"
+                    android:id="@+id/commentTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"

@@ -48,13 +48,21 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     val comment: LiveData<String>
         get() = _comment
 
-    private var _price=MutableLiveData("")
-    val price:LiveData<String>
+    private var _price = MutableLiveData("")
+    val price: LiveData<String>
         get() = _price
 
-    private var _agingCapacity=MutableLiveData("")
-    val agingCapacity:LiveData<String>
+    private var _agingCapacity = MutableLiveData("")
+    val agingCapacity: LiveData<String>
         get() = _agingCapacity
+
+    private var _wineColor = MutableLiveData("")
+    val wineColor: LiveData<String>
+        get() = _wineColor
+
+    private var _wineStillness = MutableLiveData("")
+    val wineStillness: LiveData<String>
+        get() = _wineStillness
 
     //************************************
     //update
@@ -78,22 +86,51 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     private suspend fun updateBottleTypeAndCapacity() {
         _bottleTypeAndCapacity.value = bottleTypeRepository.findBottleTypeByIdAndLanguage(
             bottleRepository.findBottleById(bottleId).bottleTypeId, "en_US"
-        ).name+" ("+bottleTypeRepository.findBottleTypeByIdAndLanguage(
+        ).name + " (" + bottleTypeRepository.findBottleTypeByIdAndLanguage(
             bottleRepository.findBottleById(bottleId).bottleTypeId, "en_US"
-        ).capacity+" L)"
+        ).capacity + " L)"
     }
 
-    private suspend fun updatePrice(){
-        _price.value=""
-        if (bottleRepository.findBottleById(bottleId).price!=null) {
+    private suspend fun updatePrice() {
+        _price.value = ""
+        if (bottleRepository.findBottleById(bottleId).price != null) {
             _price.value = bottleRepository.findBottleById(bottleId).price.toString() + " €"
         }
     }
 
-    private suspend fun updateAgingCapacity(){
-        _agingCapacity.value=""
-        if (bottleRepository.findBottleById(bottleId).agingCapacity!=null){
-            _agingCapacity.value=bottleRepository.findBottleById(bottleId).agingCapacity.toString()+" years"
+    private suspend fun updateAgingCapacity() {
+        _agingCapacity.value = ""
+        if (bottleRepository.findBottleById(bottleId).agingCapacity != null) {
+            _agingCapacity.value =
+                bottleRepository.findBottleById(bottleId).agingCapacity.toString() + " years"
+        }
+    }
+
+    private suspend fun updateWineColor() {
+        _wineColor.value = ""
+        if (bottleRepository.findBottleById(bottleId).wineColor != null) {
+            _wineColor.value = bottleRepository.findBottleById(bottleId).wineColor
+        }
+    }
+
+    private suspend fun updateWineStillness() {
+        _wineStillness.value = ""
+        if (bottleRepository.findBottleById(bottleId).wineStillness != null) {
+            _wineStillness.value = bottleRepository.findBottleById(bottleId).wineStillness
+        }
+    }
+
+    private suspend fun updateOrigin(){
+        _origin.value=""
+        if (bottleRepository.findBottleById(bottleId).origin!=null){
+            _origin.value=bottleRepository.findBottleById(bottleId).origin
+        }
+    }
+
+    private suspend fun updateComment(){
+        _comment.value=""
+        if(bottleRepository.findBottleById(bottleId).comment!=null){
+            _comment.value=bottleRepository.findBottleById(bottleId).comment
         }
     }
 
@@ -106,6 +143,10 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
             updateBottleTypeAndCapacity()
             updatePrice()
             updateAgingCapacity()
+            updateWineColor()
+            updateWineStillness()
+            updateOrigin()
+            updateComment()
         }
     }
 }
