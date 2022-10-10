@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.*
 import com.nathaniel.motus.cavevin.transformers.CellarItemComparator
+import com.nathaniel.motus.cavevin.utils.systemLanguage
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import java.util.function.Predicate
@@ -38,7 +39,6 @@ class BottleListViewModel(
     //State
     //***********************************
     private var currentCellarId = 1
-    private var language = "en_US"
 
     private var _redIsEnable = MutableLiveData(true)
     val redIsEnable: LiveData<Boolean>
@@ -153,17 +153,17 @@ class BottleListViewModel(
         findBottleById(cellarEntry.bottleId).cuvee,
         findBottleById(cellarEntry.bottleId).vintage,
         findBottleById(cellarEntry.bottleId).wineColor,
-        findWineColorTranslation(findBottleById(cellarEntry.bottleId).wineColor, language),
+        findWineColorTranslation(findBottleById(cellarEntry.bottleId).wineColor, systemLanguage()),
         findBottleById(cellarEntry.bottleId).wineStillness,
-        findWineStillnessTranslation(findBottleById(cellarEntry.bottleId).wineStillness, language),
+        findWineStillnessTranslation(findBottleById(cellarEntry.bottleId).wineStillness, systemLanguage()),
         findBottleById(cellarEntry.bottleId).bottleTypeId,
         findBottleTypeByIdAndLanguage(
             findBottleById(cellarEntry.bottleId).bottleTypeId,
-            language
+            systemLanguage()
         ).name,
         findBottleTypeByIdAndLanguage(
             findBottleById(cellarEntry.bottleId).bottleTypeId,
-            language
+            systemLanguage()
         ).capacity,
         cellarEntry.quantity,
         findBottleById(cellarEntry.bottleId).price,

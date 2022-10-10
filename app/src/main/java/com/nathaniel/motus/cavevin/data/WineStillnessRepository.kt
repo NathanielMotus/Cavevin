@@ -18,23 +18,19 @@ class WineStillnessRepository(val database: CellarDatabase) {
 
     fun getWineStillnesses() = database.wineStillnessDao().getWineStillnesses()
 
-    suspend fun getWineStillnessLanguages(id: String?) =
+    suspend fun getWineStillnessLanguages(id: String) =
         database.wineStillnessDao().getWineStillnessLanguages(id)
 
-    suspend fun findWineStillnessTranslation(id: String?, language: String): String? {
+    suspend fun findWineStillnessTranslation(id: String, language: String): String =
         //or create it if not yet translated
-        if (id != null) {
-            database.wineStillnessDao().findWineStillnessTranslation(id, language) ?: with(
-                findWineStillnessTranslation(
-                    id,
-                    findBaseLanguage(language, getWineStillnessLanguages(id)!!)
-                )
-            ) {
-                database.wineStillnessDao().insert(WineStillness(id, language, this!!))
-                return findWineStillnessTranslation(id, language)
-            }
+        database.wineStillnessDao().findWineStillnessTranslation(id, language) ?: with(
+            findWineStillnessTranslation(
+                id,
+                findBaseLanguage(language, getWineStillnessLanguages(id))
+            )
+        ) {
+            database.wineStillnessDao().insert(WineStillness(id, language, this))
+            return findWineStillnessTranslation(id, language)
         }
-        return null
-    }
 
 }

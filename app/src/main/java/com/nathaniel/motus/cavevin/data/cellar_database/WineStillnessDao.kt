@@ -19,7 +19,7 @@ interface WineStillnessDao {
 
     @Query("SELECT language FROM wine_stillness WHERE id=:id")
     //return languages available for a stillness
-    suspend fun getWineStillnessLanguages(id:String?):List<String>?
+    suspend fun getWineStillnessLanguages(id:String?):List<String>
 
     @Query("SELECT translation FROM wine_stillness WHERE language=:language AND id=:id")
     //return translation of a stillness for a language

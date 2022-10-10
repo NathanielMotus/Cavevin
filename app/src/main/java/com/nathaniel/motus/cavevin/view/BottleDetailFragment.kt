@@ -1,5 +1,6 @@
 package com.nathaniel.motus.cavevin.view
 
+import android.content.Intent
 import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
+import com.nathaniel.motus.cavevin.R
+import com.nathaniel.motus.cavevin.controller.CellarPictureUtils
+import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.databinding.FragmentBottleBinding
 import com.nathaniel.motus.cavevin.databinding.FragmentBottleDetailBinding
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
@@ -46,6 +50,18 @@ class BottleDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setObservers()
+        binding.bottleDetailBottleImageView.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            if (viewModel.imageName.value != null) {
+                intent.setDataAndType(
+                    CellarPictureUtils.getUriFromFileProvider(
+                        requireContext().applicationContext,
+                        viewModel.imageName.value!!
+                    ), "image/*"
+                )
+                startActivity(intent)
+            }
+        }
     }
 
     private fun setObservers() {
@@ -78,40 +94,53 @@ class BottleDetailFragment : Fragment() {
             } else
                 binding.agingCapacityLinearLayout.visibility = View.GONE
         }
-        viewModel.wineColor.observe(viewLifecycleOwner){
-            if (it!=""){
-                binding.bottleDetailWineView.wineColor=it
-                binding.bottleDetailWineView.visibility=View.VISIBLE
-            }else
-                binding.bottleDetailWineView.visibility=View.GONE
+        viewModel.wineColor.observe(viewLifecycleOwner) {
+            if (it != "") {
+                binding.bottleDetailWineView.wineColor = it
+                binding.bottleDetailWineView.visibility = View.VISIBLE
+            } else
+                binding.bottleDetailWineView.visibility = View.GONE
         }
-        viewModel.wineStillness.observe(viewLifecycleOwner){
-            if (it!=""){
-                binding.bottleDetailWineView.wineStillness=it
-                binding.bottleDetailWineView.visibility=View.VISIBLE
-            }else
-                binding.bottleDetailWineView.visibility=View.GONE
+        viewModel.wineStillness.observe(viewLifecycleOwner) {
+            if (it != "") {
+                binding.bottleDetailWineView.wineStillness = it
+                binding.bottleDetailWineView.visibility = View.VISIBLE
+            } else
+                binding.bottleDetailWineView.visibility = View.GONE
         }
-        viewModel.origin.observe(viewLifecycleOwner){
-            if (it!=""){
-                binding.originTextView.text=it
-                binding.originDataCardView.visibility=View.VISIBLE
-            }else
-                binding.originDataCardView.visibility=View.GONE
+        viewModel.origin.observe(viewLifecycleOwner) {
+            if (it != "") {
+                binding.originTextView.text = it
+                binding.originDataCardView.visibility = View.VISIBLE
+            } else
+                binding.originDataCardView.visibility = View.GONE
         }
-        viewModel.comment.observe(viewLifecycleOwner){
-            if (it!=""){
-                binding.commentTextView.text=it
-                binding.commentDataCardView.visibility=View.VISIBLE
-            }else
-                binding.commentDataCardView.visibility=View.GONE
+        viewModel.comment.observe(viewLifecycleOwner) {
+            if (it != "") {
+                binding.commentTextView.text = it
+                binding.commentDataCardView.visibility = View.VISIBLE
+            } else
+                binding.commentDataCardView.visibility = View.GONE
+        }
+        viewModel.imageName.observe(viewLifecycleOwner) {
+            if (it != "") {
+                binding.bottleDetailBottleImageView.setImageBitmap(
+                    CellarStorageUtils.getBitmapFromInternalStorage(
+                        binding.root.context.filesDir,
+                        binding.root.context.resources.getString(R.string.photo_folder_name), it
+                    )
+                )
+                binding.bottleDetailBottleImageView.visibility = View.VISIBLE
+            } else
+                binding.bottleDetailBottleImageView.visibility = View.GONE
+        }
+
+        viewModel.rating.observe(viewLifecycleOwner) {
+            binding.ratingView.rating = it
         }
     }
 
-    //todo : implement rating observer
-    //todo : fix localization
     //todo : implement top bar
-    //todo : implement photo observer (and collapse if absent)
 
     companion object {
         const val BOTTLE_ID = "bottleId"

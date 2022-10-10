@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.CellarDatabase
+import com.nathaniel.motus.cavevin.utils.systemLanguage
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -11,9 +12,6 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
 
     private val bottleRepository = BottleRepository(CellarDatabase.getDatabase(application))
     private val bottleTypeRepository = BottleTypeRepository(CellarDatabase.getDatabase(application))
-    private val wineColorRepository = WineColorRepository(CellarDatabase.getDatabase(application))
-    private val wineStillnessRepository =
-        WineStillnessRepository(CellarDatabase.getDatabase(application))
 
     //**********************************
     //State
@@ -64,6 +62,14 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     val wineStillness: LiveData<String>
         get() = _wineStillness
 
+    private var _imageName=MutableLiveData("")
+    val imageName:LiveData<String>
+        get() =_imageName
+
+    private var _rating=MutableLiveData(0)
+    val rating:LiveData<Int>
+        get() = _rating
+
     //************************************
     //update
     //************************************
@@ -85,9 +91,9 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
 
     private suspend fun updateBottleTypeAndCapacity() {
         _bottleTypeAndCapacity.value = bottleTypeRepository.findBottleTypeByIdAndLanguage(
-            bottleRepository.findBottleById(bottleId).bottleTypeId, "en_US"
+            bottleRepository.findBottleById(bottleId).bottleTypeId, systemLanguage()
         ).name + " (" + bottleTypeRepository.findBottleTypeByIdAndLanguage(
-            bottleRepository.findBottleById(bottleId).bottleTypeId, "en_US"
+            bottleRepository.findBottleById(bottleId).bottleTypeId, systemLanguage()
         ).capacity + " L)"
     }
 
@@ -134,6 +140,17 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
+    private suspend fun updateImageName(){
+        _imageName.value=""
+        if (bottleRepository.findBottleById(bottleId).picture!=null){
+            _imageName.value=bottleRepository.findBottleById(bottleId).picture
+        }
+    }
+
+    private suspend fun updateRating(){
+        _rating.value=bottleRepository.findBottleById(bottleId).rating
+    }
+
     fun updateBottleDetailViewModel() {
         viewModelScope.launch {
             updateAppellation()
@@ -147,6 +164,8 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
             updateWineStillness()
             updateOrigin()
             updateComment()
+            updateImageName()
+            updateRating()
         }
     }
 }
