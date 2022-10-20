@@ -10,15 +10,15 @@
     android:orientation="vertical"
     tools:context=".controller.MainActivity">
 
-    <LinearLayout
+    <!--LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"-->
 
-        <include
+        <!--include
             layout="@layout/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"/-->
 
         <!--
         <FrameLayout
@@ -37,9 +37,9 @@
             app:navGraph="@navigation/nav_graph"
             />
 
-    </LinearLayout>
+    <!--/LinearLayout-->
 
-    <com.google.android.material.navigation.NavigationView
+    <!--com.google.android.material.navigation.NavigationView
         android:id="@+id/activity_main_navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -47,8 +47,17 @@
         android:fitsSystemWindows="true"
         android:layout_marginTop="?attr/actionBarSize"
         app:headerLayout="@layout/activity_main_nav_header"
-        app:menu="@menu/activity_main_menu_drawer">
-        <LinearLayout
+        app:menu="@menu/activity_main_menu_drawer"-->
+    <com.google.android.material.navigation.NavigationView
+    android:id="@+id/activity_main_navigation_view"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:fitsSystemWindows="true"
+    app:headerLayout="@layout/activity_main_nav_header"
+    app:menu="@menu/activity_main_menu_drawer">
+
+    <LinearLayout
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_marginTop="230dp"

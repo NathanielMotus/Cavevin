@@ -75,16 +75,16 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
         //if (Cellar.numberOfCellars == 0) prepareFirstUse()
         cleanUpDatabase()
         sharedPreferences
-        configureToolBar()
-        configureDrawerLayout()
-        configureNavigationView()
+        //configureToolBar()
+        //configureDrawerLayout()
+        //configureNavigationView()
         //configureBottomBar()
-        configureSortOptions()
+        //configureSortOptions()
         if (Cellar.numberOfCellars > 0) Collections.sort(
             Cellar.cellarPool[currentCellarIndex].cellList,
             CellComparator
         )
-        setDrawerCellarTitle()
+        //setDrawerCellarTitle()
         configureNavController()
         //configureAndShowCellarFragment()
     }
@@ -152,11 +152,12 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
     //    **********************************************************************************************
 //    Toolbar events
 //    **********************************************************************************************
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+/*    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
+*/
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

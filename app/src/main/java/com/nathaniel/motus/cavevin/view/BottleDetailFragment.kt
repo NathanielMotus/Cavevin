@@ -1,18 +1,16 @@
 package com.nathaniel.motus.cavevin.view
 
 import android.content.Intent
+import android.graphics.ColorFilter
 import android.opengl.Visibility
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.controller.CellarPictureUtils
 import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
-import com.nathaniel.motus.cavevin.databinding.FragmentBottleBinding
 import com.nathaniel.motus.cavevin.databinding.FragmentBottleDetailBinding
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModelFactory
@@ -50,6 +48,19 @@ class BottleDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setObservers()
+        configureToolbar()
+        setImageOnClickListener()
+    }
+
+    private fun configureToolbar() {
+        binding.bottleDetailMaterialToolbar.inflateMenu(R.menu.menu_bottle_detail)
+        binding.bottleDetailMaterialToolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+        //binding.bottleDetailMaterialToolbar.title="Detail"
+    }
+
+    private fun setImageOnClickListener(){
         binding.bottleDetailBottleImageView.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             if (viewModel.imageName.value != null) {

@@ -6,56 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2">
-
-        <com.nathaniel.motus.cavevin.view.WineView
-            android:id="@+id/wineView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/vintageInputLayout"
-            app:layout_constraintStart_toEndOf="@+id/bottleImageView" />
-
-        <com.nathaniel.motus.cavevin.view.RatingView
-            android:id="@+id/ratingView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/vintageInputLayout"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.4" />
-
-        <ImageView
-            android:id="@+id/bottleImageView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
-            app:srcCompat="@drawable/photo_frame" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/vintageInputLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/vintage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/vintageTextInput"
-                style="@style/TextAppearance.Material3.TitleLarge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="2010" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -66,29 +23,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/bottleTypeInputLayout"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/bottle_type"
+            <ImageView
+                android:id="@+id/bottleImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:suffixText="L">
+                tools:srcCompat="@tools:sample/avatars" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/bottleTypeAutoCompleteTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="false"
-                    android:inputType="none"
-                    android:singleLine="true"
-                    android:text="Nabuchodonosor 20" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <com.nathaniel.motus.cavevin.view.RatingView
+                android:id="@+id/ratingView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bottleImageView"
+                app:layout_constraintWidth_percent="0.4" />
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/appellationInputLayout"
@@ -97,7 +51,7 @@
                 android:hint="@string/appellation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bottleTypeInputLayout">
+                app:layout_constraintTop_toBottomOf="@id/ratingView">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/appellationTextInput"
@@ -130,14 +84,58 @@
                 android:hint="@string/cuvee"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/domainInputLayout">
+                app:layout_constraintTop_toBottomOf="@id/domainInputLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cuveeTextInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Cuvee glouglou" />
+
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/vintageInputLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/vintage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cuveeInputLayout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vintageTextInput"
+                    style="@style/TextAppearance.Material3.TitleLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="2010" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/bottleTypeInputLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/bottle_type"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vintageInputLayout"
+                app:suffixText="L">
+
+                <AutoCompleteTextView
+                    android:id="@+id/bottleTypeAutoCompleteTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:inputType="none"
+                    android:singleLine="true"
+                    android:text="Nabuchodonosor 20" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/originInputLayout"
@@ -145,8 +143,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/origin"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cuveeInputLayout">
+                app:layout_constraintTop_toBottomOf="@+id/bottleTypeInputLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/originTextInput"
@@ -187,7 +186,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/priceInpputLayout"
+                android:id="@+id/priceInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/price"
