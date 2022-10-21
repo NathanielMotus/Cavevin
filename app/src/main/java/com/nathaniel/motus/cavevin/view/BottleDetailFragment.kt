@@ -8,6 +8,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
+import androidx.navigation.findNavController
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.controller.CellarPictureUtils
 import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
@@ -57,10 +58,19 @@ class BottleDetailFragment : Fragment() {
         binding.bottleDetailMaterialToolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
-        //binding.bottleDetailMaterialToolbar.title="Detail"
+        binding.bottleDetailMaterialToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_bottle_detail_edit -> {
+                    binding.bottleDetailMaterialToolbar.findNavController()
+                        .navigate(BottleDetailFragmentDirections.actionBottleFragmentToBottleEditFragment())
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
-    private fun setImageOnClickListener(){
+    private fun setImageOnClickListener() {
         binding.bottleDetailBottleImageView.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             if (viewModel.imageName.value != null) {

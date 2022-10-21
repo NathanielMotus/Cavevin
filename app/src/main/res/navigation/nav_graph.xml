@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_cellarItemListFragment_to_bottleFragment"
             app:destination="@id/bottleFragment" />
+        <action
+            android:id="@+id/action_cellarItemListFragment_to_bottleEditFragment"
+            app:destination="@id/bottleEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/bottleFragment"
@@ -19,5 +22,12 @@
         <argument
             android:name="bottleId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_bottleFragment_to_bottleEditFragment"
+            app:destination="@id/bottleEditFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/bottleEditFragment"
+        android:name="com.nathaniel.motus.cavevin.view.BottleEditFragment"
+        android:label="BottleEditFragment" />
 </navigation>
