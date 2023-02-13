@@ -29,5 +29,9 @@
     <fragment
         android:id="@+id/bottleEditFragment"
         android:name="com.nathaniel.motus.cavevin.view.BottleEditFragment"
-        android:label="BottleEditFragment" />
+        android:label="BottleEditFragment" >
+        <argument
+            android:name="bottleId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

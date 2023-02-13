@@ -62,7 +62,7 @@ class BottleDetailFragment : Fragment() {
             when (it.itemId) {
                 R.id.menu_bottle_detail_edit -> {
                     binding.bottleDetailMaterialToolbar.findNavController()
-                        .navigate(BottleDetailFragmentDirections.actionBottleFragmentToBottleEditFragment())
+                        .navigate(BottleDetailFragmentDirections.actionBottleFragmentToBottleEditFragment(viewModel.bottleId))
                     true
                 }
                 else -> false
