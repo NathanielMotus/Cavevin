@@ -25,13 +25,13 @@
 
             <ImageView
                 android:id="@+id/bottleImageView"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@mipmap/ic_launcher_round" />
+                android:src="@drawable/photo_frame" />
 
             <LinearLayout
                 android:id="@+id/imageManagerLinearLayout"
