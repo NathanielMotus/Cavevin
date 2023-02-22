@@ -128,12 +128,54 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/wineColorInputLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cuveeInputLayout">
+
+                <AutoCompleteTextView
+                    android:id="@+id/wineColorAutoCompleteTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:inputType="none"
+                    android:singleLine="true"
+                    android:text="Rouge" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/wineStillnessInputLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/wineColorInputLayout">
+
+                <AutoCompleteTextView
+                    android:id="@+id/wineStillnessAutoCompleteTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:inputType="none"
+                    android:singleLine="true"
+                    android:text="AutoCompleteTextView" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/vintageInputLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/vintage"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cuveeInputLayout">
+                app:layout_constraintTop_toBottomOf="@+id/wineStillnessInputLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/vintageTextInput"
@@ -153,20 +195,14 @@
                 android:hint="@string/bottle_type"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vintageInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/vintageInputLayout"
                 app:suffixText="L">
 
-                <AutoCompleteTextView
-                    android:id="@+id/bottleTypeAutoCompleteTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="false"
-                    android:inputType="none"
-                    android:singleLine="true"
-                    android:text="Nabuchodonosor 20" />
+                <Spinner
+                    android:id="@+id/bottleTypeSpinner"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </com.google.android.material.textfield.TextInputLayout>
 
 

@@ -105,6 +105,7 @@ class BottleEditFragment : Fragment() {
     }
 }
 
+//todo choose wine color and stillness
 //todo implement top bar
 //todo implement photo picker
 //todo implement bottle type list
