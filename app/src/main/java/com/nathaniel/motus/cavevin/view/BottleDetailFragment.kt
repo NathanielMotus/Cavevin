@@ -1,8 +1,6 @@
 package com.nathaniel.motus.cavevin.view
 
 import android.content.Intent
-import android.graphics.ColorFilter
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment

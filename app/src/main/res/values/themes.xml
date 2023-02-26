@@ -2,19 +2,19 @@
 <resources>
 <style name="Theme.WineCellar" parent="Theme.Material3.DayNight.NoActionBar">
     <!-- Primary brand color. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorOnPrimary">@color/colorOnPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+    <item name="colorPrimary">@color/brown700</item>
+    <item name="colorOnPrimary">@color/pure_white</item>
+    <item name="colorPrimaryDark">@color/brown900</item>
+    <item name="colorPrimaryVariant">@color/brown400</item>
     <!-- Secondary brand color. -->
-    <item name="colorSecondary">@color/colorSecondary</item>
-    <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
-    <item name="colorOnSecondary">@color/colorOnSecondary</item>
-    <item name="colorControlNormal">@color/colorOnPrimary</item>
+    <item name="colorSecondary">@color/green900</item>
+    <item name="colorSecondaryVariant">@color/green_custom_dark</item>
+    <item name="colorOnSecondary">@color/pure_white</item>
+    <item name="colorControlNormal">@color/pure_white</item>
     <!--
     <item name="android:colorBackground">@color/colorBackground</item>
     <item name="colorOnBackground">@color/colorOnBackground</item>
 -->
-    <item name="colorAccent">@color/colorSecondary</item>
+    <item name="colorAccent">@color/green900</item>
 </style>
 </resources>

@@ -5,12 +5,10 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.compose.ui.input.key.Key.Companion.W
 import androidx.core.content.ContextCompat
 import com.nathaniel.motus.cavevin.R
 
@@ -63,13 +61,13 @@ class RatingView(context: Context, attrs: AttributeSet?) : LinearLayout(context,
         setImage(
             0,
             AppCompatResources.getDrawable(context, R.drawable.ic_baseline_clear_48)!!,
-            ContextCompat.getColor(context, R.color.colorPrimary)
+            ContextCompat.getColor(context, R.color.brown700)
         )
 
         setImage(
             6,
             AppCompatResources.getDrawable(context, R.drawable.ic_baseline_edit_48)!!,
-            ContextCompat.getColor(context, R.color.colorPrimary)
+            ContextCompat.getColor(context, R.color.brown700)
         )
     }
 

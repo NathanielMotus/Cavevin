@@ -10,7 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
+import com.nathaniel.motus.cavevin.data.cellar_database.Bottle
 import com.nathaniel.motus.cavevin.databinding.FragmentBottleEditBinding
+import com.nathaniel.motus.cavevin.ui.bottle_edit.BottleEditContent
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModelFactory
 import kotlinx.coroutines.launch
@@ -22,6 +24,8 @@ class BottleEditFragment : Fragment() {
     private val viewModel: BottleDetailViewModel by viewModels {
         BottleDetailViewModelFactory(requireActivity().application)
     }
+
+    private lateinit var bottle:Bottle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +45,7 @@ class BottleEditFragment : Fragment() {
         val fragmentBottleEditBinding =
             FragmentBottleEditBinding.inflate(inflater, container, false)
         _binding = fragmentBottleEditBinding
+        binding.composeView.setContent { BottleEditContent(viewModel=viewModel) }
         return fragmentBottleEditBinding.root
     }
 

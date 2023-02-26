@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#5d4037</color>
-    <color name="colorPrimaryDark">#321911</color>
-    <color name="colorPrimaryVariant">#8b6b61</color>
-    <color name="colorOnPrimary">#ffffff</color>
-    <color name="colorSecondary">#1b5e20</color>
-    <color name="colorSecondaryVariant">#003300</color>
-    <color name="colorOnSecondary">#ffffff</color>
-    <color name="colorBackground">#000000</color>
-    <color name="colorOnBackground">#ffffff</color>
-    <color name="redWine">#ba000d</color>
-    <color name="whiteWine">#fbc02d</color>
-    <color name="pinkWine">#e040fb</color>
-    <color name="colorNeutral">#000000</color>
+    <color name="brown700">#5d4037</color>
+    <color name="brown900">#3e2723</color>
+    <color name="brown400">#8d6e63</color>
+    <color name="pure_white">#ffffff</color>
+    <color name="green900">#1b5e20</color>
+    <color name="green_custom_dark">#003300</color>
+    <color name="red_wine_color">#ba000d</color>
+    <color name="white_wine_color">#fbc02d</color>
+    <color name="pink_wine_color">#e040fb</color>
+    <color name="pure_black">#000000</color>
 </resources>

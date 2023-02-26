@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="36sp"
-    android:background="@color/colorPrimary">
+    android:background="@color/brown700">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/bottomBarStillButton"
@@ -12,8 +12,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_wine_bar_full_48"
-        android:tint="@color/colorNeutral"
-        android:background="@color/colorPrimaryVariant"
+        android:tint="@color/pure_black"
+        android:background="@color/brown400"
         android:padding="1dp"
         />
 
@@ -23,8 +23,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_wine_bar_full_sparkling_48"
-        android:tint="@color/colorNeutral"
-        android:background="@color/colorPrimaryVariant"
+        android:tint="@color/pure_black"
+        android:background="@color/brown400"
         android:padding="1dp"
         />
 
@@ -34,8 +34,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_wine_bar_full_48"
-        android:tint="@color/redWine"
-        android:background="@color/colorPrimaryVariant"
+        android:tint="@color/red_wine_color"
+        android:background="@color/brown400"
         android:padding="1dp"
         />
 
@@ -45,8 +45,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_wine_bar_full_48"
-        android:tint="@color/whiteWine"
-        android:background="@color/colorPrimaryVariant"
+        android:tint="@color/white_wine_color"
+        android:background="@color/brown400"
         android:padding="1dp"
         />
 
@@ -56,8 +56,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_wine_bar_full_48"
-        android:tint="@color/pinkWine"
-        android:background="@color/colorPrimaryVariant"
+        android:tint="@color/pink_wine_color"
+        android:background="@color/brown400"
         android:padding="1dp"
         />
 
@@ -67,8 +67,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/ic_outline_wine_bar_empty_48"
-        android:tint="@color/colorNeutral"
-        android:background="@color/colorPrimaryVariant"
+        android:tint="@color/pure_black"
+        android:background="@color/brown400"
         android:padding="1dp"
         />
 

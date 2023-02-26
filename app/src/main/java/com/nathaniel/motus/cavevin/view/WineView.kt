@@ -53,9 +53,9 @@ class WineView(context: Context, attrs: AttributeSet?) :
 
     private fun setColor() {
         imageTintList = when (wineColor) {
-            "white" -> ColorStateList.valueOf(ContextCompat.getColor(context, R.color.whiteWine))
-            "pink" -> ColorStateList.valueOf(ContextCompat.getColor(context, R.color.pinkWine))
-            else -> ColorStateList.valueOf(ContextCompat.getColor(context, R.color.redWine))
+            "white" -> ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white_wine_color))
+            "pink" -> ColorStateList.valueOf(ContextCompat.getColor(context, R.color.pink_wine_color))
+            else -> ColorStateList.valueOf(ContextCompat.getColor(context, R.color.red_wine_color))
         }
     }
 }

@@ -64,9 +64,9 @@ class MyRecyclerViewAdapter(
         val bottle = cell.bottle
         val color = bottle.type
         when (color) {
-            "1" -> holder.type.setBackgroundColor(mContext.resources.getColor(R.color.whiteWine))
-            "2" -> holder.type.setBackgroundColor(mContext.resources.getColor(R.color.pinkWine))
-            else -> holder.type.setBackgroundColor(mContext.resources.getColor(R.color.redWine))
+            "1" -> holder.type.setBackgroundColor(mContext.resources.getColor(R.color.white_wine_color))
+            "2" -> holder.type.setBackgroundColor(mContext.resources.getColor(R.color.pink_wine_color))
+            else -> holder.type.setBackgroundColor(mContext.resources.getColor(R.color.red_wine_color))
         }
         holder.appellation.text = bottle.appellation
         holder.domain.text = bottle.domain

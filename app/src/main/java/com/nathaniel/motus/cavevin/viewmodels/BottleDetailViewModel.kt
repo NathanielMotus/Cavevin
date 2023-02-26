@@ -21,18 +21,30 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     private var _appellation = MutableLiveData("")
     val appellation: LiveData<String>
         get() = _appellation
+    fun onAppellationChange(appellation: String) {
+        _appellation.value = appellation
+    }
 
     private var _domain = MutableLiveData("")
     val domain: LiveData<String>
         get() = _domain
+    fun onDomainChange(domain:String){
+        _domain.value=domain
+    }
 
     private var _cuvee = MutableLiveData("")
     val cuvee: LiveData<String>
         get() = _cuvee
+    fun onCuveeChange(cuvee:String){
+        _cuvee.value=cuvee
+    }
 
     private var _vintage = MutableLiveData("")
     val vintage: LiveData<String>
         get() = _vintage
+    fun onVintageChange(vintage:String){
+        _vintage.value=vintage
+    }
 
     private var _bottleTypeAndCapacity = MutableLiveData("")
     val bottleTypeAndCapacity: LiveData<String>
@@ -62,12 +74,12 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     val wineStillness: LiveData<String>
         get() = _wineStillness
 
-    private var _imageName=MutableLiveData("")
-    val imageName:LiveData<String>
-        get() =_imageName
+    private var _imageName = MutableLiveData("")
+    val imageName: LiveData<String>
+        get() = _imageName
 
-    private var _rating=MutableLiveData(0)
-    val rating:LiveData<Int>
+    private var _rating = MutableLiveData(0)
+    val rating: LiveData<Int>
         get() = _rating
 
     //************************************
@@ -126,29 +138,29 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    private suspend fun updateOrigin(){
-        _origin.value=""
-        if (bottleRepository.findBottleById(bottleId).origin!=null){
-            _origin.value=bottleRepository.findBottleById(bottleId).origin
+    private suspend fun updateOrigin() {
+        _origin.value = ""
+        if (bottleRepository.findBottleById(bottleId).origin != null) {
+            _origin.value = bottleRepository.findBottleById(bottleId).origin
         }
     }
 
-    private suspend fun updateComment(){
-        _comment.value=""
-        if(bottleRepository.findBottleById(bottleId).comment!=null){
-            _comment.value=bottleRepository.findBottleById(bottleId).comment
+    private suspend fun updateComment() {
+        _comment.value = ""
+        if (bottleRepository.findBottleById(bottleId).comment != null) {
+            _comment.value = bottleRepository.findBottleById(bottleId).comment
         }
     }
 
-    private suspend fun updateImageName(){
-        _imageName.value=""
-        if (bottleRepository.findBottleById(bottleId).picture!=null){
-            _imageName.value=bottleRepository.findBottleById(bottleId).picture
+    private suspend fun updateImageName() {
+        _imageName.value = ""
+        if (bottleRepository.findBottleById(bottleId).picture != null) {
+            _imageName.value = bottleRepository.findBottleById(bottleId).picture
         }
     }
 
-    private suspend fun updateRating(){
-        _rating.value=bottleRepository.findBottleById(bottleId).rating
+    private suspend fun updateRating() {
+        _rating.value = bottleRepository.findBottleById(bottleId).rating
     }
 
     fun updateBottleDetailViewModel() {
