@@ -81,6 +81,9 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     private var _rating = MutableLiveData(0)
     val rating: LiveData<Int>
         get() = _rating
+    fun onRatingChange(rating:Int){
+        _rating.value=rating
+    }
 
     //************************************
     //update

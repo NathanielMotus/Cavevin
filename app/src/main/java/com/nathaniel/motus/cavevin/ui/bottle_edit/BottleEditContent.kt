@@ -39,10 +39,11 @@ fun BottleEditContent(
     modifier: Modifier = Modifier
 ) {
     WineCellarMainTheme() {
-        Column() {
+        Column {
             val inputImageName by viewModel.imageName.observeAsState("")
             val inputWineColor by viewModel.wineColor.observeAsState("")
             val inputAppellation by viewModel.appellation.observeAsState("")
+            val inputRating by viewModel.rating.observeAsState(0)
 
             Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center)
             {
@@ -56,6 +57,14 @@ fun BottleEditContent(
             }
 
             ImagePicker(thereIsAnImage = inputImageName != "", modifier = modifier.fillMaxWidth())
+
+            Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                RatingBar(
+                    rating = inputRating,
+                    onRatingChange = { rating: Int -> viewModel.onRatingChange(rating) },
+                    isEditable = true
+                )
+            }
 
             OutlinedTextField(
                 value = inputAppellation,
@@ -91,7 +100,7 @@ fun BottleImage(
     appellation: String?,
     imageSize: Int = 200,
     imagePadding: Int = 8,
-    modifier: Modifier=Modifier
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     Column() {
@@ -151,7 +160,7 @@ fun BottleImage(
 @Composable
 fun ImagePicker(
     thereIsAnImage: Boolean,
-    modifier: Modifier=Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -167,15 +176,15 @@ fun ImagePicker(
 }
 
 @Composable
-fun ImagePickerButton(
+private fun ImagePickerButton(
     onClick: () -> Unit = {},
     resourceID: Int,
     contentDescription: String = "",
-    modifier: Modifier=Modifier
+    modifier: Modifier = Modifier
 ) {
     FilledTonalButton(
         onClick = onClick,
-        modifier = modifier.padding(8.dp)
+        modifier = modifier.padding(4.dp)
     ) {
         Image(
             painter = painterResource(id = resourceID),
@@ -183,4 +192,48 @@ fun ImagePickerButton(
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer)
         )
     }
+}
+
+@Composable
+fun RatingBar(
+    rating: Int = 0,
+    isEditable: Boolean = false,
+    onRatingChange: (rating: Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row() {
+        if (isEditable)
+            Image(
+                painter = painterResource(id = R.drawable.ic_baseline_clear_48),
+                contentDescription = "Clear",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+                modifier = modifier.clickable { onRatingChange(0) })
+        for (index in 0..4) {
+            RatingStar(index = index,
+                isEditable = isEditable,
+                isOn = rating > index,
+                onClick = {index:Int->
+                onRatingChange(index)
+            })
+        }
+    }
+
+}
+
+@Composable
+private fun RatingStar(
+    index: Int,
+    isEditable: Boolean,
+    isOn: Boolean = true,
+    onClick: (index: Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Image(
+        painter = if (isOn) painterResource(id = R.drawable.ic_baseline_star_rate_48) else painterResource(
+            id = R.drawable.ic_baseline_star_outline_48
+        ),
+        contentDescription = "",
+        colorFilter = ColorFilter.tint(whiteWhineColor),
+        modifier = if(isEditable) modifier.clickable { onClick(index + 1) } else modifier
+    )
 }
