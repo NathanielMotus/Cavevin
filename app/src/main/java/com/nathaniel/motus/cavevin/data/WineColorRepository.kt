@@ -16,7 +16,7 @@ class WineColorRepository(val database: CellarDatabase) {
 
     fun getWineColors() = database.wineColorDao().getWineColors()
 
-    suspend fun getWineColorLanguages(id:String) = database.wineColorDao().getWineColorLanguages(id)
+    private suspend fun getWineColorLanguages(id:String) = database.wineColorDao().getWineColorLanguages(id)
 
     suspend fun findWineColorTranslation(id: String, language: String): String =
         //or create it if not yet translated

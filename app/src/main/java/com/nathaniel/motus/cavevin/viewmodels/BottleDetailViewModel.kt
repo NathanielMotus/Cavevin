@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.CellarDatabase
+import com.nathaniel.motus.cavevin.data.cellar_database.WineColor
+import com.nathaniel.motus.cavevin.data.cellar_database.WineStillness
+import com.nathaniel.motus.cavevin.utils.BASE_LANGUAGE
 import com.nathaniel.motus.cavevin.utils.systemLanguage
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
@@ -12,6 +15,9 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
 
     private val bottleRepository = BottleRepository(CellarDatabase.getDatabase(application))
     private val bottleTypeRepository = BottleTypeRepository(CellarDatabase.getDatabase(application))
+    private val wineColorRepository = WineColorRepository(CellarDatabase.getDatabase(application))
+    private val wineStillnessRepository =
+        WineStillnessRepository(CellarDatabase.getDatabase(application))
 
     //**********************************
     //State
@@ -21,6 +27,7 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     private var _appellation = MutableLiveData("")
     val appellation: LiveData<String>
         get() = _appellation
+
     fun onAppellationChange(appellation: String) {
         _appellation.value = appellation
     }
@@ -28,22 +35,25 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     private var _domain = MutableLiveData("")
     val domain: LiveData<String>
         get() = _domain
-    fun onDomainChange(domain:String){
-        _domain.value=domain
+
+    fun onDomainChange(domain: String) {
+        _domain.value = domain
     }
 
     private var _cuvee = MutableLiveData("")
     val cuvee: LiveData<String>
         get() = _cuvee
-    fun onCuveeChange(cuvee:String){
-        _cuvee.value=cuvee
+
+    fun onCuveeChange(cuvee: String) {
+        _cuvee.value = cuvee
     }
 
     private var _vintage = MutableLiveData("")
     val vintage: LiveData<String>
         get() = _vintage
-    fun onVintageChange(vintage:String){
-        _vintage.value=vintage
+
+    fun onVintageChange(vintage: String) {
+        _vintage.value = vintage
     }
 
     private var _bottleTypeAndCapacity = MutableLiveData("")
@@ -70,9 +80,16 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     val wineColor: LiveData<String>
         get() = _wineColor
 
+    fun onWineColorChange(wineColor: String) {
+        _wineColor.value = wineColor
+    }
+
     private var _wineStillness = MutableLiveData("")
     val wineStillness: LiveData<String>
         get() = _wineStillness
+    fun onWineStillnessChange(wineStillness:String){
+        _wineStillness.value=wineStillness
+    }
 
     private var _imageName = MutableLiveData("")
     val imageName: LiveData<String>
@@ -81,13 +98,69 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     private var _rating = MutableLiveData(0)
     val rating: LiveData<Int>
         get() = _rating
-    fun onRatingChange(rating:Int){
-        _rating.value=rating
+
+    fun onRatingChange(rating: Int) {
+        _rating.value = rating
     }
+
+    private var _redWineTranslation = MutableLiveData("")
+    val redWineTranslation: LiveData<String>
+        get() = _redWineTranslation
+
+    private var _whiteWineTranslation = MutableLiveData("")
+    val whiteWineTranslation: LiveData<String>
+        get() = _whiteWineTranslation
+
+    private var _pinkWineTranslation = MutableLiveData("")
+    val pinkWineTranslation: LiveData<String>
+        get() = _pinkWineTranslation
+
+    private var _stillWineTranslation = MutableLiveData("")
+    val stillWineTranslation: LiveData<String>
+        get() = _stillWineTranslation
+
+    private var _sparklingWineTranslation = MutableLiveData("")
+    val sparklingWineTranslation: LiveData<String>
+        get() = _sparklingWineTranslation
 
     //************************************
     //update
     //************************************
+    private suspend fun updateStillWineTranslation() {
+        _stillWineTranslation.value = wineStillnessRepository.findWineStillnessTranslation(
+            WineStillness.STILL,
+            systemLanguage()
+        )
+    }
+
+    private suspend fun updateSparklingWineTranslation() {
+        _sparklingWineTranslation.value = wineStillnessRepository.findWineStillnessTranslation(
+            WineStillness.SPARKLING,
+            systemLanguage()
+        )
+    }
+
+    private suspend fun updateRedWineTranslation() {
+        _redWineTranslation.value = wineColorRepository.findWineColorTranslation(
+            WineColor.RED,
+            systemLanguage()
+        )
+    }
+
+    private suspend fun updateWhiteWineTranslation() {
+        _whiteWineTranslation.value = wineColorRepository.findWineColorTranslation(
+            WineColor.WHITE,
+            systemLanguage()
+        )
+    }
+
+    private suspend fun updatePinkWineTranslation() {
+        _pinkWineTranslation.value = wineColorRepository.findWineColorTranslation(
+            WineColor.PINK,
+            systemLanguage()
+        )
+    }
+
     private suspend fun updateAppellation() {
         _appellation.value = bottleRepository.findBottleById(bottleId).appellation
     }
@@ -181,6 +254,11 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
             updateComment()
             updateImageName()
             updateRating()
+            updateRedWineTranslation()
+            updateWhiteWineTranslation()
+            updatePinkWineTranslation()
+            updateSparklingWineTranslation()
+            updateStillWineTranslation()
         }
     }
 }
