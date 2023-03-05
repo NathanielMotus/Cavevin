@@ -96,9 +96,6 @@ class BottleDetailFragment : Fragment() {
         viewModel.vintage.observe(viewLifecycleOwner) {
             binding.vintageTextView.text = it
         }
-        viewModel.bottleTypeAndCapacity.observe(viewLifecycleOwner) {
-            binding.bottleTypeTextView.text = it
-        }
         viewModel.price.observe(viewLifecycleOwner) {
             if (it != "") {
                 binding.priceTextView.text = it

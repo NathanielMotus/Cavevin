@@ -6,7 +6,6 @@ import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.CellarDatabase
 import com.nathaniel.motus.cavevin.data.cellar_database.WineColor
 import com.nathaniel.motus.cavevin.data.cellar_database.WineStillness
-import com.nathaniel.motus.cavevin.utils.BASE_LANGUAGE
 import com.nathaniel.motus.cavevin.utils.systemLanguage
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
@@ -56,9 +55,17 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
         _vintage.value = vintage
     }
 
-    private var _bottleTypeAndCapacity = MutableLiveData("")
-    val bottleTypeAndCapacity: LiveData<String>
-        get() = _bottleTypeAndCapacity
+    private var _bottleTypeId = MutableLiveData(0)
+    val bottleTypeId: LiveData<Int>
+        get() = _bottleTypeId
+
+    private suspend fun updateBottleTypeId() {
+        _bottleTypeId.value = bottleRepository.findBottleById(bottleId).bottleTypeId
+    }
+
+    fun onBottleTypeIdChange(id: Int) {
+        _bottleTypeId.value = id
+    }
 
     private var _origin = MutableLiveData("")
     val origin: LiveData<String>
@@ -87,8 +94,9 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     private var _wineStillness = MutableLiveData("")
     val wineStillness: LiveData<String>
         get() = _wineStillness
-    fun onWineStillnessChange(wineStillness:String){
-        _wineStillness.value=wineStillness
+
+    fun onWineStillnessChange(wineStillness: String) {
+        _wineStillness.value = wineStillness
     }
 
     private var _imageName = MutableLiveData("")
@@ -123,9 +131,43 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     val sparklingWineTranslation: LiveData<String>
         get() = _sparklingWineTranslation
 
+    private val _bottleTypesAndCapacities = MutableLiveData<List<Pair<Int, String>>>()
+    val bottleTypesAndCapacities: LiveData<List<Pair<Int, String>>>
+        get() = _bottleTypesAndCapacities
+
+    val selectedBottleTypeItem: LiveData<Pair<Int, String>> =
+        bottleTypeId.switchMap { id -> transformBottleTypeIdIntoSelectedBottleTypeItem(id) }
+
+    private fun transformBottleTypeIdIntoSelectedBottleTypeItem(id: Int): LiveData<Pair<Int, String>> {
+        var theItem = Pair(0, "")
+        if (bottleTypesAndCapacities.value != null)
+            for (item in bottleTypesAndCapacities.value!!)
+                if (item.first == id)
+                    theItem = item
+        return MutableLiveData(theItem)
+    }
+
     //************************************
     //update
     //************************************
+    private suspend fun updateBottleTypesAndCapacities() {
+        _bottleTypesAndCapacities.value = mutableListOf()
+        for (id in bottleTypeRepository.getBottleTypeIds()) {
+            (_bottleTypesAndCapacities.value as MutableList<Pair<Int, String>>).add(
+                Pair(
+                    id, bottleTypeRepository.findBottleTypeByIdAndLanguage(
+                        id,
+                        systemLanguage()
+                    ).name + " " + bottleTypeRepository.findBottleTypeByIdAndLanguage(
+                        id,
+                        systemLanguage()
+                    ).capacity + " L"
+                )
+            )
+        }
+    }
+
+
     private suspend fun updateStillWineTranslation() {
         _stillWineTranslation.value = wineStillnessRepository.findWineStillnessTranslation(
             WineStillness.STILL,
@@ -177,14 +219,6 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
         _vintage.value = bottleRepository.findBottleById(bottleId).vintage
     }
 
-    private suspend fun updateBottleTypeAndCapacity() {
-        _bottleTypeAndCapacity.value = bottleTypeRepository.findBottleTypeByIdAndLanguage(
-            bottleRepository.findBottleById(bottleId).bottleTypeId, systemLanguage()
-        ).name + " (" + bottleTypeRepository.findBottleTypeByIdAndLanguage(
-            bottleRepository.findBottleById(bottleId).bottleTypeId, systemLanguage()
-        ).capacity + " L)"
-    }
-
     private suspend fun updatePrice() {
         _price.value = ""
         if (bottleRepository.findBottleById(bottleId).price != null) {
@@ -202,16 +236,12 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
 
     private suspend fun updateWineColor() {
         _wineColor.value = ""
-        if (bottleRepository.findBottleById(bottleId).wineColor != null) {
-            _wineColor.value = bottleRepository.findBottleById(bottleId).wineColor
-        }
+        _wineColor.value = bottleRepository.findBottleById(bottleId).wineColor
     }
 
     private suspend fun updateWineStillness() {
         _wineStillness.value = ""
-        if (bottleRepository.findBottleById(bottleId).wineStillness != null) {
-            _wineStillness.value = bottleRepository.findBottleById(bottleId).wineStillness
-        }
+        _wineStillness.value = bottleRepository.findBottleById(bottleId).wineStillness
     }
 
     private suspend fun updateOrigin() {
@@ -245,7 +275,6 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
             updateDomain()
             updateCuvee()
             updateVintage()
-            updateBottleTypeAndCapacity()
             updatePrice()
             updateAgingCapacity()
             updateWineColor()
@@ -259,6 +288,8 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
             updatePinkWineTranslation()
             updateSparklingWineTranslation()
             updateStillWineTranslation()
+            updateBottleTypesAndCapacities()
+            updateBottleTypeId()
         }
     }
 }

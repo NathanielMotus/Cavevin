@@ -1,9 +1,14 @@
 package com.nathaniel.motus.cavevin.ui.bottle_edit
 
 import android.content.Intent
+import android.widget.Spinner
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -13,12 +18,15 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.PopupProperties
 import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.controller.CellarPictureUtils
@@ -27,6 +35,7 @@ import com.nathaniel.motus.cavevin.data.cellar_database.WineColor
 import com.nathaniel.motus.cavevin.data.cellar_database.WineStillness
 import com.nathaniel.motus.cavevin.ui.theme.*
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
+import kotlin.math.exp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,9 +46,11 @@ fun BottleEditContent(
     WineCellarMainTheme() {
         Surface() {
             Column {
-                //val inputImageName by viewModel.imageName.observeAsState("")
-                val inputImageName = ""
+                val inputImageName by viewModel.imageName.observeAsState("")
+                //val inputImageName = ""
                 val inputAppellation by viewModel.appellation.observeAsState("")
+                val inputDomain by viewModel.domain.observeAsState("")
+                val inputCuvee by viewModel.cuvee.observeAsState("")
                 val inputRating by viewModel.rating.observeAsState(0)
                 val inputWineColor by viewModel.wineColor.observeAsState(initial = "")
                 val redWineTranslation by viewModel.redWineTranslation.observeAsState("")
@@ -50,7 +61,12 @@ fun BottleEditContent(
                 val sparklingWineTranslation by viewModel.sparklingWineTranslation.observeAsState(
                     initial = ""
                 )
-
+                val bottleTypesAndCapacities by viewModel.bottleTypesAndCapacities.observeAsState(
+                    initial = listOf(Pair(0, ""))
+                )
+                val inputSelectedBottleTypeItem by viewModel.selectedBottleTypeItem.observeAsState(
+                    initial = Pair(0, "")
+                )
 
                 Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center)
                 {
@@ -86,7 +102,6 @@ fun BottleEditContent(
                     modifier = modifier.fillMaxWidth()
                 )
 
-                val inputDomain by viewModel.domain.observeAsState("")
                 OutlinedTextField(
                     value = inputDomain,
                     onValueChange = { viewModel.onDomainChange(it) },
@@ -94,7 +109,6 @@ fun BottleEditContent(
                     modifier = modifier.fillMaxWidth()
                 )
 
-                val inputCuvee by viewModel.cuvee.observeAsState("")
                 OutlinedTextField(
                     value = inputCuvee,
                     onValueChange = { viewModel.onCuveeChange(it) },
@@ -112,9 +126,23 @@ fun BottleEditContent(
 
                 WineStillnessRadioGroup(
                     selectedWineStillness = inputWineStillness,
-                    onWineStillnessChange = {wineStillness:String -> viewModel.onWineStillnessChange(wineStillness)},
-                    stillWineTranslation =stillWineTranslation ,
+                    onWineStillnessChange = { wineStillness: String ->
+                        viewModel.onWineStillnessChange(
+                            wineStillness
+                        )
+                    },
+                    stillWineTranslation = stillWineTranslation,
                     sparklingWineTranslation = sparklingWineTranslation
+                )
+
+                PairSpinner(
+                    itemList = bottleTypesAndCapacities,
+                    selectedItem = inputSelectedBottleTypeItem,
+                    onSelectionChanged = { item: Pair<Int, String> ->
+                        viewModel.onBottleTypeIdChange(
+                            item.first
+                        )
+                    }
                 )
             }
         }
@@ -377,5 +405,63 @@ fun WineStillnessRadioGroup(
             iconId = R.drawable.ic_baseline_wine_bar_full_sparkling_48,
             onWineStillnessChange = { wineStillness: String -> onWineStillnessChange(wineStillness) }
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PairSpinner(
+    itemList: List<Pair<Int, String>>,
+    selectedItem: Pair<Int, String>,
+    onSelectionChanged: (Pair<Int, String>) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        Column() {
+            OutlinedTextField(
+                value = selectedItem.second,
+                onValueChange = {},
+                label = {
+                    Text(
+                        text = stringResource(
+                            id = R.string.bottle_type
+                        )
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.ArrowDropDown,
+                        contentDescription = ""/*,
+                        modifier = modifier.clickable { expanded = !expanded }*/
+                    )
+                },
+                readOnly = true,
+                modifier = modifier.focusable(enabled = false)
+            )
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = modifier
+                    .wrapContentWidth()
+                    .requiredSize(300.dp)
+            ) {
+                itemList.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(text = item.second) },
+                        onClick = {
+                            onSelectionChanged(item)
+                            expanded = false
+                        },
+                        modifier = modifier.wrapContentWidth()
+                    )
+                }
+            }
+        }
+        Spacer(modifier = modifier.matchParentSize()
+            .background(Color.Transparent)
+            .padding(10.dp)
+            .clickable { expanded=!expanded })
     }
 }
