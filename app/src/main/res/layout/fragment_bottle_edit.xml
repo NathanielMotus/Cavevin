@@ -28,159 +28,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/bottleImageView"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/photo_frame" />
-
-            <LinearLayout
-                android:id="@+id/imageManagerLinearLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bottleImageView">
-
-                <ImageView
-                    android:id="@+id/deleteImageIconImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_baseline_delete_forever_48" />
-
-                <ImageView
-                    android:id="@+id/folderImageIconImageVuew"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_baseline_folder_48" />
-
-                <ImageView
-                    android:id="@+id/cameraImageIconImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_baseline_camera_alt_48" />
-            </LinearLayout>
-
-            <com.nathaniel.motus.cavevin.view.RatingView
-                android:id="@+id/ratingView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageManagerLinearLayout"
-                app:layout_constraintWidth_percent="0.4" />
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/appellationInputLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/appellation"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ratingView">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/appellationTextInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Bourgogne Hautes Côtes de Nuit même plus" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/domainInputLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/domain"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/appellationInputLayout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/domainTextInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Domaine Trucmuche" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/cuveeInputLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:hint="@string/cuvee"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/domainInputLayout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/cuveeTextInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Cuvee glouglou" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/wineColorInputLayout"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cuveeInputLayout">
-
-                <AutoCompleteTextView
-                    android:id="@+id/wineColorAutoCompleteTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="false"
-                    android:inputType="none"
-                    android:singleLine="true"
-                    android:text="Rouge" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/wineStillnessInputLayout"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/wineColorInputLayout">
-
-                <AutoCompleteTextView
-                    android:id="@+id/wineStillnessAutoCompleteTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="false"
-                    android:inputType="none"
-                    android:singleLine="true"
-                    android:text="AutoCompleteTextView" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/vintageInputLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/vintage"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/wineStillnessInputLayout">
+                app:layout_constraintTop_toBottomOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/vintageTextInput"
@@ -193,25 +47,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/bottleTypeInputLayout"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/bottle_type"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/vintageInputLayout"
-                app:suffixText="L">
-
-                <Spinner
-                    android:id="@+id/bottleTypeSpinner"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/originInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -219,7 +54,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bottleTypeInputLayout">
+                app:layout_constraintTop_toBottomOf="@+id/vintageInputLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/originTextInput"

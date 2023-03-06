@@ -55,15 +55,6 @@ class BottleEditFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewModel.appellation.observe(viewLifecycleOwner) {
-            binding.appellationTextInput.setText(it)
-        }
-        viewModel.domain.observe(viewLifecycleOwner) {
-            binding.domainTextInput.setText(it)
-        }
-        viewModel.cuvee.observe(viewLifecycleOwner) {
-            binding.cuveeTextInput.setText(it)
-        }
         viewModel.vintage.observe(viewLifecycleOwner) {
             binding.vintageTextInput.setText(it)
         }
@@ -79,30 +70,6 @@ class BottleEditFragment : Fragment() {
         viewModel.price.observe(viewLifecycleOwner) {
             binding.priceTextInput.setText(it.toString())
         }
-        viewModel.rating.observe(viewLifecycleOwner) {
-            binding.ratingView.rating = it
-            binding.ratingView.displayMode = RatingView.EDITABLE_MODE
-        }
-        viewModel.imageName.observe(viewLifecycleOwner) {
-            if (it != "") {
-                binding.bottleImageView.setImageBitmap(
-                    CellarStorageUtils.getBitmapFromInternalStorage(
-                        binding.root.context.filesDir,
-                        binding.root.context.resources.getString(R.string.photo_folder_name), it
-                    )
-                )
-                binding.bottleImageView.visibility = View.VISIBLE
-            } else {
-                binding.bottleImageView.setImageDrawable(
-                    AppCompatResources.getDrawable(
-                        binding.root.context,
-                        R.drawable.photo_frame
-                    )
-                )
-                binding.bottleImageView.visibility = View.VISIBLE
-            }
-        }
-
     }
 
     companion object {

@@ -2,10 +2,7 @@ package com.nathaniel.motus.cavevin.ui.bottle_edit
 
 import android.content.Intent
 import android.widget.Spinner
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
@@ -417,51 +414,42 @@ fun PairSpinner(
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
-    Box {
-        Column() {
-            OutlinedTextField(
-                value = selectedItem.second,
-                onValueChange = {},
-                label = {
-                    Text(
-                        text = stringResource(
-                            id = R.string.bottle_type
-                        )
-                    )
-                },
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.ArrowDropDown,
-                        contentDescription = ""/*,
-                        modifier = modifier.clickable { expanded = !expanded }*/
-                    )
-                },
-                readOnly = true,
-                modifier = modifier.focusable(enabled = false)
-            )
 
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = modifier
-                    .wrapContentWidth()
-                    .requiredSize(300.dp)
-            ) {
-                itemList.forEach { item ->
-                    DropdownMenuItem(
-                        text = { Text(text = item.second) },
-                        onClick = {
-                            onSelectionChanged(item)
-                            expanded = false
-                        },
-                        modifier = modifier.wrapContentWidth()
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }) {
+
+        TextField(readOnly = true,
+            value = selectedItem.second,
+            onValueChange = {},
+            label = {
+                Text(
+                    text = stringResource(
+                        id = R.string.bottle_type
                     )
-                }
+                )
+            },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            modifier=modifier.menuAnchor()
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = modifier
+                .exposedDropdownSize(matchTextFieldWidth = true)
+                .requiredSize(300.dp)
+        ) {
+            itemList.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(text = item.second) },
+                    onClick = {
+                        onSelectionChanged(item)
+                        expanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                )
             }
         }
-        Spacer(modifier = modifier.matchParentSize()
-            .background(Color.Transparent)
-            .padding(10.dp)
-            .clickable { expanded=!expanded })
     }
 }
