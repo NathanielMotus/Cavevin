@@ -12,4 +12,6 @@ class BottleRepository(val database: CellarDatabase) {
     suspend fun deleteBottle(bottle: Bottle)=database.bottleDao().delete(bottle)
 
     suspend fun findBottleById(id:Int)=database.bottleDao().findBottleById(id)
+
+    suspend fun getAppellations()=database.bottleDao().getAppellations()
 }

@@ -1,29 +1,28 @@
 package com.nathaniel.motus.cavevin.ui.bottle_edit
 
 import android.content.Intent
-import android.widget.Spinner
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.FocusInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
 import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.controller.CellarPictureUtils
@@ -32,7 +31,6 @@ import com.nathaniel.motus.cavevin.data.cellar_database.WineColor
 import com.nathaniel.motus.cavevin.data.cellar_database.WineStillness
 import com.nathaniel.motus.cavevin.ui.theme.*
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
-import kotlin.math.exp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +39,13 @@ fun BottleEditContent(
     modifier: Modifier = Modifier
 ) {
     WineCellarMainTheme() {
-        Surface() {
+        val focusManager = LocalFocusManager.current
+        Surface(modifier = modifier
+            .fillMaxSize()
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null
+            ) { focusManager.clearFocus() }) {
             Column {
                 val inputImageName by viewModel.imageName.observeAsState("")
                 //val inputImageName = ""
@@ -64,6 +68,7 @@ fun BottleEditContent(
                 val inputSelectedBottleTypeItem by viewModel.selectedBottleTypeItem.observeAsState(
                     initial = Pair(0, "")
                 )
+                val appellations by viewModel.appellations.observeAsState(listOf())
 
                 Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center)
                 {
@@ -92,11 +97,11 @@ fun BottleEditContent(
                     )
                 }
 
-                OutlinedTextField(
+                AutocompleteTextInput(
                     value = inputAppellation,
                     onValueChange = { viewModel.onAppellationChange(it) },
-                    label = { Text(text = stringResource(id = R.string.appellation)) },
-                    modifier = modifier.fillMaxWidth()
+                    labelText = stringResource(id = R.string.appellation),
+                    suggestions = appellations
                 )
 
                 OutlinedTextField(
@@ -139,7 +144,8 @@ fun BottleEditContent(
                         viewModel.onBottleTypeIdChange(
                             item.first
                         )
-                    }
+                    },
+                    labelText = stringResource(id = R.string.bottle_type)
                 )
             }
         }
@@ -165,8 +171,6 @@ fun BottleImage(
             ), contentDescription = "",
             contentScale = ContentScale.Fit,
             modifier = modifier
-                .size(imageSize.dp)
-                .padding(imagePadding.dp)
                 .clickable {
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.setDataAndType(
@@ -177,6 +181,9 @@ fun BottleImage(
                     )
                     startActivity(context, intent, null)
                 }
+                .size(imageSize.dp)
+                .padding(imagePadding.dp)
+
         )
     }
 }
@@ -411,6 +418,7 @@ fun PairSpinner(
     itemList: List<Pair<Int, String>>,
     selectedItem: Pair<Int, String>,
     onSelectionChanged: (Pair<Int, String>) -> Unit,
+    labelText: String = "Label",
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -419,18 +427,17 @@ fun PairSpinner(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }) {
 
-        TextField(readOnly = true,
+        TextField(
+            readOnly = true,
             value = selectedItem.second,
             onValueChange = {},
             label = {
                 Text(
-                    text = stringResource(
-                        id = R.string.bottle_type
-                    )
+                    text = labelText
                 )
             },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier=modifier.menuAnchor()
+            modifier = modifier.menuAnchor()
         )
 
         ExposedDropdownMenu(
@@ -449,6 +456,48 @@ fun PairSpinner(
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                 )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AutocompleteTextInput(
+    value: String,
+    onValueChange: (value: String) -> Unit,
+    suggestions: List<String>,
+    labelText: String = "",
+    modifier: Modifier = Modifier
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = { value: String -> onValueChange(value) },
+            label = { Text(text = labelText) },
+            modifier = modifier
+                .menuAnchor()
+        )
+
+        val filterSuggestions = suggestions.filter { it.contains(value, ignoreCase = true) }
+        if (filterSuggestions.isNotEmpty()) {
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = modifier.exposedDropdownSize(matchTextFieldWidth = true)
+            ) {
+                filterSuggestions.forEach { suggestion ->
+                    DropdownMenuItem(
+                        onClick = {
+                            onValueChange(suggestion)
+                            expanded = false
+                            focusManager.clearFocus()
+                        },
+                        text = { Text(text = suggestion) })
+                }
+
             }
         }
     }

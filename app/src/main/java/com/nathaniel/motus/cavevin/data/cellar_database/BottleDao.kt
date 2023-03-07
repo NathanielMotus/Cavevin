@@ -21,4 +21,7 @@ interface BottleDao {
 
     @Query("SELECT * FROM bottle WHERE id=:id")
     suspend fun findBottleById(id:Int):Bottle
+
+    @Query("SELECT DISTINCT appellation FROM bottle")
+    suspend fun getAppellations():List<String>
 }

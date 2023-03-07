@@ -147,6 +147,14 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
         return MutableLiveData(theItem)
     }
 
+    private val _appellations = MutableLiveData<List<String>>()
+    val appellations: LiveData<List<String>>
+        get() = _appellations
+
+    private suspend fun updateAppellations() {
+        _appellations.value = bottleRepository.getAppellations()
+    }
+
     //************************************
     //update
     //************************************
@@ -290,6 +298,7 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
             updateStillWineTranslation()
             updateBottleTypesAndCapacities()
             updateBottleTypeId()
+            updateAppellations()
         }
     }
 }
