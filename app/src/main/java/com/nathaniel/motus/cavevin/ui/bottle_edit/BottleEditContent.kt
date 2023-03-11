@@ -2,24 +2,33 @@ package com.nathaniel.motus.cavevin.ui.bottle_edit
 
 import android.content.Intent
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.FocusInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.ImeOptions
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
@@ -32,21 +41,25 @@ import com.nathaniel.motus.cavevin.data.cellar_database.WineStillness
 import com.nathaniel.motus.cavevin.ui.theme.*
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun BottleEditContent(
     viewModel: BottleDetailViewModel,
     modifier: Modifier = Modifier
 ) {
-    WineCellarMainTheme() {
+    WineCellarMainTheme {
         val focusManager = LocalFocusManager.current
         Surface(modifier = modifier
             .fillMaxSize()
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = null
-            ) { focusManager.clearFocus() }) {
-            Column {
+            ) { focusManager.clearFocus() }
+        ) {
+
+            Column(
+                modifier = modifier.verticalScroll(rememberScrollState())
+            ) {
                 val inputImageName by viewModel.imageName.observeAsState("")
                 //val inputImageName = ""
                 val inputAppellation by viewModel.appellation.observeAsState("")
@@ -69,13 +82,15 @@ fun BottleEditContent(
                     initial = Pair(0, "")
                 )
                 val appellations by viewModel.appellations.observeAsState(listOf())
+                val domains by viewModel.domains.observeAsState(initial = listOf())
+                val cuvees by viewModel.cuvees.observeAsState(initial = listOf())
+                val inputVintage by viewModel.vintage.observeAsState(initial = "")
 
                 Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center)
                 {
                     if (inputImageName != "" && inputImageName != null)
                         BottleImage(
-                            imageName = inputImageName,
-                            modifier = modifier.fillMaxWidth()
+                            imageName = inputImageName
                         )
                     else
                         BottleImagePlaceHolder(
@@ -104,18 +119,18 @@ fun BottleEditContent(
                     suggestions = appellations
                 )
 
-                OutlinedTextField(
-                    value = inputDomain,
-                    onValueChange = { viewModel.onDomainChange(it) },
-                    label = { Text(text = stringResource(id = R.string.domain)) },
-                    modifier = modifier.fillMaxWidth()
+                AutocompleteTextInput(
+                    value = inputDomain, onValueChange = { viewModel.onDomainChange(it) },
+                    labelText = stringResource(id = R.string.domain), suggestions = domains
                 )
 
-                OutlinedTextField(
+                AutocompleteTextInput(
                     value = inputCuvee,
                     onValueChange = { viewModel.onCuveeChange(it) },
-                    label = { Text(text = stringResource(id = R.string.cuvee)) },
-                    modifier = modifier.fillMaxWidth()
+                    labelText = stringResource(
+                        id = R.string.cuvee
+                    ),
+                    suggestions = cuvees
                 )
 
                 WineColorRadioGroup(
@@ -147,6 +162,12 @@ fun BottleEditContent(
                     },
                     labelText = stringResource(id = R.string.bottle_type)
                 )
+
+                GenericOutlineTextField(
+                    value = inputVintage,
+                    onValueChange = { viewModel.onVintageChange(it) },
+                    labelText = stringResource(id = R.string.vintage)
+                )
             }
         }
     }
@@ -171,6 +192,8 @@ fun BottleImage(
             ), contentDescription = "",
             contentScale = ContentScale.Fit,
             modifier = modifier
+                .size(imageSize.dp)
+                .padding(imagePadding.dp)
                 .clickable {
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.setDataAndType(
@@ -181,9 +204,6 @@ fun BottleImage(
                     )
                     startActivity(context, intent, null)
                 }
-                .size(imageSize.dp)
-                .padding(imagePadding.dp)
-
         )
     }
 }
@@ -478,10 +498,16 @@ fun AutocompleteTextInput(
             onValueChange = { value: String -> onValueChange(value) },
             label = { Text(text = labelText) },
             modifier = modifier
-                .menuAnchor()
+                .menuAnchor(),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = {
+                focusManager.clearFocus()
+                expanded = false
+            })
         )
 
-        val filterSuggestions = suggestions.filter { it.contains(value, ignoreCase = true) }
+        val filterSuggestions =
+            suggestions.filter { it.contains(value, ignoreCase = true) }.sorted()
         if (filterSuggestions.isNotEmpty()) {
             ExposedDropdownMenu(
                 expanded = expanded,
@@ -501,4 +527,23 @@ fun AutocompleteTextInput(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun GenericOutlineTextField(
+    value: String,
+    onValueChange: (value: String) -> Unit,
+    labelText: String = "",
+    modifier: Modifier = Modifier
+) {
+    val focusManager= LocalFocusManager.current
+    OutlinedTextField(value = value,
+        onValueChange = { it -> onValueChange(it) },
+        label = { Text(text = labelText) },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = {
+            focusManager.clearFocus()
+        })
+    )
 }

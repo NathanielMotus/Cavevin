@@ -24,4 +24,10 @@ interface BottleDao {
 
     @Query("SELECT DISTINCT appellation FROM bottle")
     suspend fun getAppellations():List<String>
+
+    @Query("SELECT DISTINCT domain FROM bottle")
+    suspend fun getDomains():List<String>
+
+    @Query("SELECT DISTINCT cuvee FROM bottle")
+    suspend fun getCuvees():List<String>
 }

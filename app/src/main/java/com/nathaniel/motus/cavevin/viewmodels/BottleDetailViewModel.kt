@@ -155,6 +155,23 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
         _appellations.value = bottleRepository.getAppellations()
     }
 
+    private val _domains = MutableLiveData<List<String>>()
+    val domains: LiveData<List<String>>
+        get() = _domains
+
+    private suspend fun updateDomains() {
+        _domains.value = bottleRepository.getDomains()
+    }
+
+    private val _cuvees = MutableLiveData<List<String>>()
+    val cuvees: LiveData<List<String>>
+        get() = _cuvees
+
+    private suspend fun updateCuvees() {
+        _cuvees.value = bottleRepository.getCuvees()
+    }
+
+
     //************************************
     //update
     //************************************
@@ -299,6 +316,8 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
             updateBottleTypesAndCapacities()
             updateBottleTypeId()
             updateAppellations()
+            updateDomains()
+            updateCuvees()
         }
     }
 }

@@ -14,4 +14,8 @@ class BottleRepository(val database: CellarDatabase) {
     suspend fun findBottleById(id:Int)=database.bottleDao().findBottleById(id)
 
     suspend fun getAppellations()=database.bottleDao().getAppellations()
+
+    suspend fun getDomains()=database.bottleDao().getDomains()
+
+    suspend fun getCuvees()=database.bottleDao().getCuvees()
 }

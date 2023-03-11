@@ -55,9 +55,6 @@ class BottleEditFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewModel.vintage.observe(viewLifecycleOwner) {
-            binding.vintageTextInput.setText(it)
-        }
         viewModel.origin.observe(viewLifecycleOwner) {
             binding.originTextInput.setText(it)
         }
