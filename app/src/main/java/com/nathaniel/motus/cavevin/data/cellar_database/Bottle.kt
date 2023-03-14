@@ -14,7 +14,7 @@ data class Bottle(
     val appellation:String?,
     val domain:String?,
     val cuvee:String?,
-    val vintage:String?,
+    val vintage:Int?,
     @ColumnInfo(name = "wine_color")
     val wineColor:String,
     @ColumnInfo(name = "wine_stillness")
@@ -23,6 +23,7 @@ data class Bottle(
     @ColumnInfo(name="bottle_type_id")
     val bottleTypeId:Int,
     val price:Double?,
+    val currency:String?,
     val agingCapacity:Int?,
     val origin:String?,
     @ColumnInfo(name = "rating")

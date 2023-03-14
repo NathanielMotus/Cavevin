@@ -80,4 +80,8 @@
     <string name="bottle">Bouteille</string>
     <string name="app_name">Cave à vin</string>
     <string name="fragment_bottle_comments">Commentaires</string>
+    <string name="aging_capacity">Capacité de garde</string>
+    <string name="price">Prix</string>
+    <string name="bottle_type">Type de bouteille</string>
+    <string name="comments">Commentaires</string>
 </resources>

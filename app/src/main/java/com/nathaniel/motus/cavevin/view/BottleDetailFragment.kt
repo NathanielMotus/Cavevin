@@ -93,16 +93,16 @@ class BottleDetailFragment : Fragment() {
         viewModel.cuvee.observe(viewLifecycleOwner) {
             binding.cuveeTextView.text = it
         }
-        viewModel.vintage.observe(viewLifecycleOwner) {
+        /*viewModel.vintage.observe(viewLifecycleOwner) {
             binding.vintageTextView.text = it
-        }
-        viewModel.price.observe(viewLifecycleOwner) {
+        }*/
+        /*viewModel.price.observe(viewLifecycleOwner) {
             if (it != "") {
                 binding.priceTextView.text = it
                 binding.priceLinearLayout.visibility = View.VISIBLE
             } else
                 binding.priceLinearLayout.visibility = View.GONE
-        }
+        }*/
         viewModel.agingCapacity.observe(viewLifecycleOwner) {
             if (it != "") {
                 binding.agingCapacityTextView.text = it

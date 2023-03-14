@@ -1,11 +1,10 @@
 package com.nathaniel.motus.cavevin.ui.bottle_edit
 
 import android.content.Intent
+import android.icu.util.Currency
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.interaction.FocusInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -17,18 +16,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.ImeOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
@@ -39,8 +37,12 @@ import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.data.cellar_database.WineColor
 import com.nathaniel.motus.cavevin.data.cellar_database.WineStillness
 import com.nathaniel.motus.cavevin.ui.theme.*
+import com.nathaniel.motus.cavevin.utils.availableCurrencies
+import com.nathaniel.motus.cavevin.utils.defaultCurrencyCode
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
+import java.util.*
 
+@RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun BottleEditContent(
@@ -84,7 +86,11 @@ fun BottleEditContent(
                 val appellations by viewModel.appellations.observeAsState(listOf())
                 val domains by viewModel.domains.observeAsState(initial = listOf())
                 val cuvees by viewModel.cuvees.observeAsState(initial = listOf())
-                val inputVintage by viewModel.vintage.observeAsState(initial = "")
+                val inputVintage by viewModel.vintage.observeAsState(initial = null)
+                val inputOrigin by viewModel.origin.observeAsState(initial = "")
+                val inputComment by viewModel.comment.observeAsState(initial = "")
+                val inputPrice by viewModel.price.observeAsState(initial = null)
+                val inputCurrency by viewModel.currency.observeAsState(initial = null)
 
                 Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center)
                 {
@@ -163,10 +169,34 @@ fun BottleEditContent(
                     labelText = stringResource(id = R.string.bottle_type)
                 )
 
-                GenericOutlineTextField(
+                GenericOutlinedIntegerField(
                     value = inputVintage,
                     onValueChange = { viewModel.onVintageChange(it) },
-                    labelText = stringResource(id = R.string.vintage)
+                    labelText = stringResource(
+                        id = R.string.vintage
+                    )
+                )
+
+                GenericOutlineTextField(
+                    value = inputOrigin,
+                    onValueChange = { viewModel.onOriginChange(it) },
+                    labelText = stringResource(
+                        id = R.string.origin
+                    )
+                )
+
+                GenericOutlineTextField(
+                    value = inputComment,
+                    onValueChange = { viewModel.onCommentChange(it) },
+                    labelText = stringResource(R.string.comments)
+                )
+
+                OutlinedPriceEditor(
+                    price = inputPrice,
+                    currency = inputCurrency,
+                    onPriceChange = { price: Double? -> viewModel.onPriceChange(price) },
+                    onCurrencyChange = { currency: String? -> viewModel.onCurrencyChange(currency) },
+                    priceLabelText = stringResource(id = R.string.price),
                 )
             }
         }
@@ -537,8 +567,9 @@ fun GenericOutlineTextField(
     labelText: String = "",
     modifier: Modifier = Modifier
 ) {
-    val focusManager= LocalFocusManager.current
-    OutlinedTextField(value = value,
+    val focusManager = LocalFocusManager.current
+    OutlinedTextField(
+        value = value,
         onValueChange = { it -> onValueChange(it) },
         label = { Text(text = labelText) },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -546,4 +577,90 @@ fun GenericOutlineTextField(
             focusManager.clearFocus()
         })
     )
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun GenericOutlinedIntegerField(
+    value: Int?,
+    onValueChange: (value: Int?) -> Unit,
+    labelText: String = "",
+    modifier: Modifier = Modifier
+) {
+    val focusManager = LocalFocusManager.current
+    OutlinedTextField(
+        value = value?.toString() ?: "",
+        onValueChange = { onValueChange(it.toIntOrNull()) },
+        label = {
+            Text(
+                text = labelText
+            )
+        },
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done,
+            keyboardType = KeyboardType.Number
+        ),
+        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.N)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun OutlinedPriceEditor(
+    price: Double?,
+    currency: String?,
+    onPriceChange: (price: Double?) -> Unit,
+    onCurrencyChange: (currency: String) -> Unit,
+    priceLabelText: String = "",
+    modifier: Modifier = Modifier
+) {
+    Row(verticalAlignment = Alignment.Bottom) {
+        val focusManager = LocalFocusManager.current
+        OutlinedTextField(
+            value = price?.toString() ?: "",
+            onValueChange = { onPriceChange(it.toDoubleOrNull()) },
+            label = { Text(text = priceLabelText) },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { focusManager.clearFocus() }
+            )
+        )
+        var expanded by remember { mutableStateOf(false) }
+        ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
+            TextField(
+                value = if (currency != null && currency != "") Currency.getInstance(currency).symbol else Currency.getInstance(
+                    defaultCurrencyCode()
+                ).symbol,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = modifier
+                    .menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = modifier
+                    .exposedDropdownSize(matchTextFieldWidth = true)
+            ) {
+                availableCurrencies().forEach { currency ->
+                    DropdownMenuItem(
+                        text = { Text(text = currency.symbol) },
+                        onClick = {
+                            onCurrencyChange(currency.currencyCode)
+                            expanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
+                }
+            }
+
+        }
+    }
 }

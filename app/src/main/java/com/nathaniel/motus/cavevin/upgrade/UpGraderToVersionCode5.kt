@@ -33,7 +33,7 @@ class UpGraderToVersionCode5(
     }
 
     private suspend fun convertFormerDatabase() {
-        Log.i("TEST", "convertFormerDatabase")
+        println("Convert former database")
         Cellar.cellarPool.forEach { convertCellar(it) }
     }
 
@@ -61,7 +61,7 @@ class UpGraderToVersionCode5(
                     it.bottle.appellation,
                     it.bottle.domain,
                     it.bottle.cuvee,
-                    it.bottle.vintage,
+                    it.bottle.vintage.toIntOrNull(),
                     when (it.bottle.type) {
                         "1" -> WineColor.WHITE
                         "2" -> WineColor.PINK
@@ -70,6 +70,7 @@ class UpGraderToVersionCode5(
                     "still",
                     it.bottle.bottleComment + it.cellComment,
                     safeFindBottleTypeById(it.bottle.capacity),
+                    null,
                     null,
                     null,
                     it.origin,

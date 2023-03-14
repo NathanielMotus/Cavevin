@@ -107,5 +107,6 @@
     <string name="aging_capacity">Aging capacity</string>
     <string name="price">Price</string>
     <string name="bottle_type">Bottle type</string>
+    <string name="comments">Comments</string>
 
 </resources>

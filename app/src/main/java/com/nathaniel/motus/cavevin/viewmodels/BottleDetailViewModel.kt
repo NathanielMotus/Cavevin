@@ -47,13 +47,14 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
         _cuvee.value = cuvee
     }
 
-    private var _vintage = MutableLiveData("")
-    val vintage: LiveData<String>
+    private var _vintage = MutableLiveData(0)
+    val vintage: LiveData<Int>
         get() = _vintage
 
-    fun onVintageChange(vintage: String) {
+    fun onVintageChange(vintage: Int?) {
         _vintage.value = vintage
     }
+    //todo : change vintage into an integer
 
     private var _bottleTypeId = MutableLiveData(0)
     val bottleTypeId: LiveData<Int>
@@ -71,17 +72,44 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     val origin: LiveData<String>
         get() = _origin
 
+    fun onOriginChange(origin: String) {
+        _origin.value = origin
+    }
+
     private var _comment = MutableLiveData("")
     val comment: LiveData<String>
         get() = _comment
 
-    private var _price = MutableLiveData("")
-    val price: LiveData<String>
+    fun onCommentChange(comment: String) {
+        _comment.value = comment
+    }
+
+    private var _price: MutableLiveData<Double?> = MutableLiveData(null)
+    val price: LiveData<Double?>
         get() = _price
+
+    fun onPriceChange(price: Double?) {
+        _price.value = price
+    }
+
+    private suspend fun updatePrice() {
+        _price.value = bottleRepository.findBottleById(bottleId).price
+    }
+
+    private var _currency=MutableLiveData("")
+    val currency:LiveData<String>
+    get() = _currency
+    fun onCurrencyChange(currency:String?){
+        _currency.value=currency
+    }
+    private suspend fun updateCurrency(){
+        _currency.value=bottleRepository.findBottleById(bottleId).currency
+    }
 
     private var _agingCapacity = MutableLiveData("")
     val agingCapacity: LiveData<String>
         get() = _agingCapacity
+    //todo change aging capacity into integer
 
     private var _wineColor = MutableLiveData("")
     val wineColor: LiveData<String>
@@ -244,13 +272,6 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
         _vintage.value = bottleRepository.findBottleById(bottleId).vintage
     }
 
-    private suspend fun updatePrice() {
-        _price.value = ""
-        if (bottleRepository.findBottleById(bottleId).price != null) {
-            _price.value = bottleRepository.findBottleById(bottleId).price.toString() + " €"
-        }
-    }
-
     private suspend fun updateAgingCapacity() {
         _agingCapacity.value = ""
         if (bottleRepository.findBottleById(bottleId).agingCapacity != null) {
@@ -301,6 +322,7 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
             updateCuvee()
             updateVintage()
             updatePrice()
+            updateCurrency()
             updateAgingCapacity()
             updateWineColor()
             updateWineStillness()
