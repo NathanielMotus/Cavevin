@@ -27,8 +27,6 @@ class BottleEditFragment : Fragment() {
         BottleDetailViewModelFactory(requireActivity().application)
     }
 
-    private lateinit var bottle:Bottle
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -52,33 +50,7 @@ class BottleEditFragment : Fragment() {
         return fragmentBottleEditBinding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setObservers()
-    }
-
-    private fun setObservers() {
-        viewModel.origin.observe(viewLifecycleOwner) {
-            binding.originTextInput.setText(it)
-        }
-        viewModel.comment.observe(viewLifecycleOwner) {
-            binding.commentTextInput.setText(it)
-        }
-        viewModel.agingCapacity.observe(viewLifecycleOwner) {
-            binding.agingTextInput.setText(it)
-        }
-        viewModel.price.observe(viewLifecycleOwner) {
-            binding.priceTextInput.setText(it.toString())
-        }
-    }
-
     companion object {
         const val BOTTLE_ID = "bottleId"
     }
 }
-
-//todo choose wine color and stillness
-//todo implement top bar
-//todo implement photo picker
-//todo implement bottle type list
-//todo implement price format

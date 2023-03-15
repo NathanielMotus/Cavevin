@@ -1,5 +1,6 @@
 package com.nathaniel.motus.cavevin.ui.bottle_edit
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.icu.util.Currency
 import android.os.Build
@@ -42,6 +43,7 @@ import com.nathaniel.motus.cavevin.utils.defaultCurrencyCode
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 import java.util.*
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -50,6 +52,7 @@ fun BottleEditContent(
     modifier: Modifier = Modifier
 ) {
     WineCellarMainTheme {
+
         val focusManager = LocalFocusManager.current
         Surface(modifier = modifier
             .fillMaxSize()
@@ -73,7 +76,9 @@ fun BottleEditContent(
                 val whiteWineTranslation by viewModel.whiteWineTranslation.observeAsState("")
                 val pinkWineTranslation by viewModel.pinkWineTranslation.observeAsState(initial = "")
                 val inputWineStillness by viewModel.wineStillness.observeAsState(initial = "")
-                val stillWineTranslation by viewModel.stillWineTranslation.observeAsState(initial = "")
+                val stillWineTranslation by viewModel.stillWineTranslation.observeAsState(
+                    initial = ""
+                )
                 val sparklingWineTranslation by viewModel.sparklingWineTranslation.observeAsState(
                     initial = ""
                 )
@@ -91,6 +96,7 @@ fun BottleEditContent(
                 val inputComment by viewModel.comment.observeAsState(initial = "")
                 val inputPrice by viewModel.price.observeAsState(initial = null)
                 val inputCurrency by viewModel.currency.observeAsState(initial = null)
+                val inputAgingCapacity by viewModel.agingCapacity.observeAsState(initial = null)
 
                 Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center)
                 {
@@ -141,7 +147,11 @@ fun BottleEditContent(
 
                 WineColorRadioGroup(
                     selectedWineColor = inputWineColor,
-                    onWineColorChange = { wineColor: String -> viewModel.onWineColorChange(wineColor) },
+                    onWineColorChange = { wineColor: String ->
+                        viewModel.onWineColorChange(
+                            wineColor
+                        )
+                    },
                     redWineTranslation = redWineTranslation,
                     whiteWineTranslation = whiteWineTranslation,
                     pinkWineTranslation = pinkWineTranslation
@@ -195,8 +205,20 @@ fun BottleEditContent(
                     price = inputPrice,
                     currency = inputCurrency,
                     onPriceChange = { price: Double? -> viewModel.onPriceChange(price) },
-                    onCurrencyChange = { currency: String? -> viewModel.onCurrencyChange(currency) },
+                    onCurrencyChange = { currency: String? ->
+                        viewModel.onCurrencyChange(
+                            currency
+                        )
+                    },
                     priceLabelText = stringResource(id = R.string.price),
+                )
+
+                GenericOutlinedIntegerField(
+                    value = inputAgingCapacity,
+                    onValueChange = { agingCapacity: Int? ->
+                        viewModel.onAgingCapacityChange(agingCapacity)
+                    },
+                    labelText = stringResource(id = R.string.aging_capacity)
                 )
             }
         }
@@ -575,7 +597,8 @@ fun GenericOutlineTextField(
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = {
             focusManager.clearFocus()
-        })
+        }),
+        modifier = modifier
     )
 }
 
@@ -660,7 +683,6 @@ fun OutlinedPriceEditor(
                     )
                 }
             }
-
         }
     }
 }

@@ -104,7 +104,7 @@
     <string name="activity_edit_cellar_stock">Stock :</string>
     <string name="red_wine_string">Red</string>
     <string name="fragment_bottle_comments">Comments</string>
-    <string name="aging_capacity">Aging capacity</string>
+    <string name="aging_capacity">Aging capacity (years)</string>
     <string name="price">Price</string>
     <string name="bottle_type">Bottle type</string>
     <string name="comments">Comments</string>
