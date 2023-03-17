@@ -15,6 +15,7 @@ import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.data.cellar_database.Bottle
 import com.nathaniel.motus.cavevin.databinding.FragmentBottleEditBinding
 import com.nathaniel.motus.cavevin.ui.bottle_edit.BottleEditContent
+import com.nathaniel.motus.cavevin.ui.bottle_edit.BottleEditScreen
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModelFactory
 import kotlinx.coroutines.launch
@@ -46,7 +47,8 @@ class BottleEditFragment : Fragment() {
         val fragmentBottleEditBinding =
             FragmentBottleEditBinding.inflate(inflater, container, false)
         _binding = fragmentBottleEditBinding
-        binding.composeView.setContent { BottleEditContent(viewModel=viewModel) }
+        //binding.composeView.setContent { BottleEditContent(viewModel=viewModel) }
+        binding.composeView.setContent { BottleEditScreen(viewModel = viewModel) }
         return fragmentBottleEditBinding.root
     }
 
