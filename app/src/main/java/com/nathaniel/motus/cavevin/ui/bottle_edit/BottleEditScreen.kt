@@ -20,9 +20,10 @@ fun BottleEditScreen(
     modifier: Modifier = Modifier
 ) {
     WineCellarMainTheme() {
-        Scaffold(topBar = { TopAppBar(title = { Text(text = "Edit") }) }) { paddingValues ->
-            BottleEditContent(viewModel = viewModel, modifier = modifier.padding(paddingValues))
-
+        Scaffold(topBar = { BottleEditTopBar() }) { paddingValues ->
+            BottleEditContent(viewModel = viewModel,
+                modifier = modifier.padding(paddingValues)
+            )
         }
     }
 }

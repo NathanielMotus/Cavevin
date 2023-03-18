@@ -84,4 +84,5 @@
     <string name="price">Prix</string>
     <string name="bottle_type">Type de bouteille</string>
     <string name="comments">Commentaires</string>
+    <string name="edit_bottle">Modifier la bouteille</string>
 </resources>

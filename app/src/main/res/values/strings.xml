@@ -108,5 +108,6 @@
     <string name="price">Price</string>
     <string name="bottle_type">Bottle type</string>
     <string name="comments">Comments</string>
+    <string name="edit_bottle">Edit bottle</string>
 
 </resources>
