@@ -27,7 +27,7 @@ fun WineColorRadioGroup(
     pinkWineTranslation: String = "PINK",
     modifier: Modifier = Modifier
 ) {
-    Row() {
+    Row(modifier=modifier) {
         WineColorRadioButton(
             wineColor = WineColor.RED,
             wineColorTranslation = redWineTranslation,

@@ -30,20 +30,20 @@ fun BottleEditContent(
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
-    Surface(modifier = Modifier
+    Surface(modifier = modifier
         .fillMaxSize()
         .clickable(
             interactionSource = MutableInteractionSource(),
-            indication= null
+            indication = null
         ) { focusManager.clearFocus() }
     ) {
 
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
             val inputImageName by viewModel.imageName.observeAsState("")
-            //val inputImageName = ""
             val inputAppellation by viewModel.appellation.observeAsState("")
             val inputDomain by viewModel.domain.observeAsState("")
             val inputCuvee by viewModel.cuvee.observeAsState("")
@@ -74,12 +74,14 @@ fun BottleEditContent(
             val inputPrice by viewModel.price.observeAsState(initial = null)
             val inputCurrency by viewModel.currency.observeAsState(initial = null)
             val inputAgingCapacity by viewModel.agingCapacity.observeAsState(initial = null)
+            val inputBottleImage by viewModel.bottleImage.observeAsState(initial = null)
 
-            Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter)
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter)
             {
-                if (inputImageName != "" && inputImageName != null)
+                if (inputBottleImage!=null)
                     BottleImage(
-                        imageName = inputImageName
+                        imageName = inputImageName,
+                        bottleImage = inputBottleImage
                     )
                 else
                     BottleImagePlaceHolder(

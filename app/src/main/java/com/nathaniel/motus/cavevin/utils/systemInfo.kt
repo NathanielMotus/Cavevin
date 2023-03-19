@@ -7,10 +7,10 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.util.*
 
-fun systemLanguage()=Locale.getDefault().toString()
+fun systemLanguage() = Locale.getDefault().toString()
 
 @RequiresApi(Build.VERSION_CODES.N)
-fun defaultCurrencyCode()=Currency.getInstance(Locale.getDefault()).currencyCode
+fun defaultCurrencyCode():String = Currency.getInstance(Locale.getDefault()).currencyCode
 
 @RequiresApi(Build.VERSION_CODES.N)
-fun availableCurrencies()=Currency.getAvailableCurrencies()
+fun availableCurrencies(): Set<Currency> = Currency.getAvailableCurrencies()

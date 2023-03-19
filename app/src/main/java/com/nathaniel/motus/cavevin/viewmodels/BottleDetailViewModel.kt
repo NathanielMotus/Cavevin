@@ -1,6 +1,7 @@
 package com.nathaniel.motus.cavevin.viewmodels
 
 import android.app.Application
+import android.graphics.Bitmap
 import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.Bottle
@@ -18,11 +19,25 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     private val wineColorRepository = WineColorRepository(CellarDatabase.getDatabase(application))
     private val wineStillnessRepository =
         WineStillnessRepository(CellarDatabase.getDatabase(application))
+    private val bottleImageRepository=BottleImageRepository(application.applicationContext)
 
     //**********************************
     //State
     //**********************************
     var bottleId = 1
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private var _bottleImage:MutableLiveData<Bitmap?> =MutableLiveData(null)
+    val bottleImage:LiveData<Bitmap?>
+    get() = _bottleImage
+
+    fun onBottleImageChange(bottleImage:Bitmap?){
+        _bottleImage.value=bottleImage
+    }
+
+    private suspend fun updateBottleImage(){
+        _bottleImage.value=bottleImageRepository.getBottleImage(bottleRepository.findBottleById(bottleId).picture)
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -387,6 +402,7 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
             updateAppellations()
             updateDomains()
             updateCuvees()
+            updateBottleImage()
         }
     }
 

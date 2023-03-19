@@ -47,7 +47,6 @@ class BottleEditFragment : Fragment() {
         val fragmentBottleEditBinding =
             FragmentBottleEditBinding.inflate(inflater, container, false)
         _binding = fragmentBottleEditBinding
-        //binding.composeView.setContent { BottleEditContent(viewModel=viewModel) }
         binding.composeView.setContent { BottleEditScreen(viewModel = viewModel) }
         return fragmentBottleEditBinding.root
     }

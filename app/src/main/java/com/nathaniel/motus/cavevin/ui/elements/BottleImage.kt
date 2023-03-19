@@ -1,6 +1,7 @@
 package com.nathaniel.motus.cavevin.ui.elements
 
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 
 @Composable
 fun BottleImage(
+    bottleImage: Bitmap?,
     imageName: String?,
     imageSize: Int = 200,
     imagePadding: Int = 8,
@@ -28,12 +30,9 @@ fun BottleImage(
     Column() {
         Image(
             painter = rememberAsyncImagePainter(
-                model = CellarStorageUtils.getBitmapFromInternalStorage(
-                    LocalContext.current.filesDir,
-                    LocalContext.current.resources.getString(R.string.photo_folder_name),
-                    imageName
-                )
-            ), contentDescription = "",
+                model = bottleImage
+            ),
+            contentDescription = "",
             contentScale = ContentScale.Fit,
             modifier = modifier
                 .size(imageSize.dp)

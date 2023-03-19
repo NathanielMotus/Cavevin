@@ -32,6 +32,7 @@ fun GenericOutlinedIntegerField(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Number
         ),
-        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+        modifier=modifier
     )
 }

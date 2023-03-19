@@ -23,7 +23,7 @@ fun WineStillnessRadioGroup(
     sparklingWineTranslation: String,
     modifier: Modifier = Modifier
 ) {
-    Row() {
+    Row(modifier=modifier) {
         WineStillnessRadioButton(
             wineStillness = WineStillness.STILL,
             wineStillnessTranslation = stillWineTranslation,
