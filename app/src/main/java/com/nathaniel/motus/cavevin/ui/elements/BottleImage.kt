@@ -2,6 +2,7 @@ package com.nathaniel.motus.cavevin.ui.elements
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -14,14 +15,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.rememberAsyncImagePainter
-import com.nathaniel.motus.cavevin.R
-import com.nathaniel.motus.cavevin.controller.CellarPictureUtils
-import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 
 @Composable
 fun BottleImage(
-    bottleImage: Bitmap?,
-    imageName: String?,
+    bottleImageBitmap: Bitmap?,
+    bottleImageUri:Uri?,
     imageSize: Int = 200,
     imagePadding: Int = 8,
     modifier: Modifier = Modifier
@@ -30,7 +28,7 @@ fun BottleImage(
     Column() {
         Image(
             painter = rememberAsyncImagePainter(
-                model = bottleImage
+                model = bottleImageBitmap
             ),
             contentDescription = "",
             contentScale = ContentScale.Fit,
@@ -40,10 +38,7 @@ fun BottleImage(
                 .clickable {
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.setDataAndType(
-                        CellarPictureUtils.getUriFromFileProvider(
-                            context,
-                            imageName!!
-                        ), "image/*"
+                        bottleImageUri, "image/*"
                     )
                     ContextCompat.startActivity(context, intent, null)
                 }

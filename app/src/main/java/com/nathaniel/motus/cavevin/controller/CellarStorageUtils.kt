@@ -484,33 +484,34 @@ object CellarStorageUtils {
     fun getBitmapFromUri(context: Context, uri: Uri?): Bitmap? {
         //get a bitmap from an Uri
         var bitmap: Bitmap? = null
-        try {
-            var stream = context.contentResolver.openInputStream(uri!!)
-            bitmap = BitmapFactory.decodeStream(stream)
-            stream!!.close()
+        if (uri != null)
+            try {
+                var stream = context.contentResolver.openInputStream(uri!!)
+                bitmap = BitmapFactory.decodeStream(stream)
+                stream!!.close()
 
-            //check orientation
-            stream = context.contentResolver.openInputStream(uri)
-            val exifInterface = androidx.exifinterface.media.ExifInterface(
-                stream!!
-            )
-            stream.close()
-            if (exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)
-                    .equals("6", ignoreCase = true)
-            ) {
-                bitmap = CellarPictureUtils.rotate(bitmap, 90)
-            } else if (exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)
-                    .equals("8", ignoreCase = true)
-            ) {
-                bitmap = CellarPictureUtils.rotate(bitmap, 270)
-            } else if (exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)
-                    .equals("3", ignoreCase = true)
-            ) {
-                bitmap = CellarPictureUtils.rotate(bitmap, 180)
+                //check orientation
+                stream = context.contentResolver.openInputStream(uri)
+                val exifInterface = androidx.exifinterface.media.ExifInterface(
+                    stream!!
+                )
+                stream.close()
+                if (exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)
+                        .equals("6", ignoreCase = true)
+                ) {
+                    bitmap = CellarPictureUtils.rotate(bitmap, 90)
+                } else if (exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)
+                        .equals("8", ignoreCase = true)
+                ) {
+                    bitmap = CellarPictureUtils.rotate(bitmap, 270)
+                } else if (exifInterface.getAttribute(ExifInterface.TAG_ORIENTATION)
+                        .equals("3", ignoreCase = true)
+                ) {
+                    bitmap = CellarPictureUtils.rotate(bitmap, 180)
+                }
+            } catch (e: IOException) {
+                Toast.makeText(context, "Erreur", Toast.LENGTH_SHORT).show()
             }
-        } catch (e: IOException) {
-            Toast.makeText(context, "Erreur", Toast.LENGTH_SHORT).show()
-        }
         return bitmap
     }
 
@@ -550,7 +551,7 @@ object CellarStorageUtils {
     }
 
     fun deleteFileFromInternalStorage(destination: File?, folderName: String?, fileName: String?) {
-        //delete a file frome internal storage
+        //delete a file from internal storage
         //use to delete bottle photos
         val file = createOrGetFile(destination, folderName, fileName)
         val deleted = file.delete()

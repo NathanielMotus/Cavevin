@@ -1,32 +1,35 @@
 package com.nathaniel.motus.cavevin.data
 
 import android.app.Application
-import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.platform.LocalContext
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 
-class BottleImageRepository(val context: Context) {
-    private val pathFile = context.filesDir
+class BottleImageRepository(private val application: Application) {
 
-    suspend fun getBottleImage(imageName: String?): Bitmap? {
+    suspend fun getBottleImageBitmap(imageName: String?): Bitmap? {
         return CellarStorageUtils.getBitmapFromInternalStorage(
-            pathFile, context.resources.getString(
+            application.applicationContext.filesDir,
+            application.applicationContext.resources.getString(
                 R.string.photo_folder_name
-            ), imageName
+            ),
+            imageName
         )
     }
 
     suspend fun getBottleImageUri(imageName: String?): Uri? {
-
-        return null
+        return if (imageName == null) null
+        else
+            Uri.parse(
+                "content://" + application.applicationContext.packageName + "/"
+                        + application.applicationContext.resources.getString(
+                    R.string.photo_folder_name
+                ) + "/" + imageName
+            )
     }
 
-    suspend fun getBottleImageThumbnail(imageName: String?): Bitmap? {
-
-        return null
+    suspend fun getBottleBitmapThumbnail(imageName: String?): Bitmap? {
+        return getBottleImageBitmap(imageName + application.applicationContext.resources.getString(R.string.photo_thumbnail_suffix))
     }
 }

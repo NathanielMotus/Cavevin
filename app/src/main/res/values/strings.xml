@@ -109,5 +109,6 @@
     <string name="bottle_type">Bottle type</string>
     <string name="comments">Comments</string>
     <string name="edit_bottle">Edit bottle</string>
+    <string name="temporary_photo_file" translatable="false">photo_temp</string>
 
 </resources>

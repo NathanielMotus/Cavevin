@@ -2,7 +2,11 @@ package com.nathaniel.motus.cavevin.viewmodels
 
 import android.app.Application
 import android.graphics.Bitmap
+import android.net.Uri
+import androidx.compose.runtime.currentRecomposeScope
 import androidx.lifecycle.*
+import com.nathaniel.motus.cavevin.R
+import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.Bottle
 import com.nathaniel.motus.cavevin.data.cellar_database.CellarDatabase
@@ -12,14 +16,17 @@ import com.nathaniel.motus.cavevin.utils.systemLanguage
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
-class BottleDetailViewModel(application: Application) : AndroidViewModel(application) {
+class BottleDetailViewModel(private val currentApplication: Application) :
+    AndroidViewModel(currentApplication) {
 
-    private val bottleRepository = BottleRepository(CellarDatabase.getDatabase(application))
-    private val bottleTypeRepository = BottleTypeRepository(CellarDatabase.getDatabase(application))
-    private val wineColorRepository = WineColorRepository(CellarDatabase.getDatabase(application))
+    private val bottleRepository = BottleRepository(CellarDatabase.getDatabase(currentApplication))
+    private val bottleTypeRepository =
+        BottleTypeRepository(CellarDatabase.getDatabase(currentApplication))
+    private val wineColorRepository =
+        WineColorRepository(CellarDatabase.getDatabase(currentApplication))
     private val wineStillnessRepository =
-        WineStillnessRepository(CellarDatabase.getDatabase(application))
-    private val bottleImageRepository=BottleImageRepository(application.applicationContext)
+        WineStillnessRepository(CellarDatabase.getDatabase(currentApplication))
+    private val bottleImageRepository = BottleImageRepository(currentApplication)
 
     //**********************************
     //State
@@ -27,16 +34,22 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
     var bottleId = 1
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private var _bottleImage:MutableLiveData<Bitmap?> =MutableLiveData(null)
-    val bottleImage:LiveData<Bitmap?>
-    get() = _bottleImage
+    private var _bottleImageName: MutableLiveData<String?> = MutableLiveData(null)
+    val bottleImageName: MutableLiveData<String?>
+        get() = _bottleImageName
 
-    fun onBottleImageChange(bottleImage:Bitmap?){
-        _bottleImage.value=bottleImage
-    }
+    private var _bottleImageUri: MutableLiveData<Uri?> = MutableLiveData(null)
+    val bottleImageUri: LiveData<Uri?>
+        get() = _bottleImageUri
 
-    private suspend fun updateBottleImage(){
-        _bottleImage.value=bottleImageRepository.getBottleImage(bottleRepository.findBottleById(bottleId).picture)
+    private var _bottleImageBitmap: MutableLiveData<Bitmap?> = MutableLiveData(null)
+    val bottleImageBitmap: LiveData<Bitmap?>
+        get() = _bottleImageBitmap
+
+    private suspend fun updateBottleImage() {
+        _bottleImageName.value = bottleRepository.findBottleById(bottleId).picture
+        _bottleImageUri.value = bottleImageRepository.getBottleImageUri(bottleImageName.value)
+        _bottleImageBitmap.value = bottleImageRepository.getBottleImageBitmap(bottleImageName.value)
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +201,7 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private var _wineColor :MutableLiveData<String> = MutableLiveData(WineColor.RED)
+    private var _wineColor: MutableLiveData<String> = MutableLiveData(WineColor.RED)
     val wineColor: LiveData<String>
         get() = _wineColor
 
@@ -427,6 +440,41 @@ class BottleDetailViewModel(application: Application) : AndroidViewModel(applica
                     imageName.value
                 )
             )
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //image concern
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    fun onNewBitmapSelected(uri: Uri?) {
+        //update viewModel but does not persist values to database
+        if (uri != null) viewModelScope.launch {
+            _bottleImageBitmap.value =
+                CellarStorageUtils.getBitmapFromUri(currentApplication.applicationContext, uri)
+            if (bottleImageBitmap.value != null) {
+                CellarStorageUtils.saveBitmapToInternalStorage(
+                    currentApplication.filesDir,
+                    currentApplication.resources.getString(R.string.photo_folder_name),
+                    currentApplication.resources.getString(R.string.temporary_photo_file),
+                    bottleImageBitmap.value
+                )
+                _bottleImageUri.value =
+                    bottleImageRepository.getBottleImageUri(currentApplication.resources.getString(R.string.temporary_photo_file))
+            }
+        }
+    }
+
+    fun onPictureTaken(isPhotoTaken:Boolean) {
+        //update viewModel but does not persist values to database
+        if (isPhotoTaken) viewModelScope.launch {
+            _bottleImageUri.value =
+                bottleImageRepository.getBottleImageUri(currentApplication.resources.getString(R.string.temporary_photo_file))
+            _bottleImageBitmap.value = CellarStorageUtils.getBitmapFromUri(currentApplication.applicationContext,bottleImageUri.value)
+        }
+    }
+
+    fun onDeleteBottleImage() {
+        _bottleImageBitmap.value = null
+        _bottleImageUri.value = null
     }
 }
 

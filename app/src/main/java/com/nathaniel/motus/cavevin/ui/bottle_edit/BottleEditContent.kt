@@ -1,7 +1,7 @@
 package com.nathaniel.motus.cavevin.ui.bottle_edit
 
-import android.annotation.SuppressLint
-import android.graphics.Paint.Align
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
@@ -15,14 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.ui.elements.*
 import com.nathaniel.motus.cavevin.ui.theme.*
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 import java.util.*
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun BottleEditContent(
@@ -43,7 +41,6 @@ fun BottleEditContent(
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
-            val inputImageName by viewModel.imageName.observeAsState("")
             val inputAppellation by viewModel.appellation.observeAsState("")
             val inputDomain by viewModel.domain.observeAsState("")
             val inputCuvee by viewModel.cuvee.observeAsState("")
@@ -74,14 +71,15 @@ fun BottleEditContent(
             val inputPrice by viewModel.price.observeAsState(initial = null)
             val inputCurrency by viewModel.currency.observeAsState(initial = null)
             val inputAgingCapacity by viewModel.agingCapacity.observeAsState(initial = null)
-            val inputBottleImage by viewModel.bottleImage.observeAsState(initial = null)
+            val inputBottleImageBitmap by viewModel.bottleImageBitmap.observeAsState(initial = null)
+            val inputBottleImageUri by viewModel.bottleImageUri.observeAsState(initial = null)
 
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter)
             {
-                if (inputBottleImage!=null)
+                if (inputBottleImageBitmap != null)
                     BottleImage(
-                        imageName = inputImageName,
-                        bottleImage = inputBottleImage
+                        bottleImageBitmap = inputBottleImageBitmap,
+                        bottleImageUri = inputBottleImageUri
                     )
                 else
                     BottleImagePlaceHolder(
@@ -91,8 +89,11 @@ fun BottleEditContent(
             }
 
             ImagePicker(
-                thereIsAnImage = inputImageName != "",
-                modifier = Modifier.fillMaxWidth()
+                thereIsAnImage = inputBottleImageBitmap != null,
+                modifier = Modifier.fillMaxWidth(),
+                onUriResult = { uri: Uri? -> viewModel.onNewBitmapSelected(uri) },
+                onDelete = { viewModel.onDeleteBottleImage() },
+                onPictureTaken = { isPhotoTaken: Boolean -> viewModel.onPictureTaken(isPhotoTaken) }
             )
 
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
