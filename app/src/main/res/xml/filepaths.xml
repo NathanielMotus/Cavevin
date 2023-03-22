@@ -3,4 +3,7 @@
     <files-path
         name="temporary_pic"
         path="Cavevin/photos/"/>
+    <cache-path
+        name="temp"
+        path="/"/>
 </paths>

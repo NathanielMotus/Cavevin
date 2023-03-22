@@ -18,11 +18,11 @@ import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottleEditTopBar(viewModel: BottleDetailViewModel,modifier: Modifier = Modifier) {
-    val activity= LocalContext.current as Activity
+fun BottleEditTopBar(viewModel: BottleDetailViewModel, modifier: Modifier = Modifier) {
+    val activity = LocalContext.current as Activity
     TopAppBar(title = { Text(text = stringResource(R.string.edit_bottle)) },
         navigationIcon = {
-            IconButton(onClick = { activity.onBackPressed()}) {
+            IconButton(onClick = { activity.onBackPressed() }) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
 
             }
@@ -32,7 +32,10 @@ fun BottleEditTopBar(viewModel: BottleDetailViewModel,modifier: Modifier = Modif
                 Icon(imageVector = Icons.Default.Clear, contentDescription = "")
 
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                viewModel.onValidate()
+                activity.onBackPressed()
+            }) {
                 Icon(imageVector = Icons.Default.Check, contentDescription = "")
 
             }
