@@ -494,11 +494,9 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun updateBottleDatabaseImage(): String? {
-
         return bottleImageRepository.replaceBottleImage(
             bottleRepository.findBottleById(bottleId).picture,
             bottleImageBitmap.value
-        //todo create thumbnail
         )
     }
 

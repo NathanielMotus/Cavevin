@@ -36,19 +36,35 @@ class BottleImageRepository(private val application: Application) {
     }
 
     suspend fun replaceBottleImage(formerImageName: String?, newBottleBitmap: Bitmap?): String? {
-        if (formerImageName != null)
+        if (formerImageName != null) {
             CellarStorageUtils.deleteFileFromInternalStorage(
                 application.filesDir,
                 application.resources.getString(R.string.photo_folder_name),
                 formerImageName
             )
-
-        return if (newBottleBitmap != null)
-            CellarStorageUtils.saveBottleImageToInternalStorage(
+            CellarStorageUtils.deleteFileFromInternalStorage(
+                application.filesDir,
+                application.resources.getString(R.string.photo_folder_name),
+                formerImageName+application.resources.getString(R.string.photo_thumbnail_suffix)
+            )
+        }
+        if (newBottleBitmap != null){
+            //save photo
+            val photoName:String=CellarStorageUtils.saveBottleImageToInternalStorage(
                 application.filesDir,
                 application.resources.getString(R.string.photo_folder_name),
                 newBottleBitmap
             )
-        else null
+            //save thumbnail
+            CellarStorageUtils.saveBitmapToInternalStorage(application.filesDir,application.resources.getString(R.string.photo_folder_name),
+                photoName+application.resources.getString(R.string.photo_thumbnail_suffix),
+            CellarStorageUtils.decodeSampledBitmapFromFile(application.filesDir,
+            application.resources.getString(R.string.photo_folder_name),
+            photoName,
+            application.resources.getDimension(R.dimen.recyclerview_cellar_row_photo_width).toInt(),
+            application.resources.getDimension(R.dimen.recyclerview_cellar_row_photo_height).toInt()))
+            return photoName
+        }
+        else return null
     }
 }
