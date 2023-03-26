@@ -2,7 +2,6 @@ package com.nathaniel.motus.cavevin.upgrade
 
 import android.content.Context
 import android.util.Log
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.data.cellar_database.Bottle
@@ -10,7 +9,6 @@ import com.nathaniel.motus.cavevin.data.cellar_database.CellarDatabase
 import com.nathaniel.motus.cavevin.data.cellar_database.Stock
 import com.nathaniel.motus.cavevin.data.cellar_database.WineColor
 import com.nathaniel.motus.cavevin.model.Cellar
-import kotlinx.coroutines.*
 import java.lang.Exception
 
 class UpGraderToVersionCode5(
@@ -52,6 +50,8 @@ class UpGraderToVersionCode5(
             )
         }
     }
+
+    //todo replace nullable empty strings by null
 
     private suspend fun convertCells(cellarId: Int, formerCellar: Cellar) {
         formerCellar.cellList.forEach {

@@ -74,19 +74,12 @@ fun BottleEditContent(
             val inputBottleImageBitmap by viewModel.bottleImageBitmap.observeAsState(initial = null)
             val inputBottleImageUri by viewModel.bottleImageUri.observeAsState(initial = null)
 
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter)
-            {
-                if (inputBottleImageBitmap != null)
-                    BottleImage(
-                        bottleImageBitmap = inputBottleImageBitmap,
-                        bottleImageUri = inputBottleImageUri
-                    )
-                else
-                    BottleImagePlaceHolder(
-                        wineColor = inputWineColor,
-                        appellation = inputAppellation
-                    )
-            }
+            BottleRepresentation(
+                bottleImageBitmap = inputBottleImageBitmap,
+                bottleImageUri = inputBottleImageUri,
+                wineColor = inputWineColor,
+                appellation = inputAppellation
+            )
 
             ImagePicker(
                 thereIsAnImage = inputBottleImageBitmap != null,

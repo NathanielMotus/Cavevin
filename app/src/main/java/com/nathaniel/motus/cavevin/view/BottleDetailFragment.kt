@@ -1,8 +1,10 @@
 package com.nathaniel.motus.cavevin.view
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
@@ -11,6 +13,7 @@ import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.controller.CellarPictureUtils
 import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.databinding.FragmentBottleDetailBinding
+import com.nathaniel.motus.cavevin.ui.bottle_detail.BottleDetailScreen
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModelFactory
 import kotlinx.coroutines.launch
@@ -30,6 +33,7 @@ class BottleDetailFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,6 +45,7 @@ class BottleDetailFragment : Fragment() {
         val fragmentBottleDetailBinding =
             FragmentBottleDetailBinding.inflate(inflater, container, false)
         _binding = fragmentBottleDetailBinding
+        binding.composeView.setContent { BottleDetailScreen(viewModel = viewModel) }
         return fragmentBottleDetailBinding.root
     }
 
