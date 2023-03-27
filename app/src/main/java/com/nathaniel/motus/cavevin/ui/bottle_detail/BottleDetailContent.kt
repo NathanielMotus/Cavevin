@@ -6,20 +6,23 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Text
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nathaniel.motus.cavevin.data.cellar_database.WineColor
 import com.nathaniel.motus.cavevin.data.cellar_database.WineStillness
-import com.nathaniel.motus.cavevin.ui.elements.BottleRepresentation
-import com.nathaniel.motus.cavevin.ui.elements.MainWineData
-import com.nathaniel.motus.cavevin.ui.elements.RatingBar
+import com.nathaniel.motus.cavevin.ui.elements.*
 import com.nathaniel.motus.cavevin.utils.defaultCurrencyCode
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
+import com.nathaniel.motus.cavevin.R
+
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
@@ -64,10 +67,7 @@ fun BottleDetailContent(
             RatingBar(onRatingChange = {}, rating = rating, isEditable = false)
         }
 
-        Card(
-            modifier
-                .fillMaxSize()
-        ) {
+        BottleDetailCard {
             MainWineData(
                 appellation = appellation,
                 domain = domain,
@@ -77,8 +77,28 @@ fun BottleDetailContent(
                 vintage = vintage,
                 bottleTypeAndCapacity = bottleTypeAndCapacity
             )
-
         }
+
+        if (agingCapacity != null || price != null)
+            BottleDetailCard {
+                SecondaryWineData(agingCapacity = agingCapacity, price = price, currency = currency)
+            }
+
+        if (origin!=null && origin!="")
+            BottleDetailCard() {
+                Column {
+                    Text(text = stringResource(id = R.string.origin), style = MaterialTheme.typography.titleLarge)
+                    Text(text = origin!!, style = MaterialTheme.typography.bodyLarge)
+                }
+            }
+        
+        if (comment!=null && comment!="")
+            BottleDetailCard {
+                Column {
+                    Text(text = stringResource(id = R.string.comments), style = MaterialTheme.typography.titleLarge)
+                    Text(text = comment!!, style = MaterialTheme.typography.bodyLarge)
+                }
+            }
 
     }
 }

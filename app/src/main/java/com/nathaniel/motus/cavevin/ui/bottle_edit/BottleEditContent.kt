@@ -1,6 +1,5 @@
 package com.nathaniel.motus.cavevin.ui.bottle_edit
 
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -177,7 +176,7 @@ fun BottleEditContent(
             OutlinedPriceEditor(
                 price = inputPrice,
                 currency = inputCurrency,
-                onPriceChange = { price: Double? -> viewModel.onPriceChange(price) },
+                onPriceChange = { price:Double? -> viewModel.onPriceChange(price) },
                 onCurrencyChange = { currency: String? ->
                     viewModel.onCurrencyChange(
                         currency

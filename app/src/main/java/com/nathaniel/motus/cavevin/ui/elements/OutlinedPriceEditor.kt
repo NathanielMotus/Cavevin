@@ -28,10 +28,12 @@ fun OutlinedPriceEditor(
     modifier: Modifier = Modifier
 ) {
     Row(verticalAlignment = Alignment.Bottom) {
+        if (currency==null || currency=="")
+            onCurrencyChange(Currency.getInstance(defaultCurrencyCode()).currencyCode)
         val focusManager = LocalFocusManager.current
         OutlinedTextField(
             value = price?.toString() ?: "",
-            onValueChange = { onPriceChange(it.toDoubleOrNull()) },
+            onValueChange = { onPriceChange(it.toDoubleOrNull())},
             label = { Text(text = priceLabelText) },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
@@ -44,7 +46,8 @@ fun OutlinedPriceEditor(
         var expanded by remember { mutableStateOf(false) }
         ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
             TextField(
-                value = if (currency != null && currency != "") Currency.getInstance(currency).symbol else Currency.getInstance(
+                value = if (currency != null && currency != "") Currency.getInstance(currency).symbol else
+                    Currency.getInstance(
                     defaultCurrencyCode()
                 ).symbol,
                 onValueChange = {},
