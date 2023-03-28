@@ -1,13 +1,11 @@
 package com.nathaniel.motus.cavevin.ui.bottle_detail
 
-import android.icu.text.CaseMap.Title
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
-import androidx.compose.material3.Card
+import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,7 +29,7 @@ fun BottleDetailContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
     ) {
@@ -85,7 +83,7 @@ fun BottleDetailContent(
             }
 
         if (origin!=null && origin!="")
-            BottleDetailCard() {
+            BottleDetailCard {
                 Column {
                     Text(text = stringResource(id = R.string.origin), style = MaterialTheme.typography.titleLarge)
                     Text(text = origin!!, style = MaterialTheme.typography.bodyLarge)
@@ -99,6 +97,10 @@ fun BottleDetailContent(
                     Text(text = comment!!, style = MaterialTheme.typography.bodyLarge)
                 }
             }
+        
+        Box(modifier = modifier.size(150.dp)){
+            DelayedCounter(count = 12, onCountChange = {}, isEnabled = true)
+        }
 
     }
 }
