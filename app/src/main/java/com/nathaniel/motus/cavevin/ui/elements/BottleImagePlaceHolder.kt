@@ -21,7 +21,6 @@ fun BottleImagePlaceHolder(
     wineColor: String,
     appellation: String?,
     imageSize: Int = 200,
-    imagePadding: Int = 8,
     modifier: Modifier = Modifier
 ) {
     val placeHolderColor = when (wineColor) {
@@ -33,8 +32,7 @@ fun BottleImagePlaceHolder(
         if (appellation != "") appellation?.first().toString() else "?"
     Box(
         modifier = modifier
-            .requiredSize(imageSize.dp)
-            .padding(imagePadding.dp),
+            .requiredSize(imageSize.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(

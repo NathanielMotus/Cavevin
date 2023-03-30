@@ -1,16 +1,14 @@
 package com.nathaniel.motus.cavevin.ui.elements
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.nathaniel.motus.cavevin.R
 import kotlinx.coroutines.delay
 
@@ -24,20 +22,35 @@ fun DelayedCounter(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = { counter++ }, enabled = isEnabled) {
-            Image(
-                painter = painterResource(id = R.drawable.outline_add_24), contentDescription = ""
-            )
-        }
+        CounterButton(
+            onClick = { counter++ },
+            enabled = isEnabled,
+            resourceId = R.drawable.outline_add_24
+        )
 
         DelayedText(count = counter, onCountChange = { onCountChange(it) })
 
-        Button(onClick = { if (counter > 0) counter-- }, enabled = isEnabled) {
-            Image(
-                painter = painterResource(id = R.drawable.outline_remove_24),
-                contentDescription = ""
-            )
-        }
+        CounterButton(
+            onClick = { if (counter > 0) counter-- },
+            enabled = isEnabled,
+            resourceId = R.drawable.outline_remove_24
+        )
+    }
+}
+
+@Composable
+private fun CounterButton(
+    onClick: () -> Unit,
+    enabled: Boolean,
+    resourceId: Int,
+) {
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        shape = RoundedCornerShape(12.dp),
+        contentPadding = PaddingValues(4.dp)
+    ) {
+        Image(painter = painterResource(id = resourceId), contentDescription = "")
     }
 }
 
@@ -58,7 +71,7 @@ private fun DelayedText(
 
     Text(
         text = count.toString(),
-        style = MaterialTheme.typography.displaySmall,
+        style = MaterialTheme.typography.titleLarge,
         modifier = modifier
     )
 }

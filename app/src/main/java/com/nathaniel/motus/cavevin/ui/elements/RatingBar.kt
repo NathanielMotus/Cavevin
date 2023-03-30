@@ -3,11 +3,13 @@ package com.nathaniel.motus.cavevin.ui.elements
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.nathaniel.motus.cavevin.R
 
 @Composable
@@ -15,7 +17,8 @@ fun RatingBar(
     rating: Int = 0,
     isEditable: Boolean = false,
     onRatingChange: (rating: Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    size: Int = 24
 ) {
     Row() {
         if (isEditable)
@@ -23,14 +26,17 @@ fun RatingBar(
                 painter = painterResource(id = R.drawable.ic_baseline_clear_48),
                 contentDescription = "Clear",
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                modifier = modifier.clickable { onRatingChange(0) })
+                modifier = modifier
+                    .clickable { onRatingChange(0) }
+                    .size(size = size.dp))
         for (index in 0..4) {
             RatingStar(index = index,
                 isEditable = isEditable,
                 isOn = rating > index,
                 onClick = { index: Int ->
                     onRatingChange(index)
-                })
+                },
+            size = size)
         }
     }
 }
@@ -41,7 +47,8 @@ private fun RatingStar(
     isEditable: Boolean,
     isOn: Boolean = true,
     onClick: (index: Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    size: Int=24
 ) {
     Image(
         painter = if (isOn) painterResource(id = R.drawable.ic_baseline_star_rate_48) else painterResource(
@@ -49,6 +56,8 @@ private fun RatingStar(
         ),
         contentDescription = "",
         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.tertiary),
-        modifier = if (isEditable) modifier.clickable { onClick(index + 1) } else modifier
+        modifier = if (isEditable) modifier
+            .clickable { onClick(index + 1) }
+            .size(size = size.dp) else modifier.size(size = size.dp)
     )
 }

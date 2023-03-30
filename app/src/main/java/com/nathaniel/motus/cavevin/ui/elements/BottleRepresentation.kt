@@ -12,19 +12,22 @@ fun BottleRepresentation(
     bottleImageBitmap: Bitmap?,
     bottleImageUri: Uri?,
     wineColor: String,
-    appellation:String?
+    appellation:String?,
+    imageSize:Int=200
 ){
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter)
+    Box(modifier = Modifier, contentAlignment = Alignment.TopCenter)
     {
         if (bottleImageBitmap != null)
             BottleImage(
                 bottleImageBitmap = bottleImageBitmap,
-                bottleImageUri = bottleImageUri
+                bottleImageUri = bottleImageUri,
+                imageSize=imageSize
             )
         else
             BottleImagePlaceHolder(
                 wineColor = wineColor,
-                appellation = appellation
+                appellation = appellation,
+                imageSize=imageSize
             )
     }
 }

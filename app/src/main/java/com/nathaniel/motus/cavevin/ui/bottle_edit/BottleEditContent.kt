@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.ui.elements.*
 import com.nathaniel.motus.cavevin.ui.theme.*
@@ -27,18 +28,16 @@ fun BottleEditContent(
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
-    Surface(modifier = modifier
-        .fillMaxSize()
+    Surface(modifier = Modifier
         .clickable(
             interactionSource = MutableInteractionSource(),
             indication = null
-        ) { focusManager.clearFocus() }
+        ) { focusManager.clearFocus() },
     ) {
 
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .fillMaxSize()
         ) {
             val inputAppellation by viewModel.appellation.observeAsState("")
             val inputDomain by viewModel.domain.observeAsState("")
@@ -73,12 +72,19 @@ fun BottleEditContent(
             val inputBottleImageBitmap by viewModel.bottleImageBitmap.observeAsState(initial = null)
             val inputBottleImageUri by viewModel.bottleImageUri.observeAsState(initial = null)
 
-            BottleRepresentation(
-                bottleImageBitmap = inputBottleImageBitmap,
-                bottleImageUri = inputBottleImageUri,
-                wineColor = inputWineColor,
-                appellation = inputAppellation
-            )
+            Box(
+                modifier = modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                BottleRepresentation(
+                    bottleImageBitmap = inputBottleImageBitmap,
+                    bottleImageUri = inputBottleImageUri,
+                    wineColor = inputWineColor,
+                    appellation = inputAppellation
+                )
+            }
 
             ImagePicker(
                 thereIsAnImage = inputBottleImageBitmap != null,
@@ -92,7 +98,8 @@ fun BottleEditContent(
                 RatingBar(
                     rating = inputRating,
                     onRatingChange = { rating: Int -> viewModel.onRatingChange(rating) },
-                    isEditable = true
+                    isEditable = true,
+                    size = 48
                 )
             }
 
@@ -176,7 +183,7 @@ fun BottleEditContent(
             OutlinedPriceEditor(
                 price = inputPrice,
                 currency = inputCurrency,
-                onPriceChange = { price:Double? -> viewModel.onPriceChange(price) },
+                onPriceChange = { price: Double? -> viewModel.onPriceChange(price) },
                 onCurrencyChange = { currency: String? ->
                     viewModel.onCurrencyChange(
                         currency

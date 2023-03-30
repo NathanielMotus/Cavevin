@@ -54,15 +54,22 @@ fun BottleDetailContent(
             )
         )
 
-        BottleRepresentation(
-            bottleImageBitmap = bottleImageBitmap,
-            bottleImageUri = bottleImageUri,
-            wineColor = wineColor,
-            appellation = appellation
-        )
+        Box(
+            modifier = modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            BottleRepresentation(
+                bottleImageBitmap = bottleImageBitmap,
+                bottleImageUri = bottleImageUri,
+                wineColor = wineColor,
+                appellation = appellation
+            )
+        }
 
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            RatingBar(onRatingChange = {}, rating = rating, isEditable = false)
+            RatingBar(onRatingChange = {}, rating = rating, isEditable = false, size = 48)
         }
 
         BottleDetailCard {
@@ -82,25 +89,41 @@ fun BottleDetailContent(
                 SecondaryWineData(agingCapacity = agingCapacity, price = price, currency = currency)
             }
 
-        if (origin!=null && origin!="")
+        if (origin != null && origin != "")
             BottleDetailCard {
                 Column {
-                    Text(text = stringResource(id = R.string.origin), style = MaterialTheme.typography.titleLarge)
+                    Text(
+                        text = stringResource(id = R.string.origin),
+                        style = MaterialTheme.typography.titleLarge
+                    )
                     Text(text = origin!!, style = MaterialTheme.typography.bodyLarge)
                 }
             }
-        
-        if (comment!=null && comment!="")
+
+        if (comment != null && comment != "")
             BottleDetailCard {
                 Column {
-                    Text(text = stringResource(id = R.string.comments), style = MaterialTheme.typography.titleLarge)
+                    Text(
+                        text = stringResource(id = R.string.comments),
+                        style = MaterialTheme.typography.titleLarge
+                    )
                     Text(text = comment!!, style = MaterialTheme.typography.bodyLarge)
                 }
             }
-        
-        Box(modifier = modifier.size(150.dp)){
-            DelayedCounter(count = 12, onCountChange = {}, isEnabled = true)
-        }
+
+        BottleCard(
+            bottleImageBitmap = bottleImageBitmap,
+            bottleImageUri = bottleImageUri,
+            appellation = appellation,
+            domain = domain,
+            cuvee = cuvee,
+            vintage = vintage,
+            bottleTypeAndCapacity = bottleTypeAndCapacity,
+            wineColor = wineColor,
+            wineStillness = wineStillness,
+            rating = rating,
+            stock = 88
+        )
 
     }
 }
