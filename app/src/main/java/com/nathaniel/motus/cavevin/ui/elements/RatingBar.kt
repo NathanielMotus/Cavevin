@@ -3,6 +3,7 @@ package com.nathaniel.motus.cavevin.ui.elements
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -14,13 +15,13 @@ import com.nathaniel.motus.cavevin.R
 
 @Composable
 fun RatingBar(
-    rating: Int = 0,
-    isEditable: Boolean = false,
     onRatingChange: (rating: Int) -> Unit,
     modifier: Modifier = Modifier,
+    rating: Int = 0,
+    isEditable: Boolean = false,
     size: Int = 24
 ) {
-    Row() {
+    Row(modifier = modifier.padding(4.dp)) {
         if (isEditable)
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_clear_48),
@@ -30,13 +31,15 @@ fun RatingBar(
                     .clickable { onRatingChange(0) }
                     .size(size = size.dp))
         for (index in 0..4) {
-            RatingStar(index = index,
+            RatingStar(
+                index = index,
                 isEditable = isEditable,
                 isOn = rating > index,
-                onClick = { index: Int ->
-                    onRatingChange(index)
+                onClick = { pos: Int ->
+                    onRatingChange(pos)
                 },
-            size = size)
+                size = size
+            )
         }
     }
 }
@@ -45,10 +48,10 @@ fun RatingBar(
 private fun RatingStar(
     index: Int,
     isEditable: Boolean,
-    isOn: Boolean = true,
     onClick: (index: Int) -> Unit,
     modifier: Modifier = Modifier,
-    size: Int=24
+    isOn: Boolean=true,
+    size: Int = 24
 ) {
     Image(
         painter = if (isOn) painterResource(id = R.drawable.ic_baseline_star_rate_48) else painterResource(
@@ -58,6 +61,8 @@ private fun RatingStar(
         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.tertiary),
         modifier = if (isEditable) modifier
             .clickable { onClick(index + 1) }
-            .size(size = size.dp) else modifier.size(size = size.dp)
+            .size(size = size.dp)
+        else modifier
+            .size(size = size.dp)
     )
 }

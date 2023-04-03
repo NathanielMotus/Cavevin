@@ -5,15 +5,11 @@ import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import com.nathaniel.motus.cavevin.data.cellar_database.WineColor
 
 @Composable
 fun BottleCard(
@@ -28,8 +24,8 @@ fun BottleCard(
     wineStillness: String,
     rating: Int,
     stock: Int,
-    imageSize: Int = 120,
-    modifier: Modifier = Modifier
+    modifier: Modifier=Modifier,
+    imageSize: Int = 80
 ) {
     Card(
         modifier = modifier
@@ -68,52 +64,46 @@ fun BottleCard(
 @Composable
 private fun CardLayout(
     //Force first and last composables width as constraints
-    //and middle composable height as constraints
-    //todo optimize
+    //and max composable height as constraints
     content: @Composable () -> Unit
 ) = Layout(content = content) { measurables, constraints ->
-    val firstWidth = measurables.first().minIntrinsicWidth(constraints.maxHeight)
-    val lastWidth = measurables.last().minIntrinsicWidth(constraints.maxHeight)
-    val midHeight = measurables[1].minIntrinsicHeight(constraints.maxWidth - firstWidth - lastWidth)
+
+    val measurableWidth: MutableList<Int> = mutableListOf()
+    measurableWidth.add(measurables.first().minIntrinsicWidth(constraints.maxHeight))
+    measurableWidth.add(measurables.last().minIntrinsicWidth(constraints.maxHeight))
+
+    val midHeight = measurables.maxOfOrNull {
+        it.minIntrinsicHeight(
+            constraints.maxWidth - measurableWidth.first() - measurableWidth.last()
+        )
+    }
+
+    if (measurables.size > 2)
+        for (i in 1..measurables.size - 2)
+            measurableWidth.add(
+                measurableWidth.size - 1,
+                (constraints.maxWidth - measurableWidth.first() - measurableWidth.last()) / (measurables.size - 2)
+            )
 
     val placeables: MutableList<Placeable> = mutableListOf()
-    for (i in 0..measurables.size - 1)
-        if (i == 0) placeables.add(
+    for (i in measurables.indices)
+        placeables.add(
             measurables[i].measure(
                 Constraints(
-                    maxWidth = constraints.maxWidth,
-                    maxHeight = midHeight
-                )
-            )
-        )
-        else if (i in 1..measurables.size - 2) placeables.add(
-            measurables[i].measure(
-                Constraints(
-                    maxWidth = constraints.maxWidth - firstWidth - lastWidth,
-                    maxHeight = constraints.maxHeight
-                )
-            )
-        )
-        else placeables.add(
-            measurables[i].measure(
-                Constraints(
-                    maxWidth = constraints.maxWidth,
-                    maxHeight = midHeight
+                    minWidth = measurableWidth[i],
+                    maxWidth = measurableWidth[i],
+                    maxHeight = midHeight ?: 0
                 )
             )
         )
 
-
-    layout(constraints.maxWidth, midHeight) {
+    layout(constraints.maxWidth, midHeight ?: 0) {
         var xPosition = 0
 
-        for (i in 0..placeables.size - 2) {
-            placeables[i].placeRelative(xPosition, 0)
-            xPosition += placeables[i].width
+        placeables.forEach {
+            it.placeRelative(xPosition, 0)
+            xPosition += it.width
         }
-
-        xPosition = constraints.maxWidth - placeables.last().width
-        placeables.last().placeRelative(xPosition, 0)
 
     }
 }

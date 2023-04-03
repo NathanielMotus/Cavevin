@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 fun MainWineData(appellation:String?,
@@ -19,7 +18,7 @@ vintage:Int?,
 bottleTypeAndCapacity:Pair<Int,String>,
 modifier: Modifier=Modifier)
 {
-    Column() {
+    Column {
         if (appellation!=null)
             Text(text = appellation, style = MaterialTheme.typography.titleLarge  ,modifier = modifier.padding(2.dp))
         if(domain!=null)

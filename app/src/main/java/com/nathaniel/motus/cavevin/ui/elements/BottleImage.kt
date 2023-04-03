@@ -3,9 +3,6 @@ package com.nathaniel.motus.cavevin.ui.elements
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import coil.compose.rememberAsyncImagePainter
 
@@ -22,8 +18,8 @@ import coil.compose.rememberAsyncImagePainter
 fun BottleImage(
     bottleImageBitmap: Bitmap?,
     bottleImageUri: Uri?,
+    modifier: Modifier=Modifier,
     imageSize: Int = 200,
-    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     Image(
@@ -31,9 +27,10 @@ fun BottleImage(
             model = bottleImageBitmap
         ),
         contentDescription = "",
-        contentScale = ContentScale.FillHeight,
+        contentScale = ContentScale.FillWidth,
         modifier = modifier
-            .size(imageSize.dp)
+            .padding(4.dp)
+            .size(width = imageSize.dp, height = (imageSize*1.5).dp)
             .clickable {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.setDataAndType(
