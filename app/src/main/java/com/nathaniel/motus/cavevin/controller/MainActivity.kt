@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
     onEditDialogClickListener {
     //Fragments declaration
     private var cellarFragment: CellarFragment? = null
-    private var cellarItemListFragment: CellarItemListFragment? = null
 
     private lateinit var navController: NavController
 
@@ -71,23 +70,13 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //get and configure the views
-        //loadDatas()
-        //if (Cellar.numberOfCellars == 0) prepareFirstUse()
         cleanUpDatabase()
         sharedPreferences
-        //configureToolBar()
-        //configureDrawerLayout()
-        //configureNavigationView()
-        //configureBottomBar()
-        //configureSortOptions()
         if (Cellar.numberOfCellars > 0) Collections.sort(
             Cellar.cellarPool[currentCellarIndex].cellList,
             CellComparator
         )
-        //setDrawerCellarTitle()
         configureNavController()
-        //configureAndShowCellarFragment()
     }
 
     override fun onDestroy() {
@@ -325,98 +314,10 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
         navController=navHostFragment.navController
     }
 
-    private fun configureAndShowCellarFragment() {
-        /*
-        cellarItemListFragment=supportFragmentManager.findFragmentById(R.id.activity_main_frame_layout) as CellarItemListFragment?
-        if (cellarItemListFragment==null){
-            cellarItemListFragment= CellarItemListFragment()
-            supportFragmentManager.beginTransaction()
-                .add(R.id.activity_main_frame_layout,cellarItemListFragment!!).commit()
-        }
-
-         */
-    }
-
-    private fun configureNavigationView() {
-        //configure navigation view
-        navigationView = findViewById(R.id.activity_main_navigation_view)
-        headerTitle =
-            navigationView.getHeaderView(0).findViewById(R.id.activity_main_drawer_cellar_title)
-        sortOption0 = navigationView.findViewById(R.id.activity_main_drawer_sort_0_radio)
-        sortOption1 = navigationView.findViewById(R.id.activity_main_drawer_sort_1_radio)
-        sortOption2 = navigationView.findViewById(R.id.activity_main_drawer_sort_2_radio)
-        sortGroup = navigationView.findViewById(R.id.activity_main_drawer_sort_radio_group)
-        navigationView.setNavigationItemSelectedListener(this)
-
-        //Put listener on radiogroup
-        sortGroup.setOnCheckedChangeListener(RadioGroup.OnCheckedChangeListener { group, checkedId ->
-            sSortOption = 0
-            if (checkedId == sortOption1.getId()) sSortOption = 1
-            if (checkedId == sortOption2.getId()) sSortOption = 2
-            val preferences = getPreferences(MODE_PRIVATE)
-            preferences.edit().putInt(CURRENT_SORT_OPTION, sSortOption).apply()
-            configureSortOptions()
-            if (Cellar.cellarPool.size > 0) Collections.sort(
-                Cellar.cellarPool[currentCellarIndex].cellList,
-                CellComparator
-            )
-            if (cellarFragment != null) cellarFragment!!.updateCellarRecyclerView(
-                Cellar.cellarPool[currentCellarIndex].typeFiltered(
-                    currentTypeFilter
-                )
-            )
-            drawerLayout!!.closeDrawer(GravityCompat.START)
-        })
-    }
-
-    private fun configureDrawerLayout() {
-        //configure drawer layout
-        drawerLayout = findViewById(R.id.activity_main_drawer_layout)
-        val toggle = ActionBarDrawerToggle(
-            this,
-            drawerLayout,
-            toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-    }
-
     private fun setDrawerCellarTitle() {
         //set the title at the cellar name
         if (Cellar.cellarPool.size != 0) headerTitle!!.text =
             Cellar.cellarPool[currentCellarIndex].cellarName
-    }
-
-    private fun configureToolBar() {
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-    }
-
-    private fun configureSortOptions() {
-        //initalize sort options radios
-        when (sSortOption) {
-            1 -> {
-                //Vintage+/App+/Dom+/Cuv+/Stock-
-                sortOption1!!.isChecked = true
-                CellComparator.setSortingOrder(1, 2, 3, 0, 4)
-                CellComparator.setSortingSense(1, 1, 1, 1, -1)
-            }
-            2 -> {
-                //Stock-/App+/Dom+/Cuv+/Vintage+
-                sortOption2!!.isChecked = true
-                CellComparator.setSortingOrder(1, 2, 3, 4, 0)
-                CellComparator.setSortingSense(1, 1, 1, 1, -1)
-            }
-            else -> {
-                //case 0
-                //App+/Dom+/Cuv+/Vintage+/Stock-
-                sortOption0!!.isChecked = true
-                CellComparator.setSortingOrder(0, 1, 2, 3, 4)
-                CellComparator.setSortingSense(1, 1, 1, 1, -1)
-            }
-        }
     }
 
     //initialize shared preferences
@@ -499,10 +400,6 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
         edf.show(fm, "fragment_edit_dialog")
     }
 
-    private fun showSortOptionsEditor() {
-        //user can create their own sort options
-    }
-
     private fun showStats() {
         //show stats
         val builder = AlertDialog.Builder(this)
@@ -567,20 +464,12 @@ class MainActivity : AppCompatActivity(), onItemClickedListener,
         }
     }
 
-    private fun prepareFirstUse() {
-        //manage the first use
-
-        //create a first cellar
-        val cellArrayList = ArrayList<Cell>()
-        val cellar = Cellar(getString(R.string.main_activity_my_cellar), cellArrayList, true)
-    }
-
     //    **********************************************************************************************
 //    Send intents
 //    **********************************************************************************************
     private fun launchEditCellarActivity(cellPosition: Int) {
         //launch the cellar editor
-        navController.navigate(R.id.action_cellarItemListFragment_to_bottleFragment)
+        //navController.navigate(R.id.action_cellarItemListFragment_to_bottleFragment)
         /*
         val intent = Intent(this@MainActivity, EditCellarActivity::class.java)
         intent.putExtra(BUNDLE_EXTRA_CURRENT_CELLAR_INDEX, currentCellarIndex)

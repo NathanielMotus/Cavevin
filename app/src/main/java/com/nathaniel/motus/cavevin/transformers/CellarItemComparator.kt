@@ -70,14 +70,14 @@ class CellarItemComparator(val sortPattern: ArrayList<ArrayList<Int>>) : Compara
         //compare capacity
         if (p0 != null) {
             if (p1 != null) {
-                comparisons[CAPACITY_COMPARE_INDEX] = p1.capacity.let { p0.capacity.compareTo(it) }
+                comparisons[CAPACITY_COMPARE_INDEX] = 0 //p1.capacity.let { p0.capacity.compareTo(it) }
             }
         }
 
         //compare stock
         if (p0 != null) {
             if (p1 != null) {
-                comparisons[STOCK_COMPARE_INDEX] = p1.quantity.let { p0.quantity.compareTo(it) }
+                comparisons[STOCK_COMPARE_INDEX] = p1.stock.let { p0.stock.compareTo(it) }
             }
         }
 
@@ -107,7 +107,7 @@ class CellarItemComparator(val sortPattern: ArrayList<ArrayList<Int>>) : Compara
         if (p0 != null) {
             if (p1 != null) {
                 comparisons[NEUTRAL_WINE_COLOR_COMPARE_INDEX] =
-                    p1.neutralWineColor?.let { p0.neutralWineColor?.compareTo(it) }
+                    p1.wineColor?.let { p0.wineColor?.compareTo(it) }
             }
         }
 
@@ -115,7 +115,7 @@ class CellarItemComparator(val sortPattern: ArrayList<ArrayList<Int>>) : Compara
         if (p0 != null) {
             if (p1 != null) {
                 comparisons[NEUTRAL_WINE_STILLNESS_COMPARE_INDEX] =
-                    p1.neutralWineStillness?.let { p0.neutralWineStillness?.compareTo(it) }
+                    p1.wineStillness?.let { p0.wineStillness?.compareTo(it) }
             }
         }
 

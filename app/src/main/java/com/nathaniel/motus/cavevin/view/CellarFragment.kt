@@ -31,7 +31,7 @@ class CellarFragment : Fragment() {
         val result = inflater.inflate(layout.fragment_cellar, container, false)
 
         //Instantiate recyclerview
-        mRecyclerView = result.findViewById(R.id.fragment_cellar_recycler_view)
+        //mRecyclerView = result.findViewById(R.id.fragment_cellar_recycler_view)
         return result
     }
 

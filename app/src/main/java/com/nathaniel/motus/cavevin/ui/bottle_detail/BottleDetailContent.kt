@@ -111,19 +111,5 @@ fun BottleDetailContent(
                 }
             }
 
-        BottleCard(
-            bottleImageBitmap = bottleImageBitmap,
-            bottleImageUri = bottleImageUri,
-            appellation = appellation,
-            domain = domain,
-            cuvee = cuvee,
-            vintage = vintage,
-            bottleTypeAndCapacity = bottleTypeAndCapacity,
-            wineColor = wineColor,
-            wineStillness = wineStillness,
-            rating = rating,
-            stock = 88
-        )
-
     }
 }

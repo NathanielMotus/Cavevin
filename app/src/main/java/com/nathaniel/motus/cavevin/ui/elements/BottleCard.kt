@@ -25,7 +25,8 @@ fun BottleCard(
     rating: Int,
     stock: Int,
     modifier: Modifier=Modifier,
-    imageSize: Int = 80
+    imageSize: Int = 80,
+    onCountChange:(Int)->Unit
 ) {
     Card(
         modifier = modifier
@@ -56,7 +57,7 @@ fun BottleCard(
                 RatingBar(onRatingChange = {}, rating = rating, size = 24)
             }
 
-            DelayedCounter(count = stock, onCountChange = {}, isEnabled = true)
+            DelayedCounter(count = stock, onCountChange = {onCountChange(it)}, isEnabled = true)
         }
     }
 }

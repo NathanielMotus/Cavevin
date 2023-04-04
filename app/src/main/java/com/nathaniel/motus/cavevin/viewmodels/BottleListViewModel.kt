@@ -1,7 +1,10 @@
 package com.nathaniel.motus.cavevin.viewmodels
 
 import android.app.Application
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
+import com.nathaniel.motus.cavevin.controller.CellarPictureUtils
+import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.*
 import com.nathaniel.motus.cavevin.transformers.CellarItemComparator
@@ -11,10 +14,9 @@ import java.lang.IllegalArgumentException
 import java.util.function.Predicate
 
 class BottleListViewModel(
-    application: Application
+    private val application: Application
 ) : AndroidViewModel(application) {
 
-    //todo : implement a view model for each view, with needed functions only
     //todo : main view, bottle detail view, bottle type management view, cellar transfer view, filter edition view
     //todo : implement transferBottle(bottleId, fromCellar, toCellar, quantity)
     //todo : implement mergeCellar(cellar, inCellar)
@@ -34,6 +36,7 @@ class BottleListViewModel(
     private val wineColorRepository = WineColorRepository(CellarDatabase.getDatabase(application))
     private val wineStillnessRepository =
         WineStillnessRepository(CellarDatabase.getDatabase(application))
+    private val bottleImageRepository=BottleImageRepository(application = application)
 
     //***********************************
     //State
@@ -151,27 +154,23 @@ class BottleListViewModel(
         findBottleById(cellarEntry.bottleId).appellation,
         findBottleById(cellarEntry.bottleId).domain,
         findBottleById(cellarEntry.bottleId).cuvee,
-        //findBottleById(cellarEntry.bottleId).vintage,
-        "2035",
+        findBottleById(cellarEntry.bottleId).vintage,
         findBottleById(cellarEntry.bottleId).wineColor,
-        findWineColorTranslation(findBottleById(cellarEntry.bottleId).wineColor, systemLanguage()),
         findBottleById(cellarEntry.bottleId).wineStillness,
-        findWineStillnessTranslation(findBottleById(cellarEntry.bottleId).wineStillness, systemLanguage()),
-        findBottleById(cellarEntry.bottleId).bottleTypeId,
-        findBottleTypeByIdAndLanguage(
+        Pair(
             findBottleById(cellarEntry.bottleId).bottleTypeId,
-            systemLanguage()
-        ).name,
-        findBottleTypeByIdAndLanguage(
-            findBottleById(cellarEntry.bottleId).bottleTypeId,
-            systemLanguage()
-        ).capacity,
+            bottleTypeRepository.findBottleTypeByIdAndLanguage(
+                findBottleById(cellarEntry.bottleId).bottleTypeId,
+                systemLanguage()
+            ).let { "${it.name} ${it.capacity} L" }
+        ),
         cellarEntry.quantity,
         findBottleById(cellarEntry.bottleId).price,
         findBottleById(cellarEntry.bottleId).agingCapacity,
         findBottleById(cellarEntry.bottleId).comment,
         findBottleById(cellarEntry.bottleId).rating,
-        findBottleById(cellarEntry.bottleId).picture
+        bottleImageRepository.getBottleBitmapThumbnail(findBottleById(cellarEntry.bottleId).picture),
+        bottleImageRepository.getBottleImageUri(findBottleById(cellarEntry.bottleId).picture)
     )
 
     private suspend fun createCellarItems(newCellarEntries: List<CellarEntry>) {
@@ -179,23 +178,24 @@ class BottleListViewModel(
         newCellarEntries.forEach {
             items.add(createCellarItem(it))
         }
-        cellarItems.value = filters(items.sortedWith(CellarItemComparator(sortPattern)))
+        //cellarItems.value = filters(items.sortedWith(CellarItemComparator(sortPattern)))
+        cellarItems.value=items
     }
 
     private fun filters(cellarItems: List<CellarItem>): List<CellarItem> {
         val conditions = ArrayList<(CellarItem) -> Boolean>()
         if (!redIsEnable.value!!)
-            conditions.add { it.neutralWineColor != "red" }
+            conditions.add { it.wineColor != "red" }
         if (!whiteIsEnable.value!!)
-            conditions.add { it.neutralWineColor != "white" }
+            conditions.add { it.wineColor != "white" }
         if (!pinkIsEnable.value!!)
-            conditions.add { it.neutralWineColor != "pink" }
+            conditions.add { it.wineColor != "pink" }
         if (!stillIsEnable.value!!)
-            conditions.add { it.neutralWineStillness != "still" }
+            conditions.add { it.wineStillness != "still" }
         if (!sparklingIsEnable.value!!)
-            conditions.add { it.neutralWineStillness != "sparkling" }
+            conditions.add { it.wineStillness != "sparkling" }
         if (!emptyIsEnable.value!!)
-            conditions.add { it.quantity != 0 }
+            conditions.add { it.stock != 0 }
 
         return cellarItems.filter { candidate -> conditions.all { it(candidate) } }
     }

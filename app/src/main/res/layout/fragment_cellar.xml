@@ -7,7 +7,12 @@
     android:orientation="vertical"
     tools:context=".view.CellarFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/composeView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!--androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_cellar_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -16,6 +21,6 @@
     <FrameLayout
         android:id="@+id/fragment_cellar_frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="36dp"/>
+        android:layout_height="36dp"/-->
 
 </androidx.appcompat.widget.LinearLayoutCompat>

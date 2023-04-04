@@ -11,11 +11,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nathaniel.motus.cavevin.databinding.FragmentCellarBinding
+import com.nathaniel.motus.cavevin.ui.bottle_list.BottleListScreen
 import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
 import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModelFactory
 import kotlinx.coroutines.launch
 
-class CellarItemListFragment : Fragment(), BottomBarFragment.BottomBarParentFragment {
+class CellarItemListFragment : Fragment() {
 
     private var _binding: FragmentCellarBinding? = null
     private val binding get() = _binding!!
@@ -23,7 +24,6 @@ class CellarItemListFragment : Fragment(), BottomBarFragment.BottomBarParentFrag
         BottleListViewModelFactory(requireActivity().application)
     }
     private lateinit var recyclerView: RecyclerView
-    private var bottomBarFragment: BottomBarFragment? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,18 +36,19 @@ class CellarItemListFragment : Fragment(), BottomBarFragment.BottomBarParentFrag
 
         val fragmentBinding = FragmentCellarBinding.inflate(inflater, container, false)
         _binding = fragmentBinding
+        binding.composeView.setContent { BottleListScreen(viewModel = viewModel) }
         return fragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        configureRecyclerView()
-        configureBottomBar()
-        setFilterStatesObserver()
+        //configureRecyclerView()
+        //configureBottomBar()
+        //setFilterStatesObserver()
     }
 
-    private fun configureRecyclerView() {
+    /*private fun configureRecyclerView() {
         recyclerView = binding.fragmentCellarRecyclerView
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext())
@@ -100,14 +101,14 @@ class CellarItemListFragment : Fragment(), BottomBarFragment.BottomBarParentFrag
             bottomBarFragment?.stillButtonState=it
             bottomBarFragment?.applyButtonStates()
         }
-    }
+    }*/
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
-    override fun notifyButtonClicked(buttonTag: String) {
+    /*override fun notifyButtonClicked(buttonTag: String) {
         when (buttonTag) {
             BottomBarFragment.STILL_BUTTON -> viewModel.changeFilter(BottleListViewModel.STILL_FILTER)
             BottomBarFragment.SPARKLING_BUTTON -> viewModel.changeFilter(BottleListViewModel.SPARKLING_FILTER)
@@ -116,5 +117,5 @@ class CellarItemListFragment : Fragment(), BottomBarFragment.BottomBarParentFrag
             BottomBarFragment.PINK_BUTTON -> viewModel.changeFilter(BottleListViewModel.PINK_FILTER)
             BottomBarFragment.EMPTY_BUTTON -> viewModel.changeFilter(BottleListViewModel.EMPTY_FILTER)
         }
-    }
+    }*/
 }

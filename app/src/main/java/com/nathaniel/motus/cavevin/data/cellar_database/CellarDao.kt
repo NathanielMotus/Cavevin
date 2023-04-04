@@ -1,7 +1,5 @@
 package com.nathaniel.motus.cavevin.data.cellar_database
 
-import android.location.GnssAntennaInfo
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.nathaniel.motus.cavevin.data.CellarEntry
 import kotlinx.coroutines.flow.Flow

@@ -31,8 +31,8 @@
                 android:resource="@xml/filepaths"/>
         </provider>
         
-        <activity android:name=".controller.EditCellarActivity"
-            android:configChanges="orientation|screenSize"/>
+        <!--activity android:name=".controller.EditCellarActivity"
+            android:configChanges="orientation|screenSize"/-->
 
         <activity
             android:name=".controller.MainActivity"
