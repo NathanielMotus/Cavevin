@@ -23,6 +23,10 @@ import java.lang.IllegalArgumentException
 class BottleDetailViewModel(private val currentApplication: Application) :
     AndroidViewModel(currentApplication) {
 
+    init {
+        viewModelScope.launch{updateBottleDetailViewModel()}
+    }
+
     private val bottleRepository = BottleRepository(CellarDatabase.getDatabase(currentApplication))
     private val bottleTypeRepository =
         BottleTypeRepository(CellarDatabase.getDatabase(currentApplication))

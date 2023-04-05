@@ -12,6 +12,7 @@ data class CellarItem(
     val vintage: Int?,
     val wineColor: String,
     val wineStillness: String,
+    val capacity:Double,
     val bottleTypeAndCapacity: Pair<Int, String>,
     val stock: Int,
     val price: Double?,

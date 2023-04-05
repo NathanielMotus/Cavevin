@@ -9,6 +9,8 @@ import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.*
 import com.nathaniel.motus.cavevin.transformers.CellarItemComparator
 import com.nathaniel.motus.cavevin.utils.systemLanguage
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import java.util.function.Predicate
@@ -20,6 +22,11 @@ class BottleListViewModel(
     //todo : main view, bottle detail view, bottle type management view, cellar transfer view, filter edition view
     //todo : implement transferBottle(bottleId, fromCellar, toCellar, quantity)
     //todo : implement mergeCellar(cellar, inCellar)
+
+
+    init {
+        updateBottleListViewModel()
+    }
 
     fun updateBottleListViewModel() {
         viewModelScope.launch {
@@ -36,7 +43,7 @@ class BottleListViewModel(
     private val wineColorRepository = WineColorRepository(CellarDatabase.getDatabase(application))
     private val wineStillnessRepository =
         WineStillnessRepository(CellarDatabase.getDatabase(application))
-    private val bottleImageRepository=BottleImageRepository(application = application)
+    private val bottleImageRepository = BottleImageRepository(application = application)
 
     //***********************************
     //State
@@ -157,6 +164,10 @@ class BottleListViewModel(
         findBottleById(cellarEntry.bottleId).vintage,
         findBottleById(cellarEntry.bottleId).wineColor,
         findBottleById(cellarEntry.bottleId).wineStillness,
+        bottleTypeRepository.findBottleTypeByIdAndLanguage(
+            findBottleById(cellarEntry.bottleId).bottleTypeId,
+            systemLanguage()
+        ).capacity,
         Pair(
             findBottleById(cellarEntry.bottleId).bottleTypeId,
             bottleTypeRepository.findBottleTypeByIdAndLanguage(
@@ -179,7 +190,7 @@ class BottleListViewModel(
             items.add(createCellarItem(it))
         }
         //cellarItems.value = filters(items.sortedWith(CellarItemComparator(sortPattern)))
-        cellarItems.value=items
+        cellarItems.value = items
     }
 
     private fun filters(cellarItems: List<CellarItem>): List<CellarItem> {
