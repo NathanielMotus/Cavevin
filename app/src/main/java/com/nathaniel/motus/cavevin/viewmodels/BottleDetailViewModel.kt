@@ -23,10 +23,6 @@ import java.lang.IllegalArgumentException
 class BottleDetailViewModel(private val currentApplication: Application) :
     AndroidViewModel(currentApplication) {
 
-    init {
-        viewModelScope.launch{updateBottleDetailViewModel()}
-    }
-
     private val bottleRepository = BottleRepository(CellarDatabase.getDatabase(currentApplication))
     private val bottleTypeRepository =
         BottleTypeRepository(CellarDatabase.getDatabase(currentApplication))
@@ -36,10 +32,11 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         WineStillnessRepository(CellarDatabase.getDatabase(currentApplication))
     private val bottleImageRepository = BottleImageRepository(currentApplication)
 
+    var bottleId = 1
+
     //**********************************
     //State
     //**********************************
-    var bottleId = 1
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     private var _bottleImageName: MutableLiveData<String?> = MutableLiveData(null)
@@ -531,6 +528,10 @@ class BottleDetailViewModel(private val currentApplication: Application) :
                 )
             )
         }
+    }
+
+    init {
+        viewModelScope.launch{updateBottleDetailViewModel()}
     }
 }
 

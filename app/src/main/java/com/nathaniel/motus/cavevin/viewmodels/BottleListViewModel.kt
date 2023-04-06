@@ -24,18 +24,6 @@ class BottleListViewModel(
     //todo : implement mergeCellar(cellar, inCellar)
 
 
-    init {
-        updateBottleListViewModel()
-    }
-
-    fun updateBottleListViewModel() {
-        viewModelScope.launch {
-            cellarRepository.getCellarEntries().collect {
-                createCellarItems(it)
-            }
-        }
-    }
-
     private val cellarRepository = CellarRepository(CellarDatabase.getDatabase(application))
     private val bottleRepository = BottleRepository(CellarDatabase.getDatabase(application))
     private val bottleTypeRepository = BottleTypeRepository(CellarDatabase.getDatabase(application))
@@ -44,6 +32,18 @@ class BottleListViewModel(
     private val wineStillnessRepository =
         WineStillnessRepository(CellarDatabase.getDatabase(application))
     private val bottleImageRepository = BottleImageRepository(application = application)
+
+    init {
+        updateBottleListViewModel()
+    }
+
+    private fun updateBottleListViewModel() {
+        viewModelScope.launch {
+            cellarRepository.getCellarEntries().collect {
+                createCellarItems(it)
+            }
+        }
+    }
 
     //***********************************
     //State

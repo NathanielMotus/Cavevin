@@ -50,11 +50,6 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        lifecycle.coroutineScope.launch {
-            bottleListViewModel.updateBottleListViewModel()
-            //bottleDetailViewModel.updateBottleDetailViewModel()
-        }
-
         cleanUpDatabase()
         sharedPreferences
         if (Cellar.numberOfCellars > 0) Collections.sort(
@@ -77,8 +72,8 @@ class MainActivity : AppCompatActivity() {
             Cellar.cellarPool[currentCellarIndex].cellList,
             CellComparator
         )
-        binding.composeView.setContent { BottleListScreen(viewModel = bottleListViewModel) }
-            //binding.composeView.setContent { BottleDetailScreen(viewModel = bottleDetailViewModel) }
+        //binding.composeView.setContent { BottleListScreen(viewModel = bottleListViewModel) }
+        binding.composeView.setContent { BottleDetailScreen(viewModel = bottleDetailViewModel) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
