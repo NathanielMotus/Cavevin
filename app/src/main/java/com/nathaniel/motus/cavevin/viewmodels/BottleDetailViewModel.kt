@@ -3,12 +3,9 @@ package com.nathaniel.motus.cavevin.viewmodels
 import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.compose.runtime.currentRecomposeScope
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.R
-import com.nathaniel.motus.cavevin.controller.CellarPictureUtils
 import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.Bottle
@@ -32,7 +29,12 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         WineStillnessRepository(CellarDatabase.getDatabase(currentApplication))
     private val bottleImageRepository = BottleImageRepository(currentApplication)
 
-    var bottleId = 1
+    private var bottleId=1
+
+    private fun updateBottleId(id: Int) {
+        bottleId = id
+        updateBottleDetailViewModel()
+    }
 
     //**********************************
     //State
@@ -110,7 +112,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun updateVintage() {
-        _vintage.value = bottleRepository.findBottleById(bottleId).vintage
+        _vintage.value =bottleRepository.findBottleById(bottleId).vintage
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +122,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         get() = _bottleTypeId
 
     private suspend fun updateBottleTypeId() {
-        _bottleTypeId.value = bottleRepository.findBottleById(bottleId).bottleTypeId
+        _bottleTypeId.value =
+            bottleRepository.findBottleById(bottleId).bottleTypeId
     }
 
     fun onBottleTypeIdChange(id: Int) {
@@ -229,7 +232,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun updateWineStillness() {
-        _wineStillness.value = bottleRepository.findBottleById(bottleId).wineStillness
+        _wineStillness.value =
+            bottleRepository.findBottleById(bottleId).wineStillness
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -531,7 +535,9 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     init {
-        viewModelScope.launch{updateBottleDetailViewModel()}
+        updateBottleDetailViewModel()
+        viewModelScope.launch {
+        }
     }
 }
 

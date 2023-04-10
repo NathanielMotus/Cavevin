@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.coroutineScope
 import com.nathaniel.motus.cavevin.databinding.ActivityMainBinding
 import com.nathaniel.motus.cavevin.model.*
@@ -20,6 +21,7 @@ import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModelFactory
 import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
 import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModelFactory
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     //todo : add possibility to overwrite user entered bottle type names with built-in bottle type names at any moment
 
 
-//    **********************************************************************************************
+    //    **********************************************************************************************
 //    MainActivity events
 //    **********************************************************************************************
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         saveDatas()
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     override fun onResume() {
         super.onResume()
         checkPermissions()
