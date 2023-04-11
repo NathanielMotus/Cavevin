@@ -28,10 +28,11 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     private val wineStillnessRepository =
         WineStillnessRepository(CellarDatabase.getDatabase(currentApplication))
     private val bottleImageRepository = BottleImageRepository(currentApplication)
+    private val cellarRepository=CellarRepository(CellarDatabase.getDatabase(currentApplication))
 
     private var bottleId=1
 
-    private fun updateBottleId(id: Int) {
+    fun updateBottleId(id: Int) {
         bottleId = id
         updateBottleDetailViewModel()
     }
@@ -39,6 +40,13 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     //**********************************
     //State
     //**********************************
+    private var _stock=MutableLiveData(0)
+    val stock:MutableLiveData<Int>
+    get() = _stock
+
+    private suspend fun updateStock(){
+        //todo
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     private var _bottleImageName: MutableLiveData<String?> = MutableLiveData(null)

@@ -15,10 +15,16 @@ import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 @Composable
 fun BottleDetailScreen(
     viewModel: BottleDetailViewModel,
+    onEdit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     WineCellarMainTheme() {
-        Scaffold() { paddingValues ->
+        Scaffold(topBar = {
+            BottleDetailTopBar(
+                viewModel = viewModel,
+                onEdit = onEdit
+            )
+        }) { paddingValues ->
             BottleDetailContent(viewModel = viewModel, modifier = modifier.padding(paddingValues))
         }
     }

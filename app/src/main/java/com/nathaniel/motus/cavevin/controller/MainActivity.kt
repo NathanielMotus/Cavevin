@@ -15,6 +15,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.coroutineScope
 import com.nathaniel.motus.cavevin.databinding.ActivityMainBinding
 import com.nathaniel.motus.cavevin.model.*
+import com.nathaniel.motus.cavevin.ui.WineCellarNavHost
 import com.nathaniel.motus.cavevin.ui.bottle_detail.BottleDetailScreen
 import com.nathaniel.motus.cavevin.ui.bottle_list.BottleListScreen
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
@@ -74,8 +75,10 @@ class MainActivity : AppCompatActivity() {
             Cellar.cellarPool[currentCellarIndex].cellList,
             CellComparator
         )
-        //binding.composeView.setContent { BottleListScreen(viewModel = bottleListViewModel) }
-        binding.composeView.setContent { BottleDetailScreen(viewModel = bottleDetailViewModel) }
+        binding.composeView.setContent { WineCellarNavHost(
+            bottleListViewModel = bottleListViewModel,
+            bottleDetailViewModel = bottleDetailViewModel
+        ) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

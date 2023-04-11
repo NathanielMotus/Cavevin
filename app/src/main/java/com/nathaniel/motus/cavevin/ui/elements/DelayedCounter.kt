@@ -64,7 +64,7 @@ private fun DelayedText(
     LaunchedEffect(key1 = count,
         block = {
             if (isActivated) {
-                delay(400)
+                delay(200)
                 onCountChange(count)
             } else isActivated = true
         })
@@ -75,3 +75,4 @@ private fun DelayedText(
         modifier = modifier
     )
 }
+//todo : try without delay

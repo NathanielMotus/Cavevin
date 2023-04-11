@@ -138,6 +138,14 @@ class BottleListViewModel(
         }
     }
 
+    fun updateStockForBottleInCellar(bottleId:Int,cellarId:Int,stock:Int){
+        updateStock(Stock(cellarId,bottleId,stock))
+    }
+
+    fun updateStockForBottleInCurrentCellar(bottleId:Int,stock: Int){
+        updateStock(Stock(currentCellarId,bottleId,stock))
+    }
+
     //*************************************
     //Wine color
     //*************************************

@@ -15,14 +15,15 @@ import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
 @Composable
 fun BottleListContent(
     viewModel: BottleListViewModel,
+    onNavigateToDetail:(bottleId:Int)->Unit,
     modifier: Modifier = Modifier,
-    onCountChange:(Int)->Unit={}
 ) {
     val cellarItems by viewModel.cellarItems.observeAsState(initial = null)
 
     LazyColumn(modifier=modifier){
         cellarItems?.forEach {
             item { BottleCard(
+                bottleId=it.bottleId,
                 bottleImageBitmap = it.bottleImageBitmap,
                 bottleImageUri = it.bottleImageUri,
                 appellation = it.appellation,
@@ -34,7 +35,8 @@ fun BottleListContent(
                 wineStillness = it.wineStillness,
                 rating = it.rating,
                 stock =it.stock,
-                onCountChange={onCountChange(it)}
+                onClick = {onNavigateToDetail(it)},
+                onCountChange={stock:Int->viewModel.updateStockForBottleInCurrentCellar(it.bottleId,stock)}
             ) }
         }
     }

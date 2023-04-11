@@ -12,12 +12,16 @@ import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
 @Composable
 fun BottleListScreen(
     viewModel: BottleListViewModel,
+    onNavigateToDetail: (bottleId: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     WineCellarMainTheme {
         Scaffold() { paddingValues ->
-            BottleListContent(viewModel = viewModel, modifier = modifier.padding(paddingValues), onCountChange = { println("Count : $it")})
-
+            BottleListContent(
+                viewModel = viewModel,
+                onNavigateToDetail = { onNavigateToDetail(it) },
+                modifier = modifier.padding(paddingValues)
+            )
         }
 
     }

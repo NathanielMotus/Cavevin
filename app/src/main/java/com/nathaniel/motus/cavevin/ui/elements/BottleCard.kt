@@ -2,6 +2,7 @@ package com.nathaniel.motus.cavevin.ui.elements
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BottleCard(
+    bottleId:Int,
     bottleImageBitmap: Bitmap?,
     bottleImageUri: Uri?,
     appellation: String?,
@@ -24,14 +26,16 @@ fun BottleCard(
     wineStillness: String,
     rating: Int,
     stock: Int,
+    onClick:(id:Int)->Unit,
     modifier: Modifier=Modifier,
     imageSize: Int = 80,
-    onCountChange:(Int)->Unit
+    onCountChange:(Int)->Unit,
 ) {
     Card(
         modifier = modifier
             .padding(2.dp)
             .fillMaxWidth()
+            .clickable {onClick(bottleId)  }
     ) {
         CardLayout {
             Box(modifier = modifier.padding(top = 8.dp)) {
