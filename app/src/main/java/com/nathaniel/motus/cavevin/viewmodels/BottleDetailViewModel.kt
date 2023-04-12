@@ -8,10 +8,7 @@ import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.data.*
-import com.nathaniel.motus.cavevin.data.cellar_database.Bottle
-import com.nathaniel.motus.cavevin.data.cellar_database.CellarDatabase
-import com.nathaniel.motus.cavevin.data.cellar_database.WineColor
-import com.nathaniel.motus.cavevin.data.cellar_database.WineStillness
+import com.nathaniel.motus.cavevin.data.cellar_database.*
 import com.nathaniel.motus.cavevin.utils.systemLanguage
 import kotlinx.coroutines.launch
 import java.io.File
@@ -28,13 +25,14 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     private val wineStillnessRepository =
         WineStillnessRepository(CellarDatabase.getDatabase(currentApplication))
     private val bottleImageRepository = BottleImageRepository(currentApplication)
-    private val cellarRepository=CellarRepository(CellarDatabase.getDatabase(currentApplication))
+    private val stockRepository=StockRepository(CellarDatabase.getDatabase(currentApplication))
 
     private var bottleId=1
+    private var cellarId=1
 
     fun updateBottleId(id: Int) {
         bottleId = id
-        updateBottleDetailViewModel()
+        loadBottleDetailViewModel()
     }
 
     //**********************************
@@ -44,8 +42,12 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val stock:MutableLiveData<Int>
     get() = _stock
 
-    private suspend fun updateStock(){
-        //todo
+    private suspend fun loadStock(){
+        _stock.value=stockRepository.getStockForBottleInCellar(bottleId,cellarId)
+    }
+
+    fun onStockChange(stock:Int?){
+        _stock.value=stock
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +63,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val bottleImageBitmap: LiveData<Bitmap?>
         get() = _bottleImageBitmap
 
-    private suspend fun updateBottleImage() {
+    private suspend fun loadBottleImage() {
         _bottleImageName.value = bottleRepository.findBottleById(bottleId).picture
         _bottleImageUri.value = bottleImageRepository.getBottleImageUri(bottleImageName.value)
         _bottleImageBitmap.value = bottleImageRepository.getBottleImageBitmap(bottleImageName.value)
@@ -77,7 +79,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _appellation.value = appellation
     }
 
-    private suspend fun updateAppellation() {
+    private suspend fun loadAppellation() {
         _appellation.value = bottleRepository.findBottleById(bottleId).appellation
     }
 
@@ -91,7 +93,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _domain.value = domain
     }
 
-    private suspend fun updateDomain() {
+    private suspend fun loadDomain() {
         _domain.value = bottleRepository.findBottleById(bottleId).domain
     }
 
@@ -105,7 +107,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _cuvee.value = cuvee
     }
 
-    private suspend fun updateCuvee() {
+    private suspend fun loadCuvee() {
         _cuvee.value = bottleRepository.findBottleById(bottleId).cuvee
     }
 
@@ -119,7 +121,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _vintage.value = vintage
     }
 
-    private suspend fun updateVintage() {
+    private suspend fun loadVintage() {
         _vintage.value =bottleRepository.findBottleById(bottleId).vintage
     }
 
@@ -129,7 +131,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val bottleTypeId: LiveData<Int>
         get() = _bottleTypeId
 
-    private suspend fun updateBottleTypeId() {
+    private suspend fun loadBottleTypeId() {
         _bottleTypeId.value =
             bottleRepository.findBottleById(bottleId).bottleTypeId
     }
@@ -148,7 +150,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _origin.value = origin
     }
 
-    private suspend fun updateOrigin() {
+    private suspend fun loadOrigin() {
         _origin.value = ""
         if (bottleRepository.findBottleById(bottleId).origin != null) {
             _origin.value = bottleRepository.findBottleById(bottleId).origin
@@ -165,7 +167,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _comment.value = comment
     }
 
-    private suspend fun updateComment() {
+    private suspend fun loadComment() {
         _comment.value = ""
         if (bottleRepository.findBottleById(bottleId).comment != null) {
             _comment.value = bottleRepository.findBottleById(bottleId).comment
@@ -182,7 +184,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _price.value = price
     }
 
-    private suspend fun updatePrice() {
+    private suspend fun loadPrice() {
         _price.value = bottleRepository.findBottleById(bottleId).price
     }
 
@@ -196,7 +198,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _currency.value = currency
     }
 
-    private suspend fun updateCurrency() {
+    private suspend fun loadCurrency() {
         _currency.value = bottleRepository.findBottleById(bottleId).currency
     }
 
@@ -210,7 +212,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _agingCapacity.value = agingCapacity
     }
 
-    private suspend fun updateAgingCapacity() {
+    private suspend fun loadAgingCapacity() {
         _agingCapacity.value =
             bottleRepository.findBottleById(bottleId).agingCapacity
     }
@@ -225,7 +227,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _wineColor.value = wineColor
     }
 
-    private suspend fun updateWineColor() {
+    private suspend fun loadWineColor() {
         _wineColor.value = bottleRepository.findBottleById(bottleId).wineColor
     }
 
@@ -239,7 +241,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _wineStillness.value = wineStillness
     }
 
-    private suspend fun updateWineStillness() {
+    private suspend fun loadWineStillness() {
         _wineStillness.value =
             bottleRepository.findBottleById(bottleId).wineStillness
     }
@@ -250,7 +252,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val imageName: LiveData<String>
         get() = _imageName
 
-    private suspend fun updateImageName() {
+    private suspend fun loadImageName() {
         _imageName.value = ""
         if (bottleRepository.findBottleById(bottleId).picture != null) {
             _imageName.value = bottleRepository.findBottleById(bottleId).picture
@@ -267,7 +269,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _rating.value = rating
     }
 
-    private suspend fun updateRating() {
+    private suspend fun loadRating() {
         _rating.value = bottleRepository.findBottleById(bottleId).rating
     }
 
@@ -277,7 +279,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val redWineTranslation: LiveData<String>
         get() = _redWineTranslation
 
-    private suspend fun updateRedWineTranslation() {
+    private suspend fun loadRedWineTranslation() {
         _redWineTranslation.value = wineColorRepository.findWineColorTranslation(
             WineColor.RED,
             systemLanguage()
@@ -290,7 +292,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val whiteWineTranslation: LiveData<String>
         get() = _whiteWineTranslation
 
-    private suspend fun updateWhiteWineTranslation() {
+    private suspend fun loadWhiteWineTranslation() {
         _whiteWineTranslation.value = wineColorRepository.findWineColorTranslation(
             WineColor.WHITE,
             systemLanguage()
@@ -303,7 +305,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val pinkWineTranslation: LiveData<String>
         get() = _pinkWineTranslation
 
-    private suspend fun updatePinkWineTranslation() {
+    private suspend fun loadPinkWineTranslation() {
         _pinkWineTranslation.value = wineColorRepository.findWineColorTranslation(
             WineColor.PINK,
             systemLanguage()
@@ -316,7 +318,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val stillWineTranslation: LiveData<String>
         get() = _stillWineTranslation
 
-    private suspend fun updateStillWineTranslation() {
+    private suspend fun loadStillWineTranslation() {
         _stillWineTranslation.value = wineStillnessRepository.findWineStillnessTranslation(
             WineStillness.STILL,
             systemLanguage()
@@ -329,7 +331,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val sparklingWineTranslation: LiveData<String>
         get() = _sparklingWineTranslation
 
-    private suspend fun updateSparklingWineTranslation() {
+    private suspend fun loadSparklingWineTranslation() {
         _sparklingWineTranslation.value = wineStillnessRepository.findWineStillnessTranslation(
             WineStillness.SPARKLING,
             systemLanguage()
@@ -342,7 +344,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val bottleTypesAndCapacities: LiveData<List<Pair<Int, String>>>
         get() = _bottleTypesAndCapacities
 
-    private suspend fun updateBottleTypesAndCapacities() {
+    private suspend fun loadBottleTypesAndCapacities() {
         _bottleTypesAndCapacities.value = mutableListOf()
         for (id in bottleTypeRepository.getBottleTypeIds()) {
             (_bottleTypesAndCapacities.value as MutableList<Pair<Int, String>>).add(
@@ -379,7 +381,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val appellations: LiveData<List<String>>
         get() = _appellations
 
-    private suspend fun updateAppellations() {
+    private suspend fun loadAppellations() {
         _appellations.value = bottleRepository.getAppellations()
     }
 
@@ -389,7 +391,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val domains: LiveData<List<String>>
         get() = _domains
 
-    private suspend fun updateDomains() {
+    private suspend fun loadDomains() {
         _domains.value = bottleRepository.getDomains()
     }
 
@@ -399,7 +401,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     val cuvees: LiveData<List<String>>
         get() = _cuvees
 
-    private suspend fun updateCuvees() {
+    private suspend fun loadCuvees() {
         _cuvees.value = bottleRepository.getCuvees()
     }
 
@@ -407,32 +409,33 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     //update
     //************************************
 
-    fun updateBottleDetailViewModel() {
+    fun loadBottleDetailViewModel() {
         viewModelScope.launch {
-            updateAppellation()
-            updateDomain()
-            updateCuvee()
-            updateVintage()
-            updatePrice()
-            updateCurrency()
-            updateAgingCapacity()
-            updateWineColor()
-            updateWineStillness()
-            updateOrigin()
-            updateComment()
-            updateImageName()
-            updateRating()
-            updateRedWineTranslation()
-            updateWhiteWineTranslation()
-            updatePinkWineTranslation()
-            updateSparklingWineTranslation()
-            updateStillWineTranslation()
-            updateBottleTypesAndCapacities()
-            updateBottleTypeId()
-            updateAppellations()
-            updateDomains()
-            updateCuvees()
-            updateBottleImage()
+            loadAppellation()
+            loadDomain()
+            loadCuvee()
+            loadVintage()
+            loadPrice()
+            loadCurrency()
+            loadAgingCapacity()
+            loadWineColor()
+            loadWineStillness()
+            loadOrigin()
+            loadComment()
+            loadImageName()
+            loadRating()
+            loadRedWineTranslation()
+            loadWhiteWineTranslation()
+            loadPinkWineTranslation()
+            loadSparklingWineTranslation()
+            loadStillWineTranslation()
+            loadBottleTypesAndCapacities()
+            loadBottleTypeId()
+            loadAppellations()
+            loadDomains()
+            loadCuvees()
+            loadBottleImage()
+            loadStock()
         }
     }
 
@@ -539,11 +542,12 @@ class BottleDetailViewModel(private val currentApplication: Application) :
                     bottleImageName.value
                 )
             )
+            stockRepository.updateStock(Stock(cellarId,bottleId,stock.value?:0))
         }
     }
 
     init {
-        updateBottleDetailViewModel()
+        loadBottleDetailViewModel()
         viewModelScope.launch {
         }
     }

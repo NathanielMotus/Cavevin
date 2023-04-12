@@ -27,7 +27,7 @@ fun BottleEditTopBar(viewModel: BottleDetailViewModel, modifier: Modifier = Modi
         },
         actions = {
             IconButton(onClick = {
-                viewModel.updateBottleDetailViewModel()
+                viewModel.loadBottleDetailViewModel()
                 activity.onBackPressedDispatcher.onBackPressed()
             }) {
                 Icon(imageVector = Icons.Default.Clear, contentDescription = "")

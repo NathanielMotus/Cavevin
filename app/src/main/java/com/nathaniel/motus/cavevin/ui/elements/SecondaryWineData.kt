@@ -20,12 +20,23 @@ import java.util.Currency
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun SecondaryWineData(
+    stock: Int?,
     agingCapacity: Int?,
     price: Double?,
     currency: String?,
     modifier: Modifier = Modifier
 ) {
     Column() {
+        Row {
+            Image(
+                painter = painterResource(id = R.drawable.outline_warehouse_24),
+                contentDescription = "",
+                modifier = modifier.size(24.dp),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+            )
+            Spacer(modifier = modifier.size(8.dp))
+            Text(text = "$stock", style = MaterialTheme.typography.bodyLarge)
+        }
         if (agingCapacity != null)
             Row() {
                 Image(
@@ -48,7 +59,11 @@ fun SecondaryWineData(
                 )
                 Spacer(modifier = modifier.size(8.dp))
                 Text(
-                    text = if (currency!=null && currency.length==3) "$price ${Currency.getInstance(currency).symbol}"
+                    text = if (currency != null && currency.length == 3) "$price ${
+                        Currency.getInstance(
+                            currency
+                        ).symbol
+                    }"
                     else "$price ${Currency.getInstance(defaultCurrencyCode()).symbol}",
                     style = MaterialTheme.typography.bodyLarge
                 )

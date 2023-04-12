@@ -53,6 +53,7 @@ fun BottleDetailContent(
                 ""
             )
         )
+        val stock by viewModel.stock.observeAsState(initial = 0)
 
         Box(
             modifier = modifier
@@ -84,9 +85,13 @@ fun BottleDetailContent(
             )
         }
 
-        if (agingCapacity != null || price != null)
             BottleDetailCard {
-                SecondaryWineData(agingCapacity = agingCapacity, price = price, currency = currency)
+                SecondaryWineData(
+                    stock = stock?:0,
+                    agingCapacity = agingCapacity,
+                    price = price,
+                    currency = currency
+                )
             }
 
         if (origin != null && origin != "")

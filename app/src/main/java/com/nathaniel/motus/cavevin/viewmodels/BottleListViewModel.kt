@@ -132,18 +132,14 @@ class BottleListViewModel(
     //**********************************************************************************************
     //Stock
     //**********************************************************************************************
-    fun updateStock(stock: Stock) {
+    private fun updateStock(stock: Stock) {
         viewModelScope.launch {
             stockRepository.updateStock(stock)
         }
     }
 
-    fun updateStockForBottleInCellar(bottleId:Int,cellarId:Int,stock:Int){
-        updateStock(Stock(cellarId,bottleId,stock))
-    }
-
-    fun updateStockForBottleInCurrentCellar(bottleId:Int,stock: Int){
-        updateStock(Stock(currentCellarId,bottleId,stock))
+    fun updateStockForBottleInCurrentCellar(bottleId: Int, stock: Int) {
+        updateStock(Stock(currentCellarId, bottleId, stock))
     }
 
     //*************************************
@@ -188,8 +184,16 @@ class BottleListViewModel(
         findBottleById(cellarEntry.bottleId).agingCapacity,
         findBottleById(cellarEntry.bottleId).comment,
         findBottleById(cellarEntry.bottleId).rating,
-        bottleImageRepository.getBottleBitmapThumbnail(findBottleById(cellarEntry.bottleId).picture),
-        bottleImageRepository.getBottleImageUri(findBottleById(cellarEntry.bottleId).picture)
+        if (findBottleById(cellarEntry.bottleId).picture != null
+            && findBottleById(cellarEntry.bottleId).picture != ""
+        ) bottleImageRepository.getBottleBitmapThumbnail(
+            findBottleById(cellarEntry.bottleId).picture
+        ) else null,
+        if (findBottleById(cellarEntry.bottleId).picture != null
+            && findBottleById(cellarEntry.bottleId).picture != ""
+        ) bottleImageRepository.getBottleImageUri(
+            findBottleById(cellarEntry.bottleId).picture
+        ) else null
     )
 
     private suspend fun createCellarItems(newCellarEntries: List<CellarEntry>) {

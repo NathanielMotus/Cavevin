@@ -17,4 +17,7 @@ interface StockDao {
 
     @Query("SELECT * FROM stock")
     fun getStocks(): LiveData<List<Stock>>
+
+    @Query("SELECT quantity FROM stock where cellar_id=:cellarId AND bottle_id=:bottleId")
+    suspend fun getStockForBottleInCellar(bottleId:Int,cellarId:Int):Int
 }

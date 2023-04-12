@@ -13,7 +13,7 @@ import com.nathaniel.motus.cavevin.R
 import kotlinx.coroutines.delay
 
 @Composable
-fun DelayedCounter(
+fun StandardCounter(
     count: Int, onCountChange: (Int) -> Unit, isEnabled: Boolean, modifier: Modifier = Modifier
 ) {
     var counter by remember { mutableStateOf(count) }
@@ -23,15 +23,27 @@ fun DelayedCounter(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CounterButton(
-            onClick = { counter++ },
+            onClick = {
+                counter++
+                onCountChange(counter)
+            },
             enabled = isEnabled,
             resourceId = R.drawable.outline_add_24
         )
 
-        DelayedText(count = counter, onCountChange = { onCountChange(it) })
+        Text(
+            text = count.toString(),
+            style = MaterialTheme.typography.titleLarge,
+            modifier = modifier
+        )
 
         CounterButton(
-            onClick = { if (counter > 0) counter-- },
+            onClick = {
+                if (counter > 0) {
+                    counter--
+                    onCountChange(counter)
+                }
+            },
             enabled = isEnabled,
             resourceId = R.drawable.outline_remove_24
         )
@@ -48,34 +60,8 @@ private fun CounterButton(
         onClick = onClick,
         enabled = enabled,
         shape = RoundedCornerShape(12.dp),
-        contentPadding = PaddingValues(4.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.secondary,
-            contentColor = MaterialTheme.colorScheme.onSecondary
-        )
+        contentPadding = PaddingValues(4.dp)
     ) {
         Image(painter = painterResource(id = resourceId), contentDescription = "")
     }
-}
-
-@Composable
-private fun DelayedText(
-    count: Int,
-    onCountChange: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var isActivated by remember { mutableStateOf(false) }
-    LaunchedEffect(key1 = count,
-        block = {
-            if (isActivated) {
-                delay(400)
-                onCountChange(count)
-            } else isActivated = true
-        })
-
-    Text(
-        text = count.toString(),
-        style = MaterialTheme.typography.titleLarge,
-        modifier = modifier
-    )
 }

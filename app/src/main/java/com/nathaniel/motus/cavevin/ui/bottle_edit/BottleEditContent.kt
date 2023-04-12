@@ -28,11 +28,12 @@ fun BottleEditContent(
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
-    Surface(modifier = Modifier
-        .clickable(
-            interactionSource = MutableInteractionSource(),
-            indication = null
-        ) { focusManager.clearFocus() },
+    Surface(
+        modifier = Modifier
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null
+            ) { focusManager.clearFocus() },
     ) {
 
         Column(
@@ -71,6 +72,7 @@ fun BottleEditContent(
             val inputAgingCapacity by viewModel.agingCapacity.observeAsState(initial = null)
             val inputBottleImageBitmap by viewModel.bottleImageBitmap.observeAsState(initial = null)
             val inputBottleImageUri by viewModel.bottleImageUri.observeAsState(initial = null)
+            val inputStock by viewModel.stock.observeAsState(initial = 0)
 
             Box(
                 modifier = modifier
@@ -166,6 +168,12 @@ fun BottleEditContent(
                 )
             )
 
+            GenericOutlinedIntegerField(
+                value = inputStock,
+                onValueChange = {viewModel.onStockChange(it)},
+                labelText = stringResource(id = R.string.stock)
+            )
+
             GenericOutlineTextField(
                 value = inputOrigin,
                 onValueChange = { viewModel.onOriginChange(it) },
@@ -202,5 +210,3 @@ fun BottleEditContent(
         }
     }
 }
-
-//todo : add stock input for current cellar

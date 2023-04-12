@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import com.nathaniel.motus.cavevin.viewmodels.BottleDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,12 +22,13 @@ fun BottleDetailTopBar(
 ) {
     val activity = LocalContext.current as AppCompatActivity
     val barTitle by viewModel.appellation.observeAsState(initial = "")
-    TopAppBar(title = { Text(text = barTitle) }, navigationIcon = {
-        IconButton(onClick = { activity.onBackPressedDispatcher.onBackPressed() }) {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
+    TopAppBar(title = { Text(text = barTitle, overflow = TextOverflow.Ellipsis, maxLines = 1) },
+        navigationIcon = {
+            IconButton(onClick = { activity.onBackPressedDispatcher.onBackPressed() }) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
 
-        }
-    },
+            }
+        },
         actions = {
             IconButton(onClick = onEdit) {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = "")
