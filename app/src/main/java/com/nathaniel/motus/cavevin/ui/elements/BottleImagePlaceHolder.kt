@@ -29,7 +29,7 @@ fun BottleImagePlaceHolder(
         else -> pinkWineColor
     }
     val placeHolderName: String =
-        if (appellation != "") appellation?.first().toString() else "?"
+        if (appellation != "" && appellation!=null) appellation?.first().toString() else "?"
     Box(
         modifier = modifier
             .requiredSize(imageSize.dp),

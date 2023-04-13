@@ -29,6 +29,8 @@ fun WineCellarNavHost(
         composable("list") {
             BottleListScreen(
                 viewModel = bottleListViewModel,
+                onFloatingActionButtonClick = {bottleDetailViewModel.updateBottleId(0)
+                                              navController.navigate("edit")},
                 onNavigateToDetail = {
                     bottleDetailViewModel.updateBottleId(it)
                     navController.navigate("detail")

@@ -11,9 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BottleListFloatingActionButton(modifier: Modifier = Modifier) {
+
+fun BottleListFloatingActionButton(onClick:()->Unit,modifier: Modifier = Modifier) {
     FloatingActionButton(
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
         shape = CircleShape,

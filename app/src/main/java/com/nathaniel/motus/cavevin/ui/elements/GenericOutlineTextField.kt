@@ -13,14 +13,14 @@ import androidx.compose.ui.text.input.ImeAction
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GenericOutlineTextField(
-    value: String,
+    value: String?,
     onValueChange: (value: String) -> Unit,
     labelText: String = "",
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
     OutlinedTextField(
-        value = value,
+        value = value?:"",
         onValueChange = { it -> onValueChange(it) },
         label = { Text(text = labelText) },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),

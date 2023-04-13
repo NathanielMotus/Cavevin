@@ -11,7 +11,7 @@ import androidx.compose.ui.text.input.ImeAction
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AutocompleteTextInput(
-    value: String,
+    value: String?,
     onValueChange: (value: String) -> Unit,
     suggestions: List<String>,
     labelText: String = "",
@@ -21,7 +21,7 @@ fun AutocompleteTextInput(
     val focusManager = LocalFocusManager.current
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
         OutlinedTextField(
-            value = value,
+            value = value?:"",
             onValueChange = { value: String -> onValueChange(value) },
             label = { Text(text = labelText) },
             modifier = modifier
@@ -34,7 +34,7 @@ fun AutocompleteTextInput(
         )
 
         val filterSuggestions =
-            suggestions.filter { it.contains(value, ignoreCase = true) }.sorted()
+            if(value!=null) suggestions.filter { it.contains(value, ignoreCase = true) }.sorted() else listOf()
         if (filterSuggestions.isNotEmpty()) {
             ExposedDropdownMenu(
                 expanded = expanded,

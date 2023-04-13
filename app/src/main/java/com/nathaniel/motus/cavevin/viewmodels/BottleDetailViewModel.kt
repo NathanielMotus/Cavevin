@@ -25,10 +25,10 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     private val wineStillnessRepository =
         WineStillnessRepository(CellarDatabase.getDatabase(currentApplication))
     private val bottleImageRepository = BottleImageRepository(currentApplication)
-    private val stockRepository=StockRepository(CellarDatabase.getDatabase(currentApplication))
+    private val stockRepository = StockRepository(CellarDatabase.getDatabase(currentApplication))
 
-    private var bottleId=1
-    private var cellarId=1
+    private var bottleId = 1
+    private var cellarId = 1
 
     fun updateBottleId(id: Int) {
         bottleId = id
@@ -38,16 +38,17 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     //**********************************
     //State
     //**********************************
-    private var _stock=MutableLiveData(0)
-    val stock:MutableLiveData<Int>
-    get() = _stock
+    private var _stock = MutableLiveData(0)
+    val stock: MutableLiveData<Int>
+        get() = _stock
 
-    private suspend fun loadStock(){
-        _stock.value=stockRepository.getStockForBottleInCellar(bottleId,cellarId)
+    private suspend fun loadStock() {
+        _stock.value =
+            if (bottleId != 0) stockRepository.getStockForBottleInCellar(bottleId, cellarId) else 0
     }
 
-    fun onStockChange(stock:Int?){
-        _stock.value=stock
+    fun onStockChange(stock: Int?) {
+        _stock.value = stock
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +65,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         get() = _bottleImageBitmap
 
     private suspend fun loadBottleImage() {
-        _bottleImageName.value = bottleRepository.findBottleById(bottleId).picture
+        _bottleImageName.value =
+            if (bottleId != 0) bottleRepository.findBottleById(bottleId).picture else null
         _bottleImageUri.value = bottleImageRepository.getBottleImageUri(bottleImageName.value)
         _bottleImageBitmap.value = bottleImageRepository.getBottleImageBitmap(bottleImageName.value)
     }
@@ -80,8 +82,10 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadAppellation() {
-        _appellation.value = bottleRepository.findBottleById(bottleId).appellation
+        _appellation.value =
+            if (bottleId != 0 && bottleRepository.findBottleById(bottleId)!=null) bottleRepository.findBottleById(bottleId).appellation else null
     }
+    //todo : clean the from scratch issue
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -94,7 +98,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadDomain() {
-        _domain.value = bottleRepository.findBottleById(bottleId).domain
+        _domain.value =
+            if (bottleId != 0) bottleRepository.findBottleById(bottleId).domain else null
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +113,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadCuvee() {
-        _cuvee.value = bottleRepository.findBottleById(bottleId).cuvee
+        _cuvee.value = if (bottleId != 0) bottleRepository.findBottleById(bottleId).cuvee else null
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +127,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadVintage() {
-        _vintage.value =bottleRepository.findBottleById(bottleId).vintage
+        _vintage.value =
+            if (bottleId != 0) bottleRepository.findBottleById(bottleId).vintage else null
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,8 +138,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         get() = _bottleTypeId
 
     private suspend fun loadBottleTypeId() {
-        _bottleTypeId.value =
-            bottleRepository.findBottleById(bottleId).bottleTypeId
+        _bottleTypeId.value = if (bottleId != 0)
+            bottleRepository.findBottleById(bottleId).bottleTypeId else 0
     }
 
     fun onBottleTypeIdChange(id: Int) {
@@ -151,10 +157,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadOrigin() {
-        _origin.value = ""
-        if (bottleRepository.findBottleById(bottleId).origin != null) {
-            _origin.value = bottleRepository.findBottleById(bottleId).origin
-        }
+        _origin.value =
+            if (bottleId != 0) bottleRepository.findBottleById(bottleId).origin else null
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,10 +172,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadComment() {
-        _comment.value = ""
-        if (bottleRepository.findBottleById(bottleId).comment != null) {
-            _comment.value = bottleRepository.findBottleById(bottleId).comment
-        }
+        _comment.value =
+            if (bottleId != 0) bottleRepository.findBottleById(bottleId).comment else null
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,7 +187,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadPrice() {
-        _price.value = bottleRepository.findBottleById(bottleId).price
+        _price.value = if (bottleId != 0) bottleRepository.findBottleById(bottleId).price else null
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +201,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadCurrency() {
-        _currency.value = bottleRepository.findBottleById(bottleId).currency
+        _currency.value =
+            if (bottleId != 0) bottleRepository.findBottleById(bottleId).currency else null
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,8 +216,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadAgingCapacity() {
-        _agingCapacity.value =
-            bottleRepository.findBottleById(bottleId).agingCapacity
+        _agingCapacity.value = if (bottleId != 0)
+            bottleRepository.findBottleById(bottleId).agingCapacity else null
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,7 +231,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadWineColor() {
-        _wineColor.value = bottleRepository.findBottleById(bottleId).wineColor
+        _wineColor.value =
+            if (bottleId != 0) bottleRepository.findBottleById(bottleId).wineColor else WineColor.RED
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,21 +246,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadWineStillness() {
-        _wineStillness.value =
-            bottleRepository.findBottleById(bottleId).wineStillness
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private var _imageName = MutableLiveData("")
-    val imageName: LiveData<String>
-        get() = _imageName
-
-    private suspend fun loadImageName() {
-        _imageName.value = ""
-        if (bottleRepository.findBottleById(bottleId).picture != null) {
-            _imageName.value = bottleRepository.findBottleById(bottleId).picture
-        }
+        _wineStillness.value = if (bottleId != 0)
+            bottleRepository.findBottleById(bottleId).wineStillness else WineStillness.STILL
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,7 +261,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun loadRating() {
-        _rating.value = bottleRepository.findBottleById(bottleId).rating
+        _rating.value = if (bottleId != 0) bottleRepository.findBottleById(bottleId).rating else 0
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -369,11 +360,14 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     private fun transformBottleTypeIdIntoSelectedBottleTypeItem(id: Int): LiveData<Pair<Int, String>> {
         var theItem = Pair(0, "")
         if (bottleTypesAndCapacities.value != null)
+            theItem=bottleTypesAndCapacities.value!!.first()
             for (item in bottleTypesAndCapacities.value!!)
                 if (item.first == id)
                     theItem = item
         return MutableLiveData(theItem)
     }
+
+    //todo clean the no bottle type issue
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -422,7 +416,6 @@ class BottleDetailViewModel(private val currentApplication: Application) :
             loadWineStillness()
             loadOrigin()
             loadComment()
-            loadImageName()
             loadRating()
             loadRedWineTranslation()
             loadWhiteWineTranslation()
@@ -437,29 +430,6 @@ class BottleDetailViewModel(private val currentApplication: Application) :
             loadBottleImage()
             loadStock()
         }
-    }
-
-    suspend fun createOrUpdateBottle() {
-        if (bottleId != 0)
-            bottleRepository.updateBottle(
-                Bottle(
-                    bottleId,
-                    appellation.value,
-                    domain.value,
-                    cuvee.value,
-                    vintage.value,
-                    wineColor.value!!,
-                    wineStillness.value!!,
-                    comment.value,
-                    bottleTypeId.value!!,
-                    price.value,
-                    currency.value,
-                    agingCapacity.value,
-                    origin.value,
-                    rating.value!!,
-                    imageName.value
-                )
-            )
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -510,10 +480,10 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     }
 
     private suspend fun updateBottleDatabaseImage(): String? {
-        return bottleImageRepository.replaceBottleImage(
+        return if (bottleId != 0) bottleImageRepository.replaceBottleImage(
             bottleRepository.findBottleById(bottleId).picture,
             bottleImageBitmap.value
-        )
+        ) else bottleImageRepository.insertBottleImage(bottleImageBitmap.value)
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -522,27 +492,52 @@ class BottleDetailViewModel(private val currentApplication: Application) :
 
     fun onValidate() {
         viewModelScope.launch {
-            bottleImageName.value = updateBottleDatabaseImage()
-            bottleRepository.updateBottle(
-                Bottle(
-                    bottleId,
-                    appellation.value,
-                    domain.value,
-                    cuvee.value,
-                    vintage.value,
-                    wineColor.value!!,
-                    wineStillness.value!!,
-                    comment.value,
-                    bottleTypeId.value!!,
-                    price.value,
-                    currency.value,
-                    agingCapacity.value,
-                    origin.value,
-                    rating.value!!,
-                    bottleImageName.value
+            if (bottleId != 0) {
+                bottleImageName.value = updateBottleDatabaseImage()
+                bottleRepository.updateBottle(
+                    Bottle(
+                        bottleId,
+                        appellation.value,
+                        domain.value,
+                        cuvee.value,
+                        vintage.value,
+                        wineColor.value!!,
+                        wineStillness.value!!,
+                        comment.value,
+                        bottleTypeId.value!!,
+                        price.value,
+                        currency.value,
+                        agingCapacity.value,
+                        origin.value,
+                        rating.value!!,
+                        bottleImageName.value
+                    )
                 )
-            )
-            stockRepository.updateStock(Stock(cellarId,bottleId,stock.value?:0))
+                stockRepository.updateStock(Stock(cellarId, bottleId, stock.value ?: 0))
+            } else {
+                bottleImageName.value = updateBottleDatabaseImage()
+                bottleRepository.insertBottle(
+                    Bottle(
+                        bottleId,
+                        appellation.value,
+                        domain.value,
+                        cuvee.value,
+                        vintage.value,
+                        wineColor.value!!,
+                        wineStillness.value!!,
+                        comment.value,
+                        bottleTypeId.value!!,
+                        price.value,
+                        currency.value,
+                        agingCapacity.value,
+                        origin.value,
+                        rating.value!!,
+                        bottleImageName.value
+                    )
+                )
+                //todo : find a way to get created bottleId
+                stockRepository.insertStock(Stock(cellarId, bottleRepository.getLastBottleId(), stock.value ?: 0))
+            }
         }
     }
 

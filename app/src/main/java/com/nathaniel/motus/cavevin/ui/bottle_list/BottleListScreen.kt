@@ -12,11 +12,12 @@ import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
 @Composable
 fun BottleListScreen(
     viewModel: BottleListViewModel,
+    onFloatingActionButtonClick: () -> Unit,
     onNavigateToDetail: (bottleId: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     WineCellarMainTheme {
-        Scaffold(floatingActionButton = { BottleListFloatingActionButton()}) { paddingValues ->
+        Scaffold(floatingActionButton = { BottleListFloatingActionButton(onFloatingActionButtonClick) }) { paddingValues ->
             BottleListContent(
                 viewModel = viewModel,
                 onNavigateToDetail = { onNavigateToDetail(it) },

@@ -17,7 +17,7 @@ interface BottleDao {
     suspend fun delete(bottle: Bottle)
 
     @Query("SELECT id FROM bottle ORDER BY ID DESC LIMIT 1")
-    suspend fun getLastBottleId():Int?
+    suspend fun getLastBottleId():Int
 
     @Query("SELECT * FROM bottle WHERE id=:id")
     suspend fun findBottleById(id:Int):Bottle
