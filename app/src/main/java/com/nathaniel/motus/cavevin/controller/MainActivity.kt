@@ -28,6 +28,8 @@ import java.io.File
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    //todo : implement shared preferences repository
+    //todo : implement cellar management (especially when running app the first time)
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
@@ -81,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         ) }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         //Export database
@@ -149,7 +152,7 @@ class MainActivity : AppCompatActivity() {
     //initialize shared preferences
 //check current cellar index is relevant (in case of unexpected application fail)
     private val sharedPreferences: Unit
-        private get() {
+        get() {
             //initialize shared preferences
             currentCellarIndex = getPreferences(MODE_PRIVATE).getInt(CURRENT_CELLAR_INDEX, 0)
             //check current cellar index is relevant (in case of unexpected application fail)
@@ -159,7 +162,7 @@ class MainActivity : AppCompatActivity() {
             sSortOption = getPreferences(MODE_PRIVATE).getInt(CURRENT_SORT_OPTION, 0)
         }
 
-    //    **********************************************************************************************
+//    **********************************************************************************************
 //    Working subs
 //    **********************************************************************************************
     private fun loadDatas() {

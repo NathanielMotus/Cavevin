@@ -27,7 +27,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
     private val bottleImageRepository = BottleImageRepository(currentApplication)
     private val stockRepository = StockRepository(CellarDatabase.getDatabase(currentApplication))
 
-    private var bottleId = 1
+    private var bottleId = 0
     private var cellarId = 1
 
     fun updateBottleId(id: Int) {
@@ -70,7 +70,6 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _bottleImageUri.value = bottleImageRepository.getBottleImageUri(bottleImageName.value)
         _bottleImageBitmap.value = bottleImageRepository.getBottleImageBitmap(bottleImageName.value)
     }
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private var _appellation = MutableLiveData("")
@@ -85,8 +84,6 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         _appellation.value =
             if (bottleId != 0 && bottleRepository.findBottleById(bottleId)!=null) bottleRepository.findBottleById(bottleId).appellation else null
     }
-    //todo : clean the from scratch issue
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private var _domain = MutableLiveData("")
@@ -139,7 +136,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
 
     private suspend fun loadBottleTypeId() {
         _bottleTypeId.value = if (bottleId != 0)
-            bottleRepository.findBottleById(bottleId).bottleTypeId else 0
+            bottleRepository.findBottleById(bottleId).bottleTypeId else 1
     }
 
     fun onBottleTypeIdChange(id: Int) {
@@ -367,8 +364,6 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         return MutableLiveData(theItem)
     }
 
-    //todo clean the no bottle type issue
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private val _appellations = MutableLiveData<List<String>>()
@@ -422,8 +417,8 @@ class BottleDetailViewModel(private val currentApplication: Application) :
             loadPinkWineTranslation()
             loadSparklingWineTranslation()
             loadStillWineTranslation()
-            loadBottleTypesAndCapacities()
             loadBottleTypeId()
+            loadBottleTypesAndCapacities()
             loadAppellations()
             loadDomains()
             loadCuvees()
