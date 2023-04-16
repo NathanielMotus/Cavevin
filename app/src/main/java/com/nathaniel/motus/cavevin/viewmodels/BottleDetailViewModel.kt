@@ -82,7 +82,9 @@ class BottleDetailViewModel(private val currentApplication: Application) :
 
     private suspend fun loadAppellation() {
         _appellation.value =
-            if (bottleId != 0 && bottleRepository.findBottleById(bottleId)!=null) bottleRepository.findBottleById(bottleId).appellation else null
+            if (bottleId != 0 && bottleRepository.findBottleById(bottleId) != null) bottleRepository.findBottleById(
+                bottleId
+            ).appellation else null
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -356,11 +358,12 @@ class BottleDetailViewModel(private val currentApplication: Application) :
 
     private fun transformBottleTypeIdIntoSelectedBottleTypeItem(id: Int): LiveData<Pair<Int, String>> {
         var theItem = Pair(0, "")
-        if (bottleTypesAndCapacities.value != null)
-            theItem=bottleTypesAndCapacities.value!!.first()
+        if (bottleTypesAndCapacities.value != null) {
+            theItem = bottleTypesAndCapacities.value!!.first()
             for (item in bottleTypesAndCapacities.value!!)
                 if (item.first == id)
                     theItem = item
+        }
         return MutableLiveData(theItem)
     }
 
@@ -531,7 +534,13 @@ class BottleDetailViewModel(private val currentApplication: Application) :
                     )
                 )
                 //todo : find a way to get created bottleId
-                stockRepository.insertStock(Stock(cellarId, bottleRepository.getLastBottleId(), stock.value ?: 0))
+                stockRepository.insertStock(
+                    Stock(
+                        cellarId,
+                        bottleRepository.getLastBottleId(),
+                        stock.value ?: 0
+                    )
+                )
             }
         }
     }

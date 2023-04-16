@@ -1,19 +1,12 @@
 package com.nathaniel.motus.cavevin.viewmodels
 
 import android.app.Application
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.*
-import com.nathaniel.motus.cavevin.controller.CellarPictureUtils
-import com.nathaniel.motus.cavevin.controller.CellarStorageUtils
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.*
-import com.nathaniel.motus.cavevin.transformers.CellarItemComparator
 import com.nathaniel.motus.cavevin.utils.systemLanguage
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
-import java.util.function.Predicate
 
 class BottleListViewModel(
     private val application: Application
@@ -33,12 +26,9 @@ class BottleListViewModel(
         WineStillnessRepository(CellarDatabase.getDatabase(application))
     private val bottleImageRepository = BottleImageRepository(application = application)
 
-    init {
-        updateBottleListViewModel()
-    }
-
-    private fun updateBottleListViewModel() {
+    private fun loadBottleListViewModel() {
         viewModelScope.launch {
+            loadCellarName()
             cellarRepository.getCellarEntries().collect {
                 createCellarItems(it)
             }
@@ -49,6 +39,15 @@ class BottleListViewModel(
     //State
     //***********************************
     private var currentCellarId = 1
+
+    private var _cellarName = MutableLiveData("")
+    val cellarName: LiveData<String>
+        get() = _cellarName
+
+    suspend fun loadCellarName() {
+        _cellarName.value=cellarRepository.getCellar(currentCellarId).name
+    }
+    //**********************************************************************************************
 
     private var _redIsEnable = MutableLiveData(true)
     val redIsEnable: LiveData<Boolean>
@@ -232,7 +231,7 @@ class BottleListViewModel(
             PINK_FILTER -> _pinkIsEnable.value = !pinkIsEnable.value!!
             EMPTY_FILTER -> _emptyIsEnable.value = !emptyIsEnable.value!!
         }
-        updateBottleListViewModel()
+        loadBottleListViewModel()
     }
 
 
@@ -243,6 +242,10 @@ class BottleListViewModel(
         const val WHITE_FILTER = "whiteFilter"
         const val PINK_FILTER = "pinkFilter"
         const val EMPTY_FILTER = "emptyFilter"
+    }
+
+    init {
+        loadBottleListViewModel()
     }
 }
 

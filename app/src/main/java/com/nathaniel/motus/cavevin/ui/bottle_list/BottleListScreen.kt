@@ -17,7 +17,8 @@ fun BottleListScreen(
     modifier: Modifier = Modifier
 ) {
     WineCellarMainTheme {
-        Scaffold(floatingActionButton = { BottleListFloatingActionButton(onFloatingActionButtonClick) }) { paddingValues ->
+        Scaffold(floatingActionButton = { BottleListFloatingActionButton(onFloatingActionButtonClick) },
+            topBar = { BottleListTopBar(viewModel = viewModel) }) { paddingValues ->
             BottleListContent(
                 viewModel = viewModel,
                 onNavigateToDetail = { onNavigateToDetail(it) },

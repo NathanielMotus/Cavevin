@@ -23,7 +23,7 @@ interface CellarDao {
     suspend fun getLastCellarId(): Int?
 
     @Query("SELECT * FROM cellar WHERE id=:id LIMIT 1")
-    fun getCellar(id: Int): Flow<Cellar>
+    suspend fun getCellar(id: Int): Cellar
 
     @Query(
         "SELECT cellar_id," +

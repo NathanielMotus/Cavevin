@@ -15,4 +15,6 @@ class CellarRepository(val database: CellarDatabase) {
 
     fun getCellarEntries()=database.cellarDao().getCellarEntries()
 
+    suspend fun getCellar(id:Int)=database.cellarDao().getCellar(id)
+
 }
