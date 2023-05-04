@@ -18,18 +18,31 @@ import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
 @Composable
 fun BottleListTopBar(viewModel: BottleListViewModel, modifier: Modifier = Modifier) {
     val cellarName by viewModel.cellarName.observeAsState(initial = "")
-    val menuExpanded= remember { mutableStateOf(false) }
-    TopAppBar(title = {Text(text = cellarName)},
-    navigationIcon = { IconButton(onClick = { /*TODO*/ }) {
-        Icon(imageVector = Icons.Outlined.Menu, contentDescription = "")
+    val menuExpanded = remember { mutableStateOf(false) }
+    TopAppBar(title = { Text(text = cellarName) },
+        navigationIcon = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Outlined.Menu, contentDescription = "")
 
-    }},
-    actions = {
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(painter = painterResource(id = R.drawable.outline_warehouse_24), contentDescription ="" )
-        }
-        IconButton(onClick = { menuExpanded.value=!menuExpanded.value}) {
-            Icon(imageVector = Icons.Outlined.MoreVert, contentDescription ="" )
-        }
-    })
+            }
+        },
+        actions = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.outline_warehouse_24),
+                    contentDescription = ""
+                )
+            }
+            IconButton(onClick = { menuExpanded.value = !menuExpanded.value }) {
+                Icon(imageVector = Icons.Outlined.MoreVert, contentDescription = "")
+            }
+            BottleListTopBarDropDownMenu(
+                onNewCellarClick = {},
+                onDeleteCellarClick = {},
+                onBackUpClick = {},
+                onRestoreBackUpClick = {},
+                onExportClick = {},
+                menuExpanded = menuExpanded.value,
+                onDismissRequest = { menuExpanded.value = false })
+        })
 }
