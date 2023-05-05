@@ -17,7 +17,7 @@ interface CellarDao {
     suspend fun delete(cellar: Cellar)
 
     @Query("SELECT * FROM cellar")
-    fun getCellars(): Flow<List<Cellar>>
+    suspend fun getCellars(): List<Cellar>
 
     @Query("SELECT id FROM cellar ORDER BY id DESC LIMIT 1")
     suspend fun getLastCellarId(): Int?

@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.*
 import com.nathaniel.motus.cavevin.utils.systemLanguage
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -29,6 +30,7 @@ class BottleListViewModel(
     private fun loadBottleListViewModel() {
         viewModelScope.launch {
             loadCellarName()
+            loadCellars()
             cellarRepository.getCellarEntries().collect {
                 createCellarItems(it)
             }
@@ -44,8 +46,23 @@ class BottleListViewModel(
     val cellarName: LiveData<String>
         get() = _cellarName
 
-    suspend fun loadCellarName() {
-        _cellarName.value=cellarRepository.getCellar(currentCellarId).name
+    private suspend fun loadCellarName() {
+        _cellarName.value = cellarRepository.getCellar(currentCellarId).name
+    }
+
+    private fun onCellarIdChange(id: Int) {
+        if (id != 0)
+            currentCellarId = id
+    }
+
+    private val _cellars = MutableLiveData<List<Cellar>>()
+    val cellars: LiveData<List<Cellar>>
+        get() = _cellars
+
+    private suspend fun loadCellars(){
+        viewModelScope.launch {
+            _cellars.value=cellarRepository.getCellars()
+        }
     }
     //**********************************************************************************************
 
@@ -90,11 +107,21 @@ class BottleListViewModel(
         }
     }
 
+    fun insertAndOpenCellar(cellar: Cellar) {
+        viewModelScope.launch {
+            cellarRepository.insertCellar(cellar)
+            getLastCellarId()?.let { onCellarIdChange(it) }
+            loadBottleListViewModel()
+        }
+    }
+
     fun deleteCellar(cellar: Cellar) {
         viewModelScope.launch {
             cellarRepository.deleteCellar(cellar)
         }
     }
+
+    suspend fun getLastCellarId() = cellarRepository.getLastCellarId()
 
     //**********************************************************************************************
     //Bottle Type
@@ -198,7 +225,8 @@ class BottleListViewModel(
     private suspend fun createCellarItems(newCellarEntries: List<CellarEntry>) {
         val items: MutableList<CellarItem> = mutableListOf()
         newCellarEntries.forEach {
-            items.add(createCellarItem(it))
+            if (it.cellarId == currentCellarId)
+                items.add(createCellarItem(it))
         }
         //cellarItems.value = filters(items.sortedWith(CellarItemComparator(sortPattern)))
         cellarItems.value = items

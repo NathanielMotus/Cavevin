@@ -10,7 +10,7 @@ class CellarRepository(val database: CellarDatabase) {
     suspend fun updateCellar(cellar: Cellar) = database.cellarDao().update(cellar)
     suspend fun insertCellar(cellar: Cellar) = database.cellarDao().insert(cellar)
     suspend fun deleteCellar(cellar: Cellar) = database.cellarDao().delete(cellar)
-    fun getCellars() = database.cellarDao().getCellars()
+    suspend fun getCellars() = database.cellarDao().getCellars()
     suspend fun getLastCellarId() = database.cellarDao().getLastCellarId()
 
     fun getCellarEntries()=database.cellarDao().getCellarEntries()

@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.nathaniel.motus.cavevin.R
+import com.nathaniel.motus.cavevin.data.cellar_database.Cellar
 import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,11 +38,12 @@ fun BottleListTopBar(viewModel: BottleListViewModel, modifier: Modifier = Modifi
                 Icon(imageVector = Icons.Outlined.MoreVert, contentDescription = "")
             }
             BottleListTopBarDropDownMenu(
-                onNewCellarClick = {},
-                onDeleteCellarClick = {},
-                onBackUpClick = {},
-                onRestoreBackUpClick = {},
-                onExportClick = {},
+                onValidateNewCellar = {viewModel.insertAndOpenCellar(Cellar(0,it))},
+                onValidateRenameCellar = {},
+                onValidateDeleteCellar = {},
+                onValidateBackUp = {},
+                onValidateRestoreBackUp = {},
+                onValidateExport = {},
                 menuExpanded = menuExpanded.value,
                 onDismissRequest = { menuExpanded.value = false })
         })
