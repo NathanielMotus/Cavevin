@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.nathaniel.motus.cavevin.ui.elements.AlertDialogWithTextField
 
 @Composable
 fun BottleListTopBarDropDownMenu(
@@ -41,11 +42,14 @@ fun BottleListTopBarDropDownMenu(
         DropdownMenuItem(text = { Text(text = "Export") }, onClick = onValidateExport)
     }
     if (showNewCellarDialog.value)
-        BottleListNewCellarDialog(
+        AlertDialogWithTextField(
+            title = "New cellar",
+            label = "Cellar name",
             onDismissRequest = { showNewCellarDialog.value = false },
             onValidate = {
                 onDismissRequest()
                 onValidateNewCellar(it)
                 showNewCellarDialog.value=false
-            })
+            }
+        )
 }

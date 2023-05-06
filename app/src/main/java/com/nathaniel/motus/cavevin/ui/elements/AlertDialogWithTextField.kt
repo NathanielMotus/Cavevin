@@ -1,4 +1,4 @@
-package com.nathaniel.motus.cavevin.ui.bottle_list
+package com.nathaniel.motus.cavevin.ui.elements
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -8,13 +8,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottleListNewCellarDialog(
+fun AlertDialogWithTextField(
+    title: String?,
+    label: String?,
     onDismissRequest: () -> Unit,
     onValidate: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -27,14 +28,16 @@ fun BottleListNewCellarDialog(
             shape = MaterialTheme.shapes.large
         ) {
             Column(modifier = modifier.padding(16.dp)) {
-                var cellarName= remember { mutableStateOf("")}
-                Text(text = "New cellar", style = MaterialTheme.typography.displaySmall)
-                Spacer(modifier = Modifier.size(16.dp))
-                OutlinedTextField(value = cellarName.value, onValueChange = { cellarName.value=it }, label = {
-                    Text(
-                        text = "Cellar name"
-                    )
-                })
+                var textValue = remember { mutableStateOf("") }
+                if (title != null) {
+                    Text(text = title, style = MaterialTheme.typography.displaySmall)
+                    Spacer(modifier = Modifier.size(16.dp))
+                }
+                OutlinedTextField(
+                    value = textValue.value,
+                    onValueChange = { textValue.value = it },
+                    label = { Text(text = label ?: "") }
+                )
                 Row(
                     modifier = modifier
                         .padding(16.dp)
@@ -45,12 +48,13 @@ fun BottleListNewCellarDialog(
                         Icon(imageVector = Icons.Outlined.Clear, contentDescription = "")
                     }
                     Spacer(modifier = Modifier.size(32.dp))
-                    IconButton(onClick = { onValidate(cellarName.value) }) {
+                    IconButton(onClick = { onValidate(textValue.value) }) {
                         Icon(imageVector = Icons.Outlined.Check, contentDescription = "")
                     }
+                    //todo : deactivate ok button when empty string
+
                 }
             }
         }
-
     }
 }
