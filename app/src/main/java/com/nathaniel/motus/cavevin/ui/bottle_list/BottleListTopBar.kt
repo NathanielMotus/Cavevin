@@ -18,6 +18,7 @@ import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottleListTopBar(viewModel: BottleListViewModel, modifier: Modifier = Modifier) {
+    val cellarId by viewModel.currentCellarId.observeAsState(initial = 1)
     val cellarName by viewModel.cellarName.observeAsState(initial = "")
     val menuExpanded = remember { mutableStateOf(false) }
     TopAppBar(title = { Text(text = cellarName) },
@@ -38,13 +39,15 @@ fun BottleListTopBar(viewModel: BottleListViewModel, modifier: Modifier = Modifi
                 Icon(imageVector = Icons.Outlined.MoreVert, contentDescription = "")
             }
             BottleListTopBarDropDownMenu(
-                onValidateNewCellar = {viewModel.insertAndOpenCellar(Cellar(0,it))},
-                onValidateRenameCellar = {},
+                onValidateNewCellar = { viewModel.insertAndOpenCellar(Cellar(0, it)) },
+                onValidateRenameCellar = { viewModel.updateCellar(Cellar(cellarId, it)) },
                 onValidateDeleteCellar = {},
                 onValidateBackUp = {},
                 onValidateRestoreBackUp = {},
                 onValidateExport = {},
                 menuExpanded = menuExpanded.value,
-                onDismissRequest = { menuExpanded.value = false })
+                onDismissRequest = { menuExpanded.value = false },
+                cellarName = cellarName
+            )
         })
 }

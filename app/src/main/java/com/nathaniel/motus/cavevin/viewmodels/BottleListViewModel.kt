@@ -5,7 +5,6 @@ import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.*
 import com.nathaniel.motus.cavevin.utils.systemLanguage
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -40,30 +39,36 @@ class BottleListViewModel(
     //***********************************
     //State
     //***********************************
-    private var currentCellarId = 1
+    private var _currentCellarId = MutableLiveData(1)
+    val currentCellarId: MutableLiveData<Int>
+        get() = _currentCellarId
 
     private var _cellarName = MutableLiveData("")
     val cellarName: LiveData<String>
         get() = _cellarName
 
     private suspend fun loadCellarName() {
-        _cellarName.value = cellarRepository.getCellar(currentCellarId).name
+        _cellarName.value = currentCellarId.value?.let { cellarRepository.getCellar(it).name }
     }
 
     private fun onCellarIdChange(id: Int) {
         if (id != 0)
-            currentCellarId = id
+            _currentCellarId.value = id
     }
 
     private val _cellars = MutableLiveData<List<Cellar>>()
     val cellars: LiveData<List<Cellar>>
         get() = _cellars
 
-    private suspend fun loadCellars(){
+    private suspend fun loadCellars() {
         viewModelScope.launch {
-            _cellars.value=cellarRepository.getCellars()
+            _cellars.value = cellarRepository.getCellars()
         }
     }
+    //todo switchmap cellars into List<Pair<Int,String>>
+    /*private val _cellarsForSpinner:MutableLiveData<List<Pair<Int,String>>> = cellars.switchMap { it.forEach { _ -> Pair<> } }
+    val cellarsForSpinner:LiveData<List<Pair<Int,String>>>
+    get() = _cellarsForSpinner*/
     //**********************************************************************************************
 
     private var _redIsEnable = MutableLiveData(true)
@@ -123,6 +128,13 @@ class BottleListViewModel(
 
     suspend fun getLastCellarId() = cellarRepository.getLastCellarId()
 
+    fun updateCellar(cellar: Cellar) {
+        viewModelScope.launch {
+            cellarRepository.updateCellar(cellar)
+            loadBottleListViewModel()
+        }
+    }
+
     //**********************************************************************************************
     //Bottle Type
     //**********************************************************************************************
@@ -165,7 +177,7 @@ class BottleListViewModel(
     }
 
     fun updateStockForBottleInCurrentCellar(bottleId: Int, stock: Int) {
-        updateStock(Stock(currentCellarId, bottleId, stock))
+        updateStock(Stock(currentCellarId.value!!, bottleId, stock))
     }
 
     //*************************************
@@ -225,7 +237,7 @@ class BottleListViewModel(
     private suspend fun createCellarItems(newCellarEntries: List<CellarEntry>) {
         val items: MutableList<CellarItem> = mutableListOf()
         newCellarEntries.forEach {
-            if (it.cellarId == currentCellarId)
+            if (it.cellarId == currentCellarId.value)
                 items.add(createCellarItem(it))
         }
         //cellarItems.value = filters(items.sortedWith(CellarItemComparator(sortPattern)))

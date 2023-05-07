@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 fun AlertDialogWithTextField(
     title: String?,
     label: String?,
+    input:String?="",
     onDismissRequest: () -> Unit,
     onValidate: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -28,14 +29,16 @@ fun AlertDialogWithTextField(
             shape = MaterialTheme.shapes.large
         ) {
             Column(modifier = modifier.padding(16.dp)) {
-                var textValue = remember { mutableStateOf("") }
+                var textValue = remember { mutableStateOf(input?:"") }
+                var validValue=remember{ mutableStateOf(false)}
                 if (title != null) {
                     Text(text = title, style = MaterialTheme.typography.displaySmall)
                     Spacer(modifier = Modifier.size(16.dp))
                 }
                 OutlinedTextField(
                     value = textValue.value,
-                    onValueChange = { textValue.value = it },
+                    onValueChange = { textValue.value = it
+                                    validValue.value=textValue.value!=""},
                     label = { Text(text = label ?: "") }
                 )
                 Row(
@@ -48,11 +51,9 @@ fun AlertDialogWithTextField(
                         Icon(imageVector = Icons.Outlined.Clear, contentDescription = "")
                     }
                     Spacer(modifier = Modifier.size(32.dp))
-                    IconButton(onClick = { onValidate(textValue.value) }) {
-                        Icon(imageVector = Icons.Outlined.Check, contentDescription = "")
+                    IconButton(onClick = { onValidate(textValue.value) }, enabled = validValue.value) {
+                        Icon(imageVector = Icons.Outlined.Check ,contentDescription = "")
                     }
-                    //todo : deactivate ok button when empty string
-
                 }
             }
         }

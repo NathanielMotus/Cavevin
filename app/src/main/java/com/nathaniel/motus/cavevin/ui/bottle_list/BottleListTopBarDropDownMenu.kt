@@ -20,10 +20,12 @@ fun BottleListTopBarDropDownMenu(
     onValidateExport: () -> Unit,
     menuExpanded: Boolean,
     onDismissRequest: () -> Unit,
+    cellarName:String,
     modifier: Modifier = Modifier
 ) {
     val showNewCellarDialog = remember { mutableStateOf(false) }
     val showRenameCellarDialog = remember { mutableStateOf(false) }
+
     DropdownMenu(expanded = menuExpanded, onDismissRequest = onDismissRequest) {
         DropdownMenuItem(
             text = { Text(text = "New cellar") },
@@ -50,6 +52,19 @@ fun BottleListTopBarDropDownMenu(
                 onDismissRequest()
                 onValidateNewCellar(it)
                 showNewCellarDialog.value=false
+            }
+        )
+
+    if(showRenameCellarDialog.value)
+        AlertDialogWithTextField(
+            title = "Rename cellar",
+            input = cellarName,
+            label = "Cellar name",
+            onDismissRequest = { showRenameCellarDialog.value=false},
+            onValidate = {
+                onDismissRequest()
+                onValidateRenameCellar(it)
+                showRenameCellarDialog.value=false
             }
         )
 }
