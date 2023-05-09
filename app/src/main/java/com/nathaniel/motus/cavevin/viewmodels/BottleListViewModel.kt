@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.nathaniel.motus.cavevin.data.*
 import com.nathaniel.motus.cavevin.data.cellar_database.*
 import com.nathaniel.motus.cavevin.utils.systemLanguage
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -51,9 +52,13 @@ class BottleListViewModel(
         _cellarName.value = currentCellarId.value?.let { cellarRepository.getCellar(it).name }
     }
 
-    private fun onCellarIdChange(id: Int) {
-        if (id != 0)
-            _currentCellarId.value = id
+    fun onCellarIdChange(id: Int) {
+        if (id != 0) {
+            viewModelScope.launch {
+                _currentCellarId.value = id
+                loadBottleListViewModel()
+            }
+        }
     }
 
     private val _cellars = MutableLiveData<List<Cellar>>()
@@ -61,14 +66,27 @@ class BottleListViewModel(
         get() = _cellars
 
     private suspend fun loadCellars() {
-        viewModelScope.launch {
-            _cellars.value = cellarRepository.getCellars()
-        }
+        _cellars.value = cellarRepository.getCellars()
     }
-    //todo switchmap cellars into List<Pair<Int,String>>
-    /*private val _cellarsForSpinner:MutableLiveData<List<Pair<Int,String>>> = cellars.switchMap { it.forEach { _ -> Pair<> } }
-    val cellarsForSpinner:LiveData<List<Pair<Int,String>>>
-    get() = _cellarsForSpinner*/
+
+    private val _cellarsForSpinner: MutableLiveData<List<Pair<Int, String>>> =
+        cellars.switchMap { transformCellarsIntoCellarsForSpinner(it) } as MutableLiveData<List<Pair<Int, String>>>
+    val cellarsForSpinner: LiveData<List<Pair<Int, String>>>
+        get() = _cellarsForSpinner
+
+    private val _selectedCellarForSpinner = MutableLiveData<Pair<Int, String>>()
+    val selectedCellarForSpinner: LiveData<Pair<Int, String>>
+        get() = _selectedCellarForSpinner
+
+    private fun transformCellarsIntoCellarsForSpinner(cellars: List<Cellar>): MutableLiveData<List<Pair<Int, String>>> {
+        val cellarsForSpinner: MutableList<Pair<Int, String>> = mutableListOf()
+        cellars.forEach {
+            cellarsForSpinner.add(Pair(it.id, it.name))
+            if (it.id == currentCellarId.value) _selectedCellarForSpinner.value =
+                Pair(it.id, it.name)
+        }
+        return MutableLiveData(cellarsForSpinner)
+    }
     //**********************************************************************************************
 
     private var _redIsEnable = MutableLiveData(true)

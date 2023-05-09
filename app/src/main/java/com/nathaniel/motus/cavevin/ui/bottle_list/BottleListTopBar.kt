@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.nathaniel.motus.cavevin.R
 import com.nathaniel.motus.cavevin.data.cellar_database.Cellar
+import com.nathaniel.motus.cavevin.ui.elements.AlertDialogWithSpinner
 import com.nathaniel.motus.cavevin.viewmodels.BottleListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -21,6 +22,8 @@ fun BottleListTopBar(viewModel: BottleListViewModel, modifier: Modifier = Modifi
     val cellarId by viewModel.currentCellarId.observeAsState(initial = 1)
     val cellarName by viewModel.cellarName.observeAsState(initial = "")
     val menuExpanded = remember { mutableStateOf(false) }
+    val cellarsForSpinner by viewModel.cellarsForSpinner.observeAsState(initial = null)
+    val selectedCellarForSpinner by viewModel.selectedCellarForSpinner.observeAsState(initial = null)
     TopAppBar(title = { Text(text = cellarName) },
         navigationIcon = {
             IconButton(onClick = { /*TODO*/ }) {
@@ -29,12 +32,28 @@ fun BottleListTopBar(viewModel: BottleListViewModel, modifier: Modifier = Modifi
             }
         },
         actions = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.outline_warehouse_24),
-                    contentDescription = ""
-                )
-            }
+            var showSpinner = remember { mutableStateOf(false) }
+
+            if (cellarsForSpinner != null)
+                IconButton(onClick = { showSpinner.value = true }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.outline_warehouse_24),
+                        contentDescription = ""
+                    )
+                    if (showSpinner.value)
+                        AlertDialogWithSpinner(
+                            title = "Change cellar",
+                            items = cellarsForSpinner!!,
+                            selectedItem = selectedCellarForSpinner!!,
+                            onDismissRequest = { showSpinner.value = false },
+                            onSelectionChanged = { cellar: Pair<Int, String> ->
+                                run {
+                                    viewModel.onCellarIdChange(cellar.first)
+                                    showSpinner.value = false
+                                }
+                            }
+                        )
+                }
             IconButton(onClick = { menuExpanded.value = !menuExpanded.value }) {
                 Icon(imageVector = Icons.Outlined.MoreVert, contentDescription = "")
             }
@@ -49,5 +68,6 @@ fun BottleListTopBar(viewModel: BottleListViewModel, modifier: Modifier = Modifi
                 onDismissRequest = { menuExpanded.value = false },
                 cellarName = cellarName
             )
-        })
+        }
+    )
 }

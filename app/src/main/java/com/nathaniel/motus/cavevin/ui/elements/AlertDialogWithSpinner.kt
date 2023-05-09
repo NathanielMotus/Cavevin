@@ -33,7 +33,7 @@ fun AlertDialogWithSpinner(
                 PairSpinner(
                     itemList = items,
                     selectedItem = selectedItem,
-                    onSelectionChanged = onSelectionChanged,
+                    onSelectionChanged = { cellar: Pair<Int, String> -> onSelectionChanged(cellar) },
                     labelText = labelText
                 )
             }
