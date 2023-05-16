@@ -34,7 +34,7 @@ class BottleDetailViewModel(private val currentApplication: Application) :
         bottleId = id
         loadBottleDetailViewModel()
     }
-
+//todo : update cellarId when coming from bottleList
     //**********************************
     //State
     //**********************************

@@ -60,7 +60,7 @@ fun BottleListTopBar(viewModel: BottleListViewModel, modifier: Modifier = Modifi
             BottleListTopBarDropDownMenu(
                 onValidateNewCellar = { viewModel.insertAndOpenCellar(Cellar(0, it)) },
                 onValidateRenameCellar = { viewModel.updateCellar(Cellar(cellarId, it)) },
-                onValidateDeleteCellar = {},
+                onValidateDeleteCellar = {viewModel.clearAndDeleteCellar(cellarId)},
                 onValidateBackUp = {},
                 onValidateRestoreBackUp = {},
                 onValidateExport = {},

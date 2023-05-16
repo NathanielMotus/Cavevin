@@ -153,6 +153,23 @@ class BottleListViewModel(
         }
     }
 
+    suspend fun deleteCellarStocks(cellarId: Int) {
+        stockRepository.deleteCellarStocks(cellarId)
+    }
+
+    suspend fun deleteCellar(cellarId: Int) {
+        cellarRepository.deleteCellar(cellarId)
+    }
+
+    fun clearAndDeleteCellar(cellarId:Int){
+        viewModelScope.launch {
+            deleteCellarStocks(cellarId)
+            deleteCellar(cellarId)
+            _currentCellarId.value=getLastCellarId()
+            loadBottleListViewModel()
+        }
+    }
+
     //**********************************************************************************************
     //Bottle Type
     //**********************************************************************************************

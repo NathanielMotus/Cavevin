@@ -22,7 +22,7 @@ fun AlertDialogWithSpinner(
             modifier = modifier
                 .wrapContentHeight()
                 .wrapContentWidth(),
-            shape = MaterialTheme.shapes.large
+            shape = MaterialTheme.shapes.extraLarge
         ) {
             Column(modifier = modifier.padding(16.dp)) {
                 if (title != null) {

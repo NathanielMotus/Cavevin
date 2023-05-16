@@ -16,6 +16,9 @@ interface CellarDao {
     @Delete
     suspend fun delete(cellar: Cellar)
 
+    @Query("DELETE FROM cellar WHERE id=:cellarId")
+    suspend fun deleteCellar(cellarId:Int)
+
     @Query("SELECT * FROM cellar")
     suspend fun getCellars(): List<Cellar>
 

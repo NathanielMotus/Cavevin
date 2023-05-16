@@ -1,9 +1,10 @@
 package com.nathaniel.motus.cavevin.ui.bottle_list
 
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,11 +21,12 @@ fun BottleListTopBarDropDownMenu(
     onValidateExport: () -> Unit,
     menuExpanded: Boolean,
     onDismissRequest: () -> Unit,
-    cellarName:String,
+    cellarName: String,
     modifier: Modifier = Modifier
 ) {
     val showNewCellarDialog = remember { mutableStateOf(false) }
     val showRenameCellarDialog = remember { mutableStateOf(false) }
+    val showDeleteCellarDialog = remember { mutableStateOf(false) }
 
     DropdownMenu(expanded = menuExpanded, onDismissRequest = onDismissRequest) {
         DropdownMenuItem(
@@ -33,7 +35,9 @@ fun BottleListTopBarDropDownMenu(
         DropdownMenuItem(
             text = { Text(text = "Rename cellar") },
             onClick = { showRenameCellarDialog.value = true })
-        DropdownMenuItem(text = { Text(text = "Delete cellar") }, onClick = onValidateDeleteCellar)
+        DropdownMenuItem(
+            text = { Text(text = "Delete cellar") },
+            onClick = { showDeleteCellarDialog.value = true })
         Divider()
         DropdownMenuItem(text = { Text(text = "Backup") }, onClick = onValidateBackUp)
         DropdownMenuItem(
@@ -51,20 +55,46 @@ fun BottleListTopBarDropDownMenu(
             onValidate = {
                 onDismissRequest()
                 onValidateNewCellar(it)
-                showNewCellarDialog.value=false
+                showNewCellarDialog.value = false
             }
         )
 
-    if(showRenameCellarDialog.value)
+    if (showRenameCellarDialog.value)
         AlertDialogWithTextField(
             title = "Rename cellar",
             input = cellarName,
             label = "Cellar name",
-            onDismissRequest = { showRenameCellarDialog.value=false},
+            onDismissRequest = { showRenameCellarDialog.value = false },
             onValidate = {
                 onDismissRequest()
                 onValidateRenameCellar(it)
-                showRenameCellarDialog.value=false
+                showRenameCellarDialog.value = false
             }
         )
+
+    if (showDeleteCellarDialog.value)
+        AlertDialog(
+            onDismissRequest = { showDeleteCellarDialog.value = false },
+            confirmButton = {
+                IconButton(onClick = {
+                    onDismissRequest()
+                    onValidateDeleteCellar()
+                    showDeleteCellarDialog.value=false
+                }) {
+                    Icon(imageVector = Icons.Outlined.Check, contentDescription = "")
+
+                }
+            },
+            dismissButton = {
+                IconButton(onClick = { showDeleteCellarDialog.value = false }) {
+                    Icon(imageVector = Icons.Outlined.Close, contentDescription = "")
+
+                }
+            },
+            title = {
+                Text(
+                    text = "Delete cellar"
+                )
+            },
+            text = { Text(text = "Are you sur you want to delete the current cellar ? This cannot be undone") })
 }

@@ -20,4 +20,7 @@ interface StockDao {
 
     @Query("SELECT quantity FROM stock where cellar_id=:cellarId AND bottle_id=:bottleId")
     suspend fun getStockForBottleInCellar(bottleId:Int,cellarId:Int):Int
+
+    @Query("DELETE FROM stock where cellar_id=:cellarId")
+    suspend fun deleteCellarStocks(cellarId: Int)
 }
